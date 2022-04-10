@@ -7,14 +7,14 @@ class RoundedButton extends StatelessWidget {
 
   void Function()? onPressed;
 
-  String text;
+  Widget child;
 
   RoundedButton({
     Key? key,
     this.height = 50.0,
     this.width = double.infinity,
     required this.onPressed,
-    required this.text,
+    required this.child,
   }) : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class RoundedButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           padding: EdgeInsets.all(0.0),
         ),
         child: Ink(
@@ -34,17 +34,9 @@ class RoundedButton extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.circular(30.0)),
           child: Container(
-            constraints: BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
+            constraints: BoxConstraints(maxWidth: width, minHeight: height),
             alignment: Alignment.center,
-            child: Text(
-              text.toUpperCase(),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 0.5,
-              ),
-            ),
+            child: child
           ),
         ),
       ),

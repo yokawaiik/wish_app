@@ -7,6 +7,7 @@ import './router/router.dart' as router;
 class WishApp extends StatelessWidget {
   const WishApp({Key? key}) : super(key: key);
 
+  
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

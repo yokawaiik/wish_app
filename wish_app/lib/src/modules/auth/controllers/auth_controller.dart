@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/models/current_user.dart';
+import 'package:wish_app/src/models/supabase_exception.dart';
 import 'package:wish_app/src/modules/auth/models/auth_user_form.dart';
 import 'package:wish_app/src/modules/auth/services/auth_service.dart';
 import 'package:wish_app/src/services/user_service.dart';
@@ -24,15 +26,14 @@ class AuthController extends GetxController {
       // Todo: validation
 
       await AuthService.signIn(authUserForm);
-
-      print(
-          "Get.find<UserService>().currentUser?.email - ${Get.find<UserService>().currentUser?.email}");
-      Get.offAndToNamed(HomeView.routeName);
-
-    } catch (e) {
-      print(e);
+      await Get.offAndToNamed(HomeView.routeName);
+    } on SupabaseException catch (e) {
+      Get.snackbar("Error login", e.msg);
+    } 
+    catch (e) {
       Get.snackbar("Error login", "It happened unknown error.");
-    } finally {
+    }
+    finally {
       isLoading.value = false;
     }
   }
@@ -47,9 +48,9 @@ class AuthController extends GetxController {
       await AuthService.signUp(authUserForm);
 
       print(
-          "Get.find<UserService>().currentUser?.email - ${Get.find<UserService>().currentUser?.email}");
+          "currentUser?.email - ${Get.find<UserService>().currentUser?.email}");
       // Get.offAndToNamed(HomeView.routeName)
-
+      await Get.offAndToNamed(HomeView.routeName);
     } catch (e) {
       print(e);
       Get.snackbar("Error register now", "It happened unknown error.");

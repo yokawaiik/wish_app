@@ -8,4 +8,11 @@ class AuthUserForm {
     this.email,
     this.password,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      "login": login,
+      "email": email,
+    };
+  }
 }

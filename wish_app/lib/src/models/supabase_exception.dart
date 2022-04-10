@@ -1,8 +1,9 @@
 class SupabaseException implements Exception {
-  String? msg;
+  String title;
+  String msg;
 
-  SupabaseException([this.msg]);
+  SupabaseException(this.title, this.msg);
 
   @override
-  String toString() => msg ?? 'SupabaseException';
+  String toString() => "$title: $msg";
 }

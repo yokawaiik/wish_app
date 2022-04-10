@@ -10,19 +10,6 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          PopupMenuButton(
-            icon: const Icon(Icons.menu),
-            itemBuilder: (ctx) => [
-              PopupMenuItem(
-                child: Text("Sign Out"),
-                onTap: () => controller.signOut(),
-              )
-            ],
-          ),
-        ],
-      ),
       body: Center(
         child: Text("Home"),
       ),

@@ -6,6 +6,6 @@ class GlobalBindings extends Bindings {
   @override
   void dependencies() {
     // Get.lazyPut(() => AuthBinding());
-    Get.put(UserService());
+    // Get.put(UserService());
   }
 }

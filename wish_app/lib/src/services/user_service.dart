@@ -5,7 +5,10 @@ import 'package:wish_app/src/models/current_user.dart';
 class UserService extends GetxService {
   final _supabase = Supabase.instance;
 
+  Future<UserService> init() async => this;
+
   CurrentUser? get currentUser {
+  // Rx<CurrentUser>? get currentUser {
     _supabase.client.auth.onAuthStateChange((event, session) {
       print("currentUser - onAuthStateChange $event");
       // if (event == AuthChangeEvent.signedOut) {
@@ -29,4 +32,6 @@ class UserService extends GetxService {
       return currentUser;
     }
   }
+
+  get isUserAuthenticated => currentUser == null ? false : true;
 }

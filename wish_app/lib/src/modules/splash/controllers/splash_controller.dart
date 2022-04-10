@@ -16,13 +16,8 @@ class SplashController extends GetxController {
   }
 
   Future<void> loading() async {
-    if (userService.currentUser == null) {
-      // Timer(Duration(seconds: 2), () {
-      //   Get.offAndToNamed(AuthView.routeName);
-      // });
-      await Get.offAndToNamed(AuthView.routeName);
-    } else {
-      await Get.offAndToNamed(HomeView.routeName);
-    }
+    Timer(const Duration(seconds: 2), () {
+      Get.offAndToNamed(HomeView.routeName);
+    });
   }
 }

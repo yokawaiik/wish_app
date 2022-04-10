@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:wish_app/src/middlewares/auth_guard.dart';
 import 'package:wish_app/src/modules/auth/bindings/auth_binding.dart';
 import 'package:wish_app/src/modules/auth/views/auth_view.dart';
 import 'package:wish_app/src/modules/home/bindings/home_binding.dart';
@@ -22,6 +23,9 @@ final List<GetPage> getPages = [
     name: HomeView.routeName,
     page: () => const HomeView(),
     binding: HomeBindings(),
+    middlewares: [
+      AuthGuard()
+    ]
   )
 ];
 

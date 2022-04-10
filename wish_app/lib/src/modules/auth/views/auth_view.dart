@@ -12,7 +12,7 @@ class AuthView extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Get.theme.colorScheme.secondaryContainer,
+      // backgroundColor: Get.theme.colorScheme.secondaryContainer,
       body: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(
@@ -84,14 +84,7 @@ class AuthView extends GetView<AuthController> {
                 height: 40,
               ),
               Obx(
-                () => RoundedButton(
-                  onPressed: controller.isLoading.value
-                      ? null
-                      : () => controller.isSignIn.value
-                          ? controller.registerNow()
-                          : controller.login(),
-                  text: controller.isSignIn.value ? "Register now" : 'Login',
-                ),
+                () => _buildRoundedButton(),
               ),
               SizedBox(
                 height: 20,
@@ -106,6 +99,34 @@ class AuthView extends GetView<AuthController> {
           ),
         ),
       ),
+    );
+  }
+
+  RoundedButton _buildRoundedButton() {
+    return RoundedButton(
+      onPressed: controller.isLoading.value
+          ? null
+          : () => controller.isSignIn.value
+              ? controller.registerNow()
+              : controller.login(),
+      child: controller.isLoading.value
+          ? SizedBox(
+              height: 30,
+              width: 30,
+              child: CircularProgressIndicator(
+                color: Get.theme.colorScheme.secondary,
+              ),
+            )
+          : Text(
+              (controller.isSignIn.value ? "Register now" : 'Login')
+                  .toUpperCase(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.5,
+              ),
+            ),
     );
   }
 }
