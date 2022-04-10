@@ -12,6 +12,20 @@ class AuthView extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            onPressed: controller.goToNavigatorView,
+            icon: Icon(
+              Icons.home,
+              color: Get.theme.colorScheme.primary,
+            ),
+          ),
+        ],
+      ),
       // backgroundColor: Get.theme.colorScheme.secondaryContainer,
       body: Center(
         child: SingleChildScrollView(

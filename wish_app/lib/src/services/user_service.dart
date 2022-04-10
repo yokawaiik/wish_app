@@ -8,9 +8,9 @@ class UserService extends GetxService {
   Future<UserService> init() async => this;
 
   CurrentUser? get currentUser {
-  // Rx<CurrentUser>? get currentUser {
+    // Rx<CurrentUser>? get currentUser {
     _supabase.client.auth.onAuthStateChange((event, session) {
-      print("currentUser - onAuthStateChange $event");
+      // print("currentUser - onAuthStateChange $event");
       // if (event == AuthChangeEvent.signedOut) {
       //   return null;
       // }
@@ -33,5 +33,31 @@ class UserService extends GetxService {
     }
   }
 
-  get isUserAuthenticated => currentUser == null ? false : true;
+  Rx<bool> get isUserAuthenticated {
+    // print("isUserAuthenticated - ${currentUser == null ? false : true}");
+    return RxBool(currentUser == null ? false : true);
+  }
+
+  CurrentUser? get user {
+    final authUser = _supabase.client.auth.currentUser;
+    if (authUser == null) {
+      return null;
+    } else {
+      final currentUser = CurrentUser(
+        id: authUser.id,
+        appMetadata: authUser.appMetadata,
+        userMetadata: authUser.userMetadata,
+        aud: authUser.aud,
+        email: authUser.email,
+        phone: authUser.phone,
+        createdAt: authUser.createdAt,
+      );
+      return currentUser;
+    }
+  }
+
+  bool get isAuthenticated {
+    // print("isAuthenticated - ${user == null ? false : true}");
+    return user == null ? false : true;
+  }
 }

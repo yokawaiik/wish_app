@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wish_app/src/modules/splash/bindings/splash_binding.dart';
 
-class SplashView extends GetView<SplashBinding> {
+class SplashView extends GetView<SplashBindings> {
   static const routeName = "/splash";
   const SplashView({Key? key}) : super(key: key);
 
