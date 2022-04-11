@@ -8,7 +8,6 @@ class AuthGuard extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     final authService = Get.find<UserService>();
-    print("AuthGuard");
     return authService.isUserAuthenticated.value
         ? null
         : const RouteSettings(name: AuthView.routeName);

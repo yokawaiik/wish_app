@@ -8,9 +8,6 @@ class GuestGuard extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     final authService = Get.find<UserService>();
-    // print("GuestGuard - $route");
-    // print("authService.isAuthenticated - ${authService.isAuthenticated}");
-
     return !authService.isAuthenticated
         ? null
         : RouteSettings(name: NavigatorView.routeName);

@@ -29,6 +29,7 @@ final List<GetPage> getPages = [
     name: NavigatorView.routeName,
     page: () => const NavigatorView(),
     binding: NavigatorBindings(),
+    
   ),
   GetPage(
     name: HomeView.routeName,

@@ -20,7 +20,7 @@ class AuthView extends GetView<AuthController> {
           IconButton(
             onPressed: controller.goToNavigatorView,
             icon: Icon(
-              Icons.home,
+              Icons.dashboard,
               color: Get.theme.colorScheme.primary,
             ),
           ),

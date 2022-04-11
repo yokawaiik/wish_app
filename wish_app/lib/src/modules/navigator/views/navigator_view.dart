@@ -9,71 +9,58 @@ class NavigatorView extends GetView<NavigatorController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          PopupMenuButton(
-            icon: const Icon(Icons.menu),
-            onSelected: (int v) {
-              switch (v) {
-                case 0:
-                  controller.signOut();
-                  break;
-                case 1:
-                  controller.goToAuthView();
-                  break;
-                default:
-              }
-            },
-            itemBuilder: (ctx) {
-              // print(controller.userService.isAuthenticated.value);
-              // return [
-              //   controller.userService.isAuthenticated.isTrue
-              //       ? PopupMenuItem(
-              //           child: Text("Sign Out"),
-              //           onTap: () => controller.signOut(),
-              //         )
-              //       : PopupMenuItem(
-              //           child: Text("Sign In"),
-              //           onTap: () => controller.goToAuthView(),
-              //         ),
-              // ];
-              return [
-                controller.userService.isAuthenticated
-                    ? PopupMenuItem(
-                        child: Text("Sign Out"),
-                        value: 0,
-                      )
-                    : PopupMenuItem(
-                        child: Text("Sign In"),
-                        value: 1,
-                      ),
-              ];
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: "Favorites",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: "Profile",
-          ),
-        ],
+    return Obx(
+      () => Scaffold(
+        appBar: AppBar(
+          actions: [
+            PopupMenuButton(
+              icon: const Icon(Icons.menu),
+              onSelected: (int v) {
+                switch (v) {
+                  case 0:
+                    controller.signOut();
+                    break;
+                  case 1:
+                    controller.goToAuthView();
+                    break;
+                  default:
+                }
+              },
+              itemBuilder: (ctx) {
+                return [
+                  controller.userService.isAuthenticated
+                      ? PopupMenuItem(
+                          child: Text("Sign Out"),
+                          value: 0,
+                        )
+                      : PopupMenuItem(
+                          child: Text("Sign In"),
+                          value: 1,
+                        ),
+                ];
+              },
+            ),
+          ],
+        ),
+        body: controller.currentView,
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: controller.selectedIndex.value,
+          onTap: controller.onItemTapped,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.star),
+              label: "Favorites",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: "Account",
+            ),
+          ],
+        ),
       ),
     );
   }
