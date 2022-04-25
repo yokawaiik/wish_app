@@ -43,19 +43,19 @@ class NavigatorView extends GetView<NavigatorController> {
           ],
         ),
         body: controller.currentView,
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: controller.selectedIndex.value,
-          onTap: controller.onItemTapped,
-          items: [
-            BottomNavigationBarItem(
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: controller.selectedIndex.value,
+          onDestinationSelected: controller.onItemTapped,
+          destinations: [
+            NavigationDestination(
               icon: Icon(Icons.star),
               label: "Favorites",
             ),
-            BottomNavigationBarItem(
+            NavigationDestination(
               icon: Icon(Icons.home),
               label: "Home",
             ),
-            BottomNavigationBarItem(
+            NavigationDestination(
               icon: Icon(Icons.person),
               label: "Account",
             ),
