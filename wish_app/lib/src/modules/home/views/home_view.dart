@@ -13,6 +13,15 @@ class HomeView extends GetView<HomeController> {
       body: Center(
         child: Text("Home"),
       ),
+      floatingActionButton: Obx(
+        () => controller.isUserAuthenticated.value
+            ? FloatingActionButton(
+                child: Icon(Icons.add_box),
+                clipBehavior: Clip.hardEdge,
+                onPressed: controller.addNewWish,
+              )
+            : SizedBox.shrink(),
+      ),
     );
   }
 }

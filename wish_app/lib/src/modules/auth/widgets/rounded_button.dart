@@ -32,7 +32,7 @@ class RoundedButton extends StatelessWidget {
         child: Ink(
           decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.circular(30.0)),
+              borderRadius: BorderRadius.circular(10.0)),
           child: Container(
             constraints: BoxConstraints(maxWidth: width, minHeight: height),
             alignment: Alignment.center,
