@@ -11,22 +11,56 @@ class AddWishView extends GetView<AddWishController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        // todo: edit wish
+        title: Text("New wish"),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondaryContainer,
-                // border: Border.all(),
-              ),
-              width: double.infinity,
-              height: Get.height / 3,
-              child: Icon(
-                Icons.image,
-                size: 100,
-              ),
-            ),
+            // In another file: add_wish_image.dart
+            GetBuilder<AddWishController>(builder: (addWishController) {
+              print("GetBuilder");
+              print(controller.wishForm.image);
+              return Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                ),
+                width: double.infinity,
+                height: Get.height / 3,
+                child: InkWell(
+                  onTap: controller.pickImage,
+                  child: controller.wishForm.hasImage
+                      ? (controller.wishForm.image != null
+                          ? Image.file(
+                              controller.wishForm.image!,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.network(
+                              controller.wishForm.imageUrl!,
+                              fit: BoxFit.cover,
+                            ))
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.touch_app,
+                              size: 100,
+                            ),
+                            Icon(
+                              Icons.arrow_right_alt,
+                              size: 100,
+                            ),
+                            Icon(
+                              Icons.image,
+                              size: 100,
+                            ),
+                          ],
+                        ),
+                ),
+              );
+            }),
+
             SizedBox(
               height: 20,
             ),
