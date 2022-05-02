@@ -8,10 +8,12 @@ class AddWishView extends GetView<AddWishController> {
   static const String routeName = "/add-wish";
   AddWishView({Key? key}) : super(key: key);
 
+  // todo: add validation
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
         // todo: edit wish
         title: Text("New wish"),
       ),
@@ -20,8 +22,6 @@ class AddWishView extends GetView<AddWishController> {
           children: [
             // In another file: add_wish_image.dart
             GetBuilder<AddWishController>(builder: (addWishController) {
-              print("GetBuilder");
-              print(controller.wishForm.image);
               return Container(
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.secondaryContainer,
@@ -110,15 +110,28 @@ class AddWishView extends GetView<AddWishController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      ElevatedButton(
-                        onPressed: controller.addWish,
-                        child: Text(
-                          "Create",
-                          style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.fontSize,
+                      Obx(
+                        () => ElevatedButton(
+                          onPressed: controller.isLoading.value
+                              ? null
+                              : controller.addWish,
+
+                          child: SizedBox(
+                            height: 50,
+                            width: 120,
+                            child: Center(
+                              child: controller.isLoading.value
+                                  ? CircularProgressIndicator()
+                                  : Text(
+                                      "Create",
+                                      style: TextStyle(
+                                        fontSize: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.fontSize,
+                                      ),
+                                    ),
+                            ),
                           ),
                         ),
                       ),

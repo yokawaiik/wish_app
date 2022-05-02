@@ -1,6 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/models/supabase_exception.dart';
-import 'package:wish_app/src/models/unknown_exception.dart';
 import 'package:wish_app/src/modules/auth/models/auth_user_form.dart';
 
 class AuthService {
@@ -38,13 +37,20 @@ class AuthService {
 
       final createdUser = _supabase.client.auth.currentUser;
 
-      final recordedRow = await _supabase.client
+      final recordedUser = await _supabase.client
           .from("users")
           .insert(authUserForm.toJson()
             ..addAll({
+              "id": createdUser?.id,
               "createdAt": createdUser?.createdAt,
             }))
           .execute();
+
+      final recordedSunscription =
+          await _supabase.client.from("subscriptions").insert({
+        "id": createdUser?.id,
+        "subscriptionTo": createdUser?.id,
+      }).execute();
     } catch (e) {
       rethrow;
     }

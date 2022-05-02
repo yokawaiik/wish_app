@@ -34,7 +34,7 @@ final List<GetPage> getPages = [
   ),
   GetPage(
     name: HomeView.routeName,
-    page: () => const HomeView(),
+    page: () => HomeView(),
     binding: HomeBindings(),
   ),
   GetPage(
