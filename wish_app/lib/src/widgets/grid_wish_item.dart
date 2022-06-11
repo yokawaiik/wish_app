@@ -22,6 +22,7 @@ class GridWishItem extends StatelessWidget {
       child: Column(
         children: [
           Container(
+            // height: gridItemHeight * 1 / 3,
             height: gridItemHeight * 1 / 3,
             width: double.infinity,
             child: wish.hasImage

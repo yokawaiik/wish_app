@@ -9,8 +9,10 @@ import 'package:wish_app/src/modules/splash/bindings/splash_binding.dart';
 import 'package:wish_app/src/modules/splash/views/splash_view.dart';
 import 'package:wish_app/src/modules/wish/bindings/add_wish_binding.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
+import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
 
 import '../middlewares/guest_guard.dart';
+import '../modules/wish/bindings/wish_info_binding.dart';
 
 final List<GetPage> getPages = [
   GetPage(
@@ -42,6 +44,13 @@ final List<GetPage> getPages = [
     page: () => AddWishView(),
     binding: AddWishBinding(),
   ),
+  GetPage(
+    name: WishInfoView.routeName,
+    page: () => WishInfoView(),
+    binding: WishInfoBinding(),
+  ),
 ];
+
+// final unknownRoute = GetPage(name: '/notfound', page: () => UnknownView());
 
 final initialRoute = NavigatorView.routeName;

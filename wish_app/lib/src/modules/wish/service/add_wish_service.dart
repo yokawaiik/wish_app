@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/models/supabase_exception.dart';
 import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/wish/models/wish_form.dart';
+import 'package:wish_app/src/modules/wish/utils/generate_wish_image_path.dart';
 
 class AddWishService {
   static final _supabase = Supabase.instance.client;
@@ -21,20 +22,20 @@ class AddWishService {
       wishForm.createdBy = result.data[0]["createdBy"];
 
       if (wishForm.image != null) {
-        final fileExt = wishForm.image?.path.split('.').last;
-        final fileName = '${wishForm.id}-${wishForm.title}.$fileExt';
-        final uploadedImageUrl =
-            await uploadImage("wish/$fileName", wishForm.image!);
+        // final fileExt = wishForm.image?.path.split('.').last;
+        // final fileName = '${wishForm.id}-${wishForm.title}.$fileExt';
+        // final imagePath = "wish/$fileName";
+
+        final imagePath = generateWishImagePath(
+          wishForm.image!.path,
+          wishForm.id.toString(),
+        );
+
+        final uploadedImageUrl = await uploadImage(imagePath, wishForm.image!);
 
         wishForm.imageUrl = uploadedImageUrl;
-        updateWish(wishForm);
+        _updateWish(wishForm);
       }
-
-
-      print(wishForm.id!);
-      print(wishForm.title!);
-      print(wishForm.createdAt!);
-      print(wishForm.createdBy!);
 
       final wish = Wish(
         id: wishForm.id!,
@@ -54,20 +55,87 @@ class AddWishService {
     }
   }
 
-  static Future<void> updateWish(WishForm wishForm) async {
+  static Future<void> _updateWish(WishForm wishForm) async {
     try {
       await _supabase
           .from("wish")
-          .update(wishForm.toJson())
+          .update(wishForm.toJson()..remove("id"))
           .eq("id", wishForm.id)
           .execute();
     } catch (e) {
-      print('AddWishService - updateWish: ${e}');
+      print('AddWishService - _updateWish: ${e}');
+    }
+  }
+
+  static Future<Wish?> updateWish(
+    WishForm wishForm,
+    String currentUserId,
+  ) async {
+    try {
+      if (wishForm.wasImageUpdate) {
+        final imagePath = generateWishImagePath(
+          wishForm.imageUrl ?? wishForm.image!.path,
+          wishForm.id.toString(),
+        );
+
+        // await removeImage(wishForm.imagePath!);
+        await removeImage(imagePath);
+
+        final uploadedImageUrl = await uploadImage(
+          imagePath,
+          wishForm.image!,
+        );
+
+        wishForm.imageUrl = uploadedImageUrl;
+      }
+
+      final updatedTheWish = await _supabase
+          .from("wish")
+          .update(wishForm.toJson()..remove("id"))
+          .eq("id", wishForm.id)
+          .single()
+          .execute();
+
+      if (updatedTheWish.hasError)
+        throw SupabaseException(
+          "Database error",
+          "Such the wish was deleted or another error.",
+        );
+
+      return Wish.fromJson(
+        updatedTheWish.data as Map<String, dynamic>,
+        currentUserId,
+      );
+    } on SupabaseException catch (e) {
+      print('AddWishService - updateWish - SupabaseException: ${e}');
+      rethrow;
+    } catch (e) {
+      print('AddWishService - updateWish - e: ${e}');
+      rethrow;
     }
   }
 
   static Future<void> deleteWish(WishForm wishForm) async {
     // todo: delete wish
+  }
+
+  // todo: test it
+  static Future<String?> removeImage(String path) async {
+    try {
+      print('removeImage - path : $path');
+      final removedResponse =
+          await _supabase.storage.from("wish.app.bucket").remove([path]);
+      if (removedResponse.error != null) {
+        throw SupabaseException(
+          "Error when removed image",
+          removedResponse.error.toString(),
+        );
+      }
+      print("removedResponse.data : ${removedResponse.data}");
+    } catch (e) {
+      print('AddWishService - removeImage: ${e}');
+      rethrow;
+    }
   }
 
   static Future<String?> uploadImage(String path, File file) async {
@@ -77,6 +145,7 @@ class AddWishService {
                 path,
                 file,
               );
+
       if (uploadResponse.error != null) {
         throw SupabaseException(
           "Error when upload image",
@@ -86,11 +155,28 @@ class AddWishService {
 
       final response =
           _supabase.storage.from("wish.app.bucket").getPublicUrl(path);
+
+      print("uploadImage - response: ${response.data}");
+
       return response.data;
     } catch (e) {
       print('AddWishService - uploadImage: ${e}');
-    } finally {
-      return null;
+    }
+  }
+
+  static Future<Wish?> getWish(int id, String currentUserId) async {
+    try {
+      final gotTheWish =
+          await _supabase.from("wish").select().eq("id", id).single().execute();
+
+      if (gotTheWish.data == null) return null;
+
+      final theWish =
+          Wish.fromJson(gotTheWish.data as Map<String, dynamic>, currentUserId);
+
+      return theWish;
+    } catch (e) {
+      print('AddWishService - updateWish: ${e}');
     }
   }
 }

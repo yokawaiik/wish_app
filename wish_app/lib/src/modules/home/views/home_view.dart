@@ -15,7 +15,7 @@ class HomeView extends GetView<HomeController> {
     final double gridItemHeight = (size.height -
         kBottomNavigationBarHeight -
         kToolbarHeight -
-        (spacing * 2 + 10));
+        (spacing * 1 + 10));
     final double gridItemWidth = size.width;
 
     return Scaffold(
@@ -25,6 +25,8 @@ class HomeView extends GetView<HomeController> {
         },
         child: Obx(
           () => controller.homeWishList.isNotEmpty
+
+              // todo: change small card to big card like instagram post
               ? GridView.builder(
                   controller: controller.scrollController,
                   padding: const EdgeInsets.all(10.0),
@@ -36,9 +38,18 @@ class HomeView extends GetView<HomeController> {
                   ),
                   itemCount: controller.homeWishList.length,
                   itemBuilder: (ctx, i) {
-                    return GridWishItem(
-                      wish: controller.homeWishList[i],
-                      gridItemHeight: gridItemHeight,
+                    return GestureDetector(
+                      onTap: () {
+                        controller
+                            .onClickWishItem(controller.homeWishList[i].id);
+                      },
+                      // todo: onLongTap: add or remove to favourites
+                      // todo: onLongTap: delete if it user own
+                      // todo: onLongTap: share link
+                      child: GridWishItem(
+                        wish: controller.homeWishList[i],
+                        gridItemHeight: gridItemHeight,
+                      ),
                     );
                   },
                 )

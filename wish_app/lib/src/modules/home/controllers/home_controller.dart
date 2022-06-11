@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/home/services/home_service.dart';
+import 'package:wish_app/src/modules/home/views/home_view.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
+import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
 import '../../../services/user_service.dart';
 
 class HomeController extends GetxController {
@@ -113,5 +115,19 @@ class HomeController extends GetxController {
     homeWishList.insert(0, addedWish);
     countWish += 1;
     homeWishList.refresh();
+  }
+
+  void updateWish(Wish updatedWish) {
+    final oldTheWishIndex =
+        homeWishList.indexWhere((element) => element.id == updatedWish.id);
+    homeWishList[oldTheWishIndex] = updatedWish;
+    homeWishList.refresh();
+  }
+
+  Future<void> onClickWishItem(int id) async {
+    await Get.toNamed(
+      WishInfoView.routeName,
+      arguments: {"id": id, "routeName": HomeView.routeName},
+    );
   }
 }

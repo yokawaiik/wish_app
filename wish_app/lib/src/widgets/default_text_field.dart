@@ -6,45 +6,57 @@ class DefaultTextField extends StatelessWidget {
   String? initialValue;
   Function(String)? onChanged;
 
-  bool isPassword;
+  bool obscureText;
   int? minLines;
   int? maxLines;
   int? maxLength;
+  Widget? suffixIcon;
 
+  TextInputType? keyboardType;
+
+  TextEditingController? controller;
+
+  Iterable<String>? autofillHints;
 
   Icon? prefixIcon;
 
   String? Function(String?)? validator;
 
   DefaultTextField({
+    this.controller,
     this.initialValue,
     required this.onChanged,
     this.labelText,
-    this.isPassword = false,
+    this.obscureText = false,
     this.prefixIcon,
     this.validator,
     this.minLines,
     this.maxLines,
     this.maxLength,
+    this.keyboardType = TextInputType.text,
+    this.suffixIcon,
+    this.autofillHints,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       initialValue: initialValue,
       onChanged: onChanged,
       keyboardType: TextInputType.text,
-      obscureText: isPassword ? true : false,
+      obscureText: maxLines == 1 ? false : obscureText,
       validator: validator,
       minLines: minLines,
-      maxLines: maxLines,
+      maxLines: obscureText ? 1 : maxLines,
       maxLength: maxLength,
+      autofillHints: autofillHints,
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: labelText,
-        prefixIcon: prefixIcon,
-      ),
+          border: OutlineInputBorder(),
+          labelText: labelText,
+          prefixIcon: prefixIcon,
+          suffixIcon: suffixIcon),
     );
   }
 }

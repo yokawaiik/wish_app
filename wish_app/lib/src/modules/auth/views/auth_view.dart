@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wish_app/src/modules/auth/widgets/text_field_login.dart';
+import 'package:wish_app/src/modules/auth/widgets/password_text_field.dart';
+import 'package:wish_app/src/widgets/default_text_field.dart';
 
 import '../controllers/auth_controller.dart';
 import '../widgets/rounded_button.dart';
+
+import '../utils/auth_validators.dart' as auth_validators;
 
 class AuthView extends GetView<AuthController> {
   static const routeName = "/auth";
@@ -33,83 +36,91 @@ class AuthView extends GetView<AuthController> {
             horizontal: 20,
             vertical: 40,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Sign in',
-                style: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Obx(
-                () => AnimatedSize(
-                  duration: Duration(milliseconds: 200),
-                  child: Column(
-                    children: controller.isSignIn.value
-                        ? [
-                            SizedBox(
-                              height: 20,
-                            ),
-                            TextFieldLogin(
-                              labelText: "Login",
-                              prefixIcon: Icon(
-                                Icons.person,
-                                color: Get.theme.colorScheme.secondary,
-                              ),
-                              onChanged: (v) {
-                                controller.authUserForm.login = v;
-                              },
-                            ),
-                          ]
-                        : [],
+          child: Form(
+            key: controller.formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Sign in',
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFieldLogin(
-                labelText: "Email",
-                prefixIcon: Icon(
-                  Icons.alternate_email,
-                  color: Get.theme.colorScheme.secondary,
+                Obx(
+                  () => AnimatedSize(
+                    duration: Duration(milliseconds: 200),
+                    child: Column(
+                      children: controller.isSignIn.value
+                          ? [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              DefaultTextField(
+                                labelText: "Login",
+                                autofillHints: [AutofillHints.nickname],
+                                validator: auth_validators.checkLogin,
+                                prefixIcon: Icon(
+                                  Icons.person,
+                                  color: Get.theme.colorScheme.secondary,
+                                ),
+                                onChanged: (v) {
+                                  controller.authUserForm.login = v;
+                                },
+                              ),
+                            ]
+                          : [],
+                    ),
+                  ),
                 ),
-                onChanged: (v) {
-                  controller.authUserForm.email = v;
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFieldLogin(
-                labelText: "Password",
-                isPassword: true,
-                prefixIcon: Icon(
-                  Icons.password,
-                  color: Get.theme.colorScheme.secondary,
+                SizedBox(
+                  height: 20,
                 ),
-                onChanged: (v) {
-                  controller.authUserForm.password = v;
-                },
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Obx(
-                () => _buildRoundedButton(),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextButton(
-                onPressed: () => controller.changeAuthMode(),
-                child: Text(controller.isSignIn.value
-                    ? "You already have an account?"
-                    : 'Don\'t have an account?'),
-              )
-            ],
+                DefaultTextField(
+                  labelText: "Email",
+                  autofillHints: [AutofillHints.email],
+                  prefixIcon: Icon(
+                    Icons.alternate_email,
+                    color: Get.theme.colorScheme.secondary,
+                  ),
+                  validator: auth_validators.checkEmail,
+                  onChanged: (v) {
+                    controller.authUserForm.email = v;
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                PasswordTextField(
+                  labelText: "Password",
+                  validator: auth_validators.checkPassword,
+                  autofillHints: [AutofillHints.email],
+                  prefixIcon: Icon(
+                    Icons.password,
+                    color: Get.theme.colorScheme.secondary,
+                  ),
+                  onChanged: (v) {
+                    controller.authUserForm.password = v;
+                  },
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                Obx(
+                  () => _buildRoundedButton(),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                TextButton(
+                  onPressed: () => controller.changeAuthMode(),
+                  child: Text(controller.isSignIn.value
+                      ? "You already have an account?"
+                      : 'Don\'t have an account?'),
+                )
+              ],
+            ),
           ),
         ),
       ),

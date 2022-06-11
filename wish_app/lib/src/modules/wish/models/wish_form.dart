@@ -13,20 +13,28 @@ class WishForm {
 
   String? createdBy;
 
+  late bool wasImageUpdate;
+  // String? imagePath;
+
   bool get hasImage {
     if (imageUrl != null || image != null) return true;
     return false;
   }
 
   WishForm({
+    this.id,
     this.title,
     this.description,
     this.link,
+    this.imageUrl,
+    this.createdBy,
+    this.wasImageUpdate = false,
+    // this.imagePath,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      // "id": id,
+      "id": id,
       "title": title,
       "description": description,
       "link": link,
@@ -43,5 +51,7 @@ class WishForm {
     link = data["link"];
     createdAt = DateTime.fromMillisecondsSinceEpoch(data["createdAt"]);
     createdBy = inCreatedBy;
+    wasImageUpdate = false;
+    // imagePath = data["imagePath"];
   }
 }

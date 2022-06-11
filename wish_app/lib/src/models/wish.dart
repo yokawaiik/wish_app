@@ -6,7 +6,8 @@ class Wish {
   late String? imageUrl;
   late DateTime createdAt;
   late String createdBy;
-  late bool? isCurrentUser;
+  // todo: add authorName
+  late bool isCurrentUser;
 
   bool get hasImage => imageUrl != null ? true : false;
 
@@ -21,8 +22,12 @@ class Wish {
     this.isCurrentUser = false,
   });
 
-  Wish.fromJson(Map<String, dynamic> data, String? currentUserId) {
+  @override
+  String toString() {
+    return 'Wish: id - $id, title - $title, description - $description, link - $link';
+  }
 
+  Wish.fromJson(Map<String, dynamic> data, String? currentUserId) {
     id = data["id"];
     title = data["title"];
     description = data["description"];
@@ -31,5 +36,18 @@ class Wish {
     createdAt = DateTime.parse(data["createdAt"] as String);
     createdBy = data["createdBy"];
     isCurrentUser = data["createdBy"] == currentUserId;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "title": title,
+      "description": description,
+      "link": link,
+      "imageUrl": imageUrl,
+      "createdAt": createdAt,
+      "createdBy": createdBy,
+      "isCurrentUser": isCurrentUser,
+    };
   }
 }

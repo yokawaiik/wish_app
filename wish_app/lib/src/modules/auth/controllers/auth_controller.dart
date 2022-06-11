@@ -1,5 +1,5 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-
 
 import '../../../models/supabase_exception.dart';
 
@@ -13,8 +13,20 @@ class AuthController extends GetxController {
 
   final authUserForm = AuthUserForm();
 
+  late final GlobalKey<FormState> formKey;
+
+  @override
+  void onInit() {
+    formKey = GlobalKey<FormState>();
+    super.onInit();
+  }
+
   void changeAuthMode() {
     isSignIn.value = !isSignIn.value;
+  }
+
+  bool validateFields() {
+    return formKey.currentState!.validate();
   }
 
   Future<void> login() async {
@@ -22,17 +34,15 @@ class AuthController extends GetxController {
     try {
       isLoading.value = true;
 
-      // Todo: validation
+      if (!validateFields()) return;
 
       await AuthService.signIn(authUserForm);
       await Get.offAllNamed(NavigatorView.routeName);
     } on SupabaseException catch (e) {
       Get.snackbar("Error login", e.msg);
-    } 
-    catch (e) {
+    } catch (e) {
       Get.snackbar("Error login", "It happened unknown error.");
-    }
-    finally {
+    } finally {
       isLoading.value = false;
     }
   }
@@ -42,7 +52,7 @@ class AuthController extends GetxController {
     try {
       isLoading.value = true;
 
-      // Todo: validation
+      if (!validateFields()) return;
 
       await AuthService.signUp(authUserForm);
 

@@ -7,12 +7,9 @@ class UserService extends GetxService {
 
   Future<UserService> init() async => this;
 
-
-   
-
   CurrentUser? get currentUser {
     // Rx<CurrentUser>? get currentUser {
-      // todo: remove currentUser || return currentUser as null
+    // todo: remove currentUser || return currentUser as null
     _supabase.client.auth.onAuthStateChange((event, session) {
       // print("currentUser - onAuthStateChange $event");
       // if (event == AuthChangeEvent.signedOut) {
