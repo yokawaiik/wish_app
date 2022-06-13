@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/home/services/home_service.dart';
 import 'package:wish_app/src/modules/home/views/home_view.dart';
+import 'package:wish_app/src/modules/wish/service/add_wish_service.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
 import '../../../services/user_service.dart';
@@ -29,6 +30,8 @@ class HomeController extends GetxController {
   }
 
   RxBool isLoading = RxBool(false);
+  RxBool isDeleting = RxBool(false);
+
   int countWish = 0;
   int limit = 10;
   // int limit = 2;
@@ -130,4 +133,33 @@ class HomeController extends GetxController {
       arguments: {"id": id, "routeName": HomeView.routeName},
     );
   }
+
+  //todo: shareWish
+  void shareWish() {}
+
+  //todo: addToFavorites
+  void addToFavorites() {}
+
+  void deleteWish(int id) {
+    homeWishList.removeWhere((wish) => wish.id == id);
+    homeWishList.refresh();
+  }
+
+  Future<void> actionDeleteWish(Wish wish) async {
+    try {
+      Get.back(); // close modalBottomSheet
+      isDeleting.value = true;
+      await AddWishService.deleteWish(wish.id, wish.imagePath);
+      deleteWish(wish.id);
+    } catch (e) {
+      print(e);
+      Get.snackbar(
+          "Error loading a last wish list", "Something happened to server.");
+    } finally {
+      isDeleting.value = false;
+    }
+  }
+
+  //todo: seeProfile
+  void seeProfile(Wish wish) {}
 }

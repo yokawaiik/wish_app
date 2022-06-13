@@ -2,6 +2,7 @@ class AuthUserForm {
   String? login;
   String? email;
   String? password;
+  String? userColor;
 
   AuthUserForm({
     this.login,
@@ -13,6 +14,7 @@ class AuthUserForm {
     return {
       "login": login,
       "email": email,
+      "userColor": userColor,
     };
   }
 }

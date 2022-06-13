@@ -1,6 +1,7 @@
 enum KindOfException {
   unknown,
   notFound,
+  auth,
 }
 
 class SupabaseException implements Exception {

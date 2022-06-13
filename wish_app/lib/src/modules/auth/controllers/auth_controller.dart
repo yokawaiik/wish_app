@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:wish_app/src/extensions/wish_color.dart';
 
 import '../../../models/supabase_exception.dart';
 
@@ -54,9 +55,12 @@ class AuthController extends GetxController {
 
       if (!validateFields()) return;
 
+      authUserForm.userColor = WishColor.generateColor().toHex();
       await AuthService.signUp(authUserForm);
 
       await Get.offAllNamed(NavigatorView.routeName);
+    } on SupabaseException catch (e) {
+      Get.snackbar(e.title, e.msg);
     } catch (e) {
       print(e);
       Get.snackbar("Error register now", "It happened unknown error.");

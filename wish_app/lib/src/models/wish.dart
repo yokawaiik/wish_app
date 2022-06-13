@@ -1,3 +1,7 @@
+import 'package:wish_app/src/models/wish_user.dart';
+
+import '../utils/generate_wish_image_path.dart';
+
 class Wish {
   late int id;
   late String title;
@@ -5,11 +9,21 @@ class Wish {
   late String? link;
   late String? imageUrl;
   late DateTime createdAt;
-  late String createdBy;
-  // todo: add authorName
+  late WishUser createdBy;
   late bool isCurrentUser;
 
   bool get hasImage => imageUrl != null ? true : false;
+
+  String? get imagePath {
+    if (hasImage) {
+      final imagePath = generateWishImagePath(
+        imageUrl!,
+        id.toString(),
+      );
+      return imagePath;
+    }
+    return null;
+  }
 
   Wish({
     required this.id,
@@ -34,7 +48,14 @@ class Wish {
     link = data["link"];
     imageUrl = data["imageUrl"];
     createdAt = DateTime.parse(data["createdAt"] as String);
-    createdBy = data["createdBy"];
+
+    // only for UI
+    createdBy = WishUser(
+      id: data["createdBy"],
+      login: data["login"],
+      imageUrl: data["userImageUrl"],
+      userColor: data["userColor"],
+    );
     isCurrentUser = data["createdBy"] == currentUserId;
   }
 

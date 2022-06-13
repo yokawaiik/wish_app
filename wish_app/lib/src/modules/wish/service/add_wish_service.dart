@@ -2,16 +2,20 @@ import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/models/supabase_exception.dart';
 import 'package:wish_app/src/models/wish.dart';
+import 'package:wish_app/src/models/wish_user.dart';
 import 'package:wish_app/src/modules/wish/models/wish_form.dart';
-import 'package:wish_app/src/modules/wish/utils/generate_wish_image_path.dart';
+import 'package:wish_app/src/services/user_service.dart';
+import 'package:wish_app/src/utils/generate_wish_image_path.dart';
 
 class AddWishService {
   static final _supabase = Supabase.instance.client;
 
   static Future<Wish?> addWish(WishForm wishForm) async {
     try {
-      final result =
-          await _supabase.from("wish").insert(wishForm.toJson()).execute();
+      final result = await _supabase
+          .from("wish")
+          .insert(wishForm.toJson()..remove("id"))
+          .execute();
 
       if (result.error != null) {
         throw SupabaseException("Error", result.error.toString());
@@ -22,10 +26,6 @@ class AddWishService {
       wishForm.createdBy = result.data[0]["createdBy"];
 
       if (wishForm.image != null) {
-        // final fileExt = wishForm.image?.path.split('.').last;
-        // final fileName = '${wishForm.id}-${wishForm.title}.$fileExt';
-        // final imagePath = "wish/$fileName";
-
         final imagePath = generateWishImagePath(
           wishForm.image!.path,
           wishForm.id.toString(),
@@ -37,11 +37,26 @@ class AddWishService {
         _updateWish(wishForm);
       }
 
+      final addedWish = (await _supabase
+              .rpc(
+                "select_wish_list",
+              )
+              .eq("id", wishForm.id)
+              .single()
+              .execute())
+          .data;
+
       final wish = Wish(
         id: wishForm.id!,
         title: wishForm.title!,
         createdAt: wishForm.createdAt!,
-        createdBy: wishForm.createdBy!,
+        // createdBy: wishForm.createdBy!,
+        createdBy: WishUser(
+          id: addedWish["createdBy"],
+          login: addedWish["login"],
+          imageUrl: addedWish["userImageUrl"],
+          userColor: addedWish["userColor"],
+        ),
         description: wishForm.description,
         imageUrl: wishForm.imageUrl,
         link: wishForm.link,
@@ -115,11 +130,19 @@ class AddWishService {
     }
   }
 
-  static Future<void> deleteWish(WishForm wishForm) async {
-    // todo: delete wish
+  static Future<void> deleteWish(int id, String? imagePath) async {
+    try {
+      await _supabase.from("wish").delete().eq("id", id).single().execute();
+
+      if (imagePath != null) {
+        await removeImage(imagePath);
+      }
+    } catch (e) {
+      print('AddWishService - deleteWish - e: ${e}');
+      rethrow;
+    }
   }
 
-  // todo: test it
   static Future<String?> removeImage(String path) async {
     try {
       print('removeImage - path : $path');

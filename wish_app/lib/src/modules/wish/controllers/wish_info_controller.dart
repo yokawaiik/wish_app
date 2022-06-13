@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
+import 'package:wish_app/src/modules/wish/service/add_wish_service.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 
 import '../../../models/wish.dart';
 import '../../home/views/home_view.dart';
 import '../../navigator/views/navigator_view.dart';
+import '../../../utils/generate_wish_image_path.dart';
 
 class WishInfoController extends GetxController {
   final homeController = Get.find<HomeController>();
@@ -58,9 +60,34 @@ class WishInfoController extends GetxController {
     });
   }
 
-  deleteTheWish() {}
+  deleteTheWish() async {
+    try {
+      String? imagePath;
+      final theWish = currentWish.value!;
 
+      if (theWish.hasImage) {
+        imagePath = generateWishImagePath(
+          theWish.imageUrl!,
+          theWish.id.toString(),
+        );
+      }
+
+      await AddWishService.deleteWish(theWish.id, imagePath);
+
+      if ([NavigatorView.routeName].contains(Get.previousRoute)) {
+        Get.back();
+        homeController.deleteWish(theWish.id);
+      }
+    } catch (e) {
+      print("WishInfoController - deleteTheWish - e: $e");
+      // Get.offNamedUntil(NavigatorView.routeName, (route) => false);
+      Get.snackbar("Error", "Error when delete the wish. Try later.");
+    }
+  }
+
+  // todo: addToFavorites
   addToFavorites() {}
 
+  // todo: shareTheWish
   shareTheWish() {}
 }

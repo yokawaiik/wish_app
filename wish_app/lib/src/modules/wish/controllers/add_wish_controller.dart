@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:wish_app/src/models/supabase_exception.dart';
+import 'package:wish_app/src/models/wish_user.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/navigator/views/navigator_view.dart';
 import 'package:wish_app/src/modules/wish/controllers/wish_info_controller.dart';
@@ -102,7 +103,8 @@ class AddWishController extends GetxController {
         description: gotTheWish.description,
         link: gotTheWish.link,
         imageUrl: gotTheWish.imageUrl,
-        createdBy: gotTheWish.createdBy,
+        // createdBy: gotTheWish.createdBy,
+        createdBy: gotTheWish.createdBy.id,
       );
 
       print(wishForm.toJson());
@@ -127,7 +129,7 @@ class AddWishController extends GetxController {
       Get.snackbar(title, message);
       Get.offNamedUntil(NavigatorView.routeName, (route) => false);
     } catch (e) {
-      print("AddWishController - addWish - Exception - ${e}");
+      print("AddWishController - getWIshForEdit - Exception - ${e}");
       Get.snackbar("Exception", "Error get the wish.");
       Get.offNamedUntil(NavigatorView.routeName, (route) => false);
     } finally {
@@ -146,6 +148,7 @@ class AddWishController extends GetxController {
 
       final addedWish = await AddWishService.addWish(wishForm.value);
 
+      // if user come here from url
       final homeController = Get.find<HomeController>();
       homeController.addWish(addedWish!);
 

@@ -32,8 +32,6 @@ class HomeService {
         throw SupabaseException("Supabase Error", selectedQuery.error!.message);
       }
 
-
-
       final lastWishList = (selectedQuery.data as List<dynamic>)
           .map((item) =>
               Wish.fromJson(item as Map<String, dynamic>, curentUserId))
@@ -41,8 +39,7 @@ class HomeService {
 
       return lastWishList;
     } on SupabaseException catch (e) {
-      print(
-          "HomeService - loadWishList - SupabaseException - ${e.toString()}");
+      print("HomeService - loadWishList - SupabaseException - ${e.toString()}");
       rethrow;
     } catch (e) {
       print("HomeService - loadWishList - SupabaseException - $e");

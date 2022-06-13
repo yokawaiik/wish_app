@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-
-
+Color seedColorTheme = Colors.teal;
+Color seedColorDarkTheme = Colors.purple;
 
 final ThemeData theme = ThemeData(
   useMaterial3: true,

@@ -34,6 +34,7 @@ String? checkEmail(
 String? checkPassword(
   String? value, {
   String? emptyLengthMessage,
+  bool isRequired = true,
   int minLength = 5,
   String? minLengthMessage,
   int maxLength = 100,
@@ -46,6 +47,7 @@ String? checkPassword(
     emptyLengthMessage: emptyLengthMessage,
     maxLength: maxLength,
     maxLengthMessage: maxLengthMessage,
+    isRequired: isRequired,
   );
 
   return baseCheck;
