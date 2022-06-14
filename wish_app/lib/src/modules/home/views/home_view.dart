@@ -42,7 +42,7 @@ class HomeView extends GetView<HomeController> {
                     title: Text("Share"),
                     onTap: controller.shareWish,
                   ),
-                  if (wish.isCurrentUser)
+                  if (wish.createdBy.isCurrentUser)
                     ListTile(
                       leading: Icon(Icons.delete),
                       title: Text("Delete"),

@@ -56,11 +56,11 @@ class AddWishService {
           login: addedWish["login"],
           imageUrl: addedWish["userImageUrl"],
           userColor: addedWish["userColor"],
+          isCurrentUser: true,
         ),
         description: wishForm.description,
         imageUrl: wishForm.imageUrl,
         link: wishForm.link,
-        isCurrentUser: true,
       );
 
       return wish;

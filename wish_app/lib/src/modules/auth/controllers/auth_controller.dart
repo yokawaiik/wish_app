@@ -6,7 +6,7 @@ import '../../../models/supabase_exception.dart';
 
 import '../../navigator/views/navigator_view.dart';
 import '../models/auth_user_form.dart';
-import '../services/auth_service.dart';
+import '../api_services/auth_service.dart';
 
 class AuthController extends GetxController {
   RxBool isSignIn = RxBool(false);

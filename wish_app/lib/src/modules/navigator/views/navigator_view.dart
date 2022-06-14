@@ -28,7 +28,8 @@ class NavigatorView extends GetView<NavigatorController> {
               },
               itemBuilder: (ctx) {
                 return [
-                  controller.userService.isAuthenticated
+                  // controller.userService.isAuthenticated
+                  controller.userService.isUserAuthenticated.value
                       ? PopupMenuItem(
                           child: Text("Sign Out"),
                           value: 0,

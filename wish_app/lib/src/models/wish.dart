@@ -10,7 +10,7 @@ class Wish {
   late String? imageUrl;
   late DateTime createdAt;
   late WishUser createdBy;
-  late bool isCurrentUser;
+  // late bool isCurrentUser;
 
   bool get hasImage => imageUrl != null ? true : false;
 
@@ -33,7 +33,7 @@ class Wish {
     this.imageUrl,
     required this.createdAt,
     required this.createdBy,
-    this.isCurrentUser = false,
+    // this.isCurrentUser = false,
   });
 
   @override
@@ -55,8 +55,9 @@ class Wish {
       login: data["login"],
       imageUrl: data["userImageUrl"],
       userColor: data["userColor"],
+      isCurrentUser: data["createdBy"] == currentUserId,
     );
-    isCurrentUser = data["createdBy"] == currentUserId;
+    // isCurrentUser = data["createdBy"] == currentUserId;
   }
 
   Map<String, dynamic> toJson() {
@@ -68,7 +69,7 @@ class Wish {
       "imageUrl": imageUrl,
       "createdAt": createdAt,
       "createdBy": createdBy,
-      "isCurrentUser": isCurrentUser,
+      // "isCurrentUser": isCurrentUser,
     };
   }
 }

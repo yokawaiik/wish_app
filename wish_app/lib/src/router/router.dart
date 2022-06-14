@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/auth/bindings/auth_bindings.dart';
 import 'package:wish_app/src/modules/auth/views/auth_view.dart';
 import 'package:wish_app/src/modules/home/bindings/home_binding.dart';
@@ -7,12 +8,15 @@ import 'package:wish_app/src/modules/navigator/bindings/navigator_binding.dart';
 import 'package:wish_app/src/modules/navigator/views/navigator_view.dart';
 import 'package:wish_app/src/modules/splash/bindings/splash_binding.dart';
 import 'package:wish_app/src/modules/splash/views/splash_view.dart';
-import 'package:wish_app/src/modules/wish/bindings/add_wish_binding.dart';
+import 'package:wish_app/src/modules/wish/bindings/add_wish_bindings.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
 
 import '../middlewares/guest_guard.dart';
-import '../modules/wish/bindings/wish_info_binding.dart';
+import '../modules/account/bindings/account_bindings.dart';
+import '../modules/unknown/bindings/unknown_bindings.dart';
+import '../modules/unknown/views/unknown_view.dart';
+import '../modules/wish/bindings/wish_info_bindings.dart';
 
 final List<GetPage> getPages = [
   GetPage(
@@ -40,17 +44,26 @@ final List<GetPage> getPages = [
     binding: HomeBindings(),
   ),
   GetPage(
+    name: AccountView.routeName,
+    page: () => AccountView(),
+    binding: AccountBindings(),
+  ),
+  GetPage(
     name: AddWishView.routeName,
     page: () => AddWishView(),
-    binding: AddWishBinding(),
+    binding: AddWishBindings(),
   ),
   GetPage(
     name: WishInfoView.routeName,
-    page: () => WishInfoView(),
-    binding: WishInfoBinding(),
+    page: () => const WishInfoView(),
+    binding: WishInfoBindings(),
   ),
 ];
 
-// final unknownRoute = GetPage(name: '/notfound', page: () => UnknownView());
+final unknownRoute = GetPage(
+  name: UnknownView.routeName,
+  page: () => UnknownView(),
+  binding: UnknownBindings(),
+);
 
 final initialRoute = NavigatorView.routeName;

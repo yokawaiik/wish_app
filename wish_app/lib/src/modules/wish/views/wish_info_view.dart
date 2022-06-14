@@ -66,13 +66,13 @@ class WishInfoView extends GetView<WishInfoController> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    if (!currentWish.isCurrentUser)
+                    if (!currentWish.createdBy.isCurrentUser)
                       IconTitleButton(
                         onPressed: () => controller.addToFavorites(),
                         icon: const Icon(Icons.favorite),
                         title: const Text("Like"),
                       ),
-                    if (currentWish.isCurrentUser) ...[
+                    if (currentWish.createdBy.isCurrentUser) ...[
                       IconTitleButton(
                         onPressed: () => controller.editTheWish(),
                         icon: const Icon(Icons.edit),
@@ -114,12 +114,11 @@ class WishInfoView extends GetView<WishInfoController> {
                       leading: Icon(Icons.link),
                       title: Text(currentWish.link!),
                     ),
-                  // todo: add author name with link to its profile
-                  // if (currentWish.author != null)
-                  //   ListTile(
-                  //     leading: Text("Author"),
-                  //     title: Text(currentWish.author!),
-                  //   ),
+                  ListTile(
+                    onTap: controller.seeProfile,
+                    leading: Text("Author"),
+                    title: Text(currentWish.createdBy.login),
+                  ),
                 ],
               )
             ],

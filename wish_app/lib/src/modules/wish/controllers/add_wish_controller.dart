@@ -9,7 +9,7 @@ import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/navigator/views/navigator_view.dart';
 import 'package:wish_app/src/modules/wish/controllers/wish_info_controller.dart';
 import 'package:wish_app/src/modules/wish/models/wish_form.dart';
-import 'package:wish_app/src/modules/wish/service/add_wish_service.dart';
+import 'package:wish_app/src/modules/wish/api_services/add_wish_service.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
@@ -144,7 +144,8 @@ class AddWishController extends GetxController {
     try {
       isLoading.value = true;
       if (!validateFields()) return;
-      wishForm.value.createdBy = userService.user?.id;
+      // wishForm.value.createdBy = userService.user?.id;
+      wishForm.value.createdBy = userService.currentUser?.id;
 
       final addedWish = await AddWishService.addWish(wishForm.value);
 
@@ -168,7 +169,8 @@ class AddWishController extends GetxController {
     try {
       isLoading.value = true;
       if (!validateFields()) return;
-      wishForm.value.createdBy = userService.user?.id;
+      // wishForm.value.createdBy = userService.user?.id;
+      wishForm.value.createdBy = userService.currentUser?.id;
 
       final updatedWish = await AddWishService.updateWish(
         wishForm.value,

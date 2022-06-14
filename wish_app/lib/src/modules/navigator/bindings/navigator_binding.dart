@@ -7,7 +7,7 @@ class NavigatorBindings extends Bindings {
   @override
   void dependencies() {
     if (GetPlatform.isMobile) {
-      Get.put(NavigatorController());
+      Get.put(NavigatorController(), permanent: true);
       Get.put(HomeController());
     }
     // Todo: Else - variant for desktop

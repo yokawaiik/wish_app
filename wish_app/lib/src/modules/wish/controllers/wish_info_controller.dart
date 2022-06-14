@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
+import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
-import 'package:wish_app/src/modules/wish/service/add_wish_service.dart';
+import 'package:wish_app/src/modules/wish/api_services/add_wish_service.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 
 import '../../../models/wish.dart';
@@ -86,8 +87,18 @@ class WishInfoController extends GetxController {
   }
 
   // todo: addToFavorites
-  addToFavorites() {}
+  void addToFavorites() {}
 
   // todo: shareTheWish
-  shareTheWish() {}
+  void shareTheWish() {}
+
+  // todo: seeProfile
+  void seeProfile() {
+    Get.toNamed(
+      AccountView.routeName,
+      arguments: {
+        "id": currentWish.value!.createdBy.id,
+      },
+    );
+  }
 }

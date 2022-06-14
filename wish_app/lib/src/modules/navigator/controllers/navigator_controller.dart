@@ -1,13 +1,14 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/favorites/views/favorites_view.dart';
 import 'package:wish_app/src/modules/home/views/home_view.dart';
 import 'package:wish_app/src/services/user_service.dart';
 
 import '../../auth/views/auth_view.dart';
-import '../services/navigator_service.dart';
+import '../api_services/navigator_service.dart';
 
 class NavigatorController extends GetxController {
   final _supabase = Supabase.instance;
@@ -40,10 +41,13 @@ class NavigatorController extends GetxController {
   void onItemTapped(int value) {
     switch (value) {
       case 2:
-        if (!userService.isAuthenticated)
+        // if (!userService.isAuthenticated)
+        if (!userService.isUserAuthenticated.value) {
           Get.toNamed(AuthView.routeName);
-        else
+        } else {
+          Get.put(AccountController());
           selectedIndex.value = value;
+        }
         break;
       default:
         selectedIndex.value = value;

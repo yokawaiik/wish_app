@@ -6,7 +6,6 @@ import './router/router.dart' as router;
 class WishApp extends StatelessWidget {
   const WishApp({Key? key}) : super(key: key);
 
-  
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -15,7 +14,7 @@ class WishApp extends StatelessWidget {
       getPages: router.getPages,
       // home: NavigatorView(),
       initialRoute: router.initialRoute,
-      // todo : add unknownRoute: , 
+      unknownRoute: router.unknownRoute,
       // initialBinding: GlobalBindings(),
     );
   }
