@@ -20,4 +20,19 @@ class UserAccount {
     userColor = data["userColor"];
     isCurrentUser = id == currentUser;
   }
+
+  @override
+  String toString() {
+    return toMap().toString();
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "id": id,
+      "login": login,
+      "imageUrl": imageUrl,
+      "userColor": userColor,
+      "isCurrentUser": isCurrentUser,
+    };
+  }
 }

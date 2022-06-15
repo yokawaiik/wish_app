@@ -1,11 +1,7 @@
 import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/api_services/api_user_service.dart';
 import 'package:wish_app/src/models/supabase_exception.dart';
-import 'package:wish_app/src/models/wish_user.dart';
 import 'package:wish_app/src/models/user_account.dart';
-import 'package:wish_app/src/modules/navigator/views/navigator_view.dart';
-import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
 import 'package:wish_app/src/services/user_service.dart';
 
 import "../../../utils/router_utils.dart" as router_utils;
@@ -13,9 +9,11 @@ import "../../../utils/router_utils.dart" as router_utils;
 class AccountController extends GetxController {
   final _userService = Get.find<UserService>();
 
-  late UserAccount userAccount;
+  var userAccount = Rxn<UserAccount>();
 
-  bool get isCurrentUser => userAccount.isCurrentUser;
+  var isLoading = Rx<bool>(false);
+
+  bool get isCurrentUser => userAccount.value?.isCurrentUser ?? false;
 
   @override
   void onInit() async {
@@ -26,16 +24,9 @@ class AccountController extends GetxController {
 
   Future<void> getUser() async {
     print("AccountController - getUser()");
-
+    isLoading.value = true;
     try {
-      print(
-          "AccountController - getUser() -  Get.arguments == null && Get.arguments['id'] != null : ${Get.arguments != null && Get.arguments["id"] != null}");
-      print(
-          "AccountController - getUser() -  _userService.isUserAuthenticated.value : ${_userService.isUserAuthenticated.value}");
-
       // an unknown user visits someone's account
-      // print("AccountController - getUser() - id : $id");
-
       if (Get.arguments != null && Get.arguments["id"] != null) {
         final gotTheUser = await ApiUserService.getUser(
           Get.arguments["id"],
@@ -46,7 +37,7 @@ class AccountController extends GetxController {
           throw SupabaseException("Error", "Such an user didn't find.");
         }
 
-        userAccount = gotTheUser;
+        userAccount.value = gotTheUser;
         // my account
       } else if (_userService.isUserAuthenticated.value) {
         final gotTheUser = (await _userService.getCurrentUserDetail);
@@ -57,7 +48,7 @@ class AccountController extends GetxController {
               "Error", "Something went wrong when get user details...");
         }
 
-        userAccount = gotTheUser;
+        userAccount.value = gotTheUser;
       } else {
         throw SupabaseException("Error", "It isn't an user.");
       }
@@ -69,6 +60,17 @@ class AccountController extends GetxController {
       print("AccountController - getUser - e: $e");
       await router_utils.toBackOrMainPage();
       Get.snackbar("Error", "Unknown error...");
+    } finally {
+      isLoading.value = false;
     }
   }
+
+  // todo: createWish
+  void createWish() {}
+
+  // todo: exit
+  void exit() {}
+
+  // todo: goToLoginPage
+  void goToLoginPage() {}
 }

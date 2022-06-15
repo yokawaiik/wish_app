@@ -4,6 +4,7 @@ import 'package:wish_app/src/extensions/wish_color.dart';
 import '../models/wish.dart';
 
 import '../theme/theme_wish_app.dart' as theme_wish_app;
+import 'account_user_avatar.dart';
 
 class GridWishItem extends StatelessWidget {
   final double gridItemHeight;
@@ -63,15 +64,10 @@ class GridWishItem extends StatelessWidget {
                     onTap: clickOnAuthor,
                     child: Row(
                       children: [
-                        CircleAvatar(
-                          backgroundColor: wish.createdBy.userColor != null
-                              ? WishColor.fromHex(wish.createdBy.userColor!)
-                              : Theme.of(context).colorScheme.primary,
-                          backgroundImage: wish.createdBy.imageUrl != null
-                              ? NetworkImage(
-                                  wish.createdBy.imageUrl!,
-                                )
-                              : null,
+                        AccountUserAvatar(
+                          defaultColor: Theme.of(context).colorScheme.primary,
+                          userHexColor: wish.createdBy.userColor,
+                          imageUrl: wish.createdBy.imageUrl,
                         ),
                         SizedBox(
                           width: 10,

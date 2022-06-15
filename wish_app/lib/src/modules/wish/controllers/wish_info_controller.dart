@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
-import 'package:wish_app/src/modules/wish/api_services/add_wish_service.dart';
+import 'package:wish_app/src/modules/wish/api_services/add_wish_api_service.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 
 import '../../../models/wish.dart';

@@ -11,38 +11,41 @@ class NavigatorView extends GetView<NavigatorController> {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        appBar: AppBar(
-          actions: [
-            PopupMenuButton(
-              icon: const Icon(Icons.menu),
-              onSelected: (int v) {
-                switch (v) {
-                  case 0:
-                    controller.signOut();
-                    break;
-                  case 1:
-                    controller.goToAuthView();
-                    break;
-                  default:
-                }
-              },
-              itemBuilder: (ctx) {
-                return [
-                  // controller.userService.isAuthenticated
-                  controller.userService.isUserAuthenticated.value
-                      ? PopupMenuItem(
-                          child: Text("Sign Out"),
-                          value: 0,
-                        )
-                      : PopupMenuItem(
-                          child: Text("Sign In"),
-                          value: 1,
-                        ),
-                ];
-              },
-            ),
-          ],
-        ),
+        // for account screen other AppBar
+        appBar: controller.selectedIndex.value != 2
+            ? AppBar(
+                actions: [
+                  PopupMenuButton(
+                    icon: const Icon(Icons.menu),
+                    onSelected: (int v) {
+                      switch (v) {
+                        case 0:
+                          controller.signOut();
+                          break;
+                        case 1:
+                          controller.goToAuthView();
+                          break;
+                        default:
+                      }
+                    },
+                    itemBuilder: (ctx) {
+                      return [
+                        // controller.userService.isAuthenticated
+                        controller.userService.isUserAuthenticated.value
+                            ? PopupMenuItem(
+                                child: Text("Sign Out"),
+                                value: 0,
+                              )
+                            : PopupMenuItem(
+                                child: Text("Sign In"),
+                                value: 1,
+                              ),
+                      ];
+                    },
+                  ),
+                ],
+              )
+            : null,
         body: controller.currentView,
         bottomNavigationBar: NavigationBar(
           selectedIndex: controller.selectedIndex.value,

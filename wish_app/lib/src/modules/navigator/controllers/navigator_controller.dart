@@ -8,7 +8,7 @@ import 'package:wish_app/src/modules/home/views/home_view.dart';
 import 'package:wish_app/src/services/user_service.dart';
 
 import '../../auth/views/auth_view.dart';
-import '../api_services/navigator_service.dart';
+import '../api_services/navigator_api_service.dart';
 
 class NavigatorController extends GetxController {
   final _supabase = Supabase.instance;

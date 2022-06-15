@@ -9,7 +9,7 @@ import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/navigator/views/navigator_view.dart';
 import 'package:wish_app/src/modules/wish/controllers/wish_info_controller.dart';
 import 'package:wish_app/src/modules/wish/models/wish_form.dart';
-import 'package:wish_app/src/modules/wish/api_services/add_wish_service.dart';
+import 'package:wish_app/src/modules/wish/api_services/add_wish_api_service.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
