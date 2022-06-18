@@ -5,6 +5,10 @@ class UserAccount {
   late String? userColor;
   late bool isCurrentUser;
 
+  int? countOfWishes;
+  int? countOfsubscribers;
+  int? countOfSubscribing;
+
   UserAccount({
     required this.id,
     required this.login,
@@ -34,5 +38,11 @@ class UserAccount {
       "userColor": userColor,
       "isCurrentUser": isCurrentUser,
     };
+  }
+
+  void setUserInfoFromMap(Map<String, dynamic> data) {
+    countOfWishes = data['count_of_wishes'];
+    countOfsubscribers = data['count_of_subscribers'];
+    countOfSubscribing = data['count_of_subscribing'];
   }
 }

@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wish_app/src/api_services/api_user_service.dart';
+import 'package:wish_app/src/api_services/user_api_service.dart';
 import 'package:wish_app/src/models/current_user.dart';
 import 'package:wish_app/src/models/user_account.dart';
 
@@ -59,21 +59,30 @@ class UserService extends GetxService {
   }
 
   Future<UserAccount?> get getCurrentUserDetail async {
-    if (isUserAuthenticated.value) {
-      if (_currentUserDetail == null) {
-        final gotTheUser = await ApiUserService.getUser(
-          currentUser!.id,
-          currentUser!.id,
-        );
+    try {
+      if (isUserAuthenticated.value) {
+        if (_currentUserDetail == null) {
+          final gotTheUser = await UserApiService.getUser(
+            currentUser!.id,
+            currentUser!.id,
+          );
 
-        _currentUserDetail = gotTheUser;
-        return _currentUserDetail;
-      } else {
-        return _currentUserDetail;
+          final gotUserInfo = await UserApiService.getUserInfo(currentUser!.id);
+
+          gotTheUser!.setUserInfoFromMap(gotUserInfo!);
+
+          _currentUserDetail = gotTheUser;
+          return _currentUserDetail;
+        } else {
+          return _currentUserDetail;
+        }
       }
-    }
 
-    return null;
+      return null;
+    } catch (e) {
+      print("UserService - getCurrentUserDetail - e: $e");
+      return null;
+    }
   }
 
   // CurrentUser? get user {

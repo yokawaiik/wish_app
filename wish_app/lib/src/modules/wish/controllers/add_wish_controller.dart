@@ -50,7 +50,8 @@ class AddWishController extends GetxController {
       if (isEdit.value) {
         // if not creator user wants to edit item
         final id = Get.arguments["id"] as int?;
-        final isCurrentUser = Get.arguments["isCurrentUser"] as bool;
+        final isCurrentUser =
+            Get.arguments["createdBy"]["isCurrentUser"] as bool;
 
         if (!isCurrentUser) {
           // Get.offAndToNamed(HomeView.routeName);
@@ -82,6 +83,9 @@ class AddWishController extends GetxController {
       // isGetWIshForEdit = true;
 
       print("AddWishController - getWIshForEdit");
+      // print("id : $id");
+      // print("userService.currentUser!.id : ${userService.currentUser!.id}");
+
       final gotTheWish = await AddWishService.getWish(
         id,
         userService.currentUser!.id,

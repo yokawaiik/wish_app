@@ -10,6 +10,7 @@ import 'package:wish_app/src/utils/generate_wish_image_path.dart';
 class AddWishService {
   static final _supabase = Supabase.instance.client;
 
+  // Todo: error
   static Future<Wish?> addWish(WishForm wishForm) async {
     try {
       final result = await _supabase
@@ -37,31 +38,40 @@ class AddWishService {
         _updateWish(wishForm);
       }
 
+      // final addedWish = (await _supabase
+      //         .rpc(
+      //           "select_wish_list",
+      //         )
+      //         .eq("id", wishForm.id)
+      //         .single()
+      //         .execute())
+      //     .data;
       final addedWish = (await _supabase
-              .rpc(
-                "select_wish_list",
-              )
+              .from("wishes_view")
+              .select()
               .eq("id", wishForm.id)
               .single()
               .execute())
-          .data;
+          .data as Map<String, dynamic>;
 
-      final wish = Wish(
-        id: wishForm.id!,
-        title: wishForm.title!,
-        createdAt: wishForm.createdAt!,
-        // createdBy: wishForm.createdBy!,
-        createdBy: WishUser(
-          id: addedWish["createdBy"],
-          login: addedWish["login"],
-          imageUrl: addedWish["userImageUrl"],
-          userColor: addedWish["userColor"],
-          isCurrentUser: true,
-        ),
-        description: wishForm.description,
-        imageUrl: wishForm.imageUrl,
-        link: wishForm.link,
-      );
+      // final wish = Wish(
+      //   id: wishForm.id!,
+      //   title: wishForm.title!,
+      //   createdAt: wishForm.createdAt!,
+      //   // createdBy: wishForm.createdBy!,
+      //   createdBy: WishUser(
+      //     id: addedWish["createdBy"],
+      //     login: addedWish["login"],
+      //     imageUrl: addedWish["userImageUrl"],
+      //     userColor: addedWish["userColor"],
+      //     isCurrentUser: true,
+      //   ),
+      //   description: wishForm.description,
+      //   imageUrl: wishForm.imageUrl,
+      //   link: wishForm.link,
+      // );
+
+      final wish = Wish.fromJson(addedWish, wishForm.createdBy);
 
       return wish;
     } catch (e) {
@@ -117,10 +127,11 @@ class AddWishService {
           "Such the wish was deleted or another error.",
         );
 
-      return Wish.fromJson(
-        updatedTheWish.data as Map<String, dynamic>,
-        currentUserId,
-      );
+      getWish(wishForm.id!, currentUserId);
+
+      final theWish = getWish(wishForm.id!, currentUserId);
+
+      return theWish;
     } on SupabaseException catch (e) {
       print('AddWishService - updateWish - SupabaseException: ${e}');
       rethrow;
@@ -189,17 +200,25 @@ class AddWishService {
 
   static Future<Wish?> getWish(int id, String currentUserId) async {
     try {
-      final gotTheWish =
-          await _supabase.from("wish").select().eq("id", id).single().execute();
+      // final gotTheWish =
+      //     await _supabase.from("wish").select().eq("id", id).single().execute();
+      final gotTheWish = await _supabase
+          .from("wishes_view")
+          .select()
+          .eq("id", id)
+          .single()
+          .execute();
 
       if (gotTheWish.data == null) return null;
+
+      // print('AddWishService - getWish - gotTheWish.data : ${gotTheWish.data}');
 
       final theWish =
           Wish.fromJson(gotTheWish.data as Map<String, dynamic>, currentUserId);
 
       return theWish;
     } catch (e) {
-      print('AddWishService - updateWish: ${e}');
+      print('AddWishService - getWish: ${e}');
     }
   }
 }

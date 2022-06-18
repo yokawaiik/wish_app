@@ -50,12 +50,20 @@ class Wish {
     createdAt = DateTime.parse(data["createdAt"] as String);
 
     // only for UI
+    // createdBy = WishUser(
+    //   id: data["createdBy"],
+    //   login: data["login"],
+    //   imageUrl: data["userImageUrl"],
+    //   userColor: data["userColor"],
+    //   isCurrentUser: data["createdBy"] == currentUserId,
+    // );
+
     createdBy = WishUser(
-      id: data["createdBy"],
-      login: data["login"],
-      imageUrl: data["userImageUrl"],
-      userColor: data["userColor"],
-      isCurrentUser: data["createdBy"] == currentUserId,
+      id: data["createdBy"]["id"],
+      login: data["createdBy"]["login"],
+      imageUrl: data["createdBy"]["userImageUrl"],
+      userColor: data["createdBy"]["userColor"],
+      isCurrentUser: data["createdBy"]["id"] == currentUserId,
     );
     // isCurrentUser = data["createdBy"] == currentUserId;
   }
@@ -68,8 +76,14 @@ class Wish {
       "link": link,
       "imageUrl": imageUrl,
       "createdAt": createdAt,
-      "createdBy": createdBy,
-      // "isCurrentUser": isCurrentUser,
+      "createdBy": {
+        "id": createdBy.id,
+        "login": createdBy.login,
+        "imageUrl": createdBy.imageUrl,
+        "userColor": createdBy.userColor,
+        "isCurrentUser": createdBy.isCurrentUser,
+      },
+      // "isCurrentUser": createdBy.isCurrentUser,
     };
   }
 }

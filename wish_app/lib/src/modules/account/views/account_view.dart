@@ -1,12 +1,17 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
+import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/account/widget/button_counter_title.dart';
 import 'package:wish_app/src/services/user_service.dart';
 import 'package:wish_app/src/widgets/account_user_avatar.dart';
 import 'package:wish_app/src/widgets/skeleton.dart';
+import 'package:wish_app/src/widgets/wish_card.dart';
+
+import '../../../widgets/wish_card_skeleton.dart';
+
+import '../../../constants/global_constants.dart' show defaultPadding;
+import '../../../constants/account_constants.dart' show skeletonItemCount;
 
 class AccountView extends GetView<AccountController> {
   static const String routeName = "/account";
@@ -68,23 +73,24 @@ class AccountView extends GetView<AccountController> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Obx(
       () {
         final userAccount = controller.userAccount.value;
+        final wishList = controller.wishList;
         final isLoading = controller.isLoading.value;
 
         return Scaffold(
           appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios_new),
-              onPressed: Get.back,
-            ),
-            // todo: change it
-            // title: isLoading
-            title: true
+            // leading: IconButton(
+            //   icon: Icon(Icons.arrow_back_ios_new),
+            //   onPressed: Get.back,
+            // ),
+            title: isLoading
+                // title: true
                 ? Skeleton(
-                    height: textTheme.bodyText2!.fontSize,
+                    height: defaultPadding,
                     width: 200,
                   )
                 : Text(userAccount!.login),
@@ -95,136 +101,197 @@ class AccountView extends GetView<AccountController> {
               ),
             ],
           ),
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding:
-                      // const EdgeInsets.symmetric(vertical: , horizontal: 20),
-                      const EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // todo: change
-                      // isLoading
-                      true
-                          ? Skeleton.round(radius: 50)
-                          : AccountUserAvatar(
-                              defaultColor:
-                                  Theme.of(context).colorScheme.primary,
-                              userHexColor: userAccount!.userColor,
-                              imageUrl: userAccount.imageUrl,
-                              radius: 50,
-                              // skeleton: Skeleton(
-                              //   height: 50,
-                              //   width: 50,
-                              // ),
-                              // isLoading: isLoading,
-                            ),
-                      Row(
-                        children: [
-                          ButtonCounterTitle(
-                            onPressed: null,
-                            title: "Wishes",
-                            counter: null,
-                            skeleton: Skeleton(
-                              height: 70,
-                              width: 70,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          ButtonCounterTitle(
-                            onPressed: null,
-                            title: "Followers",
-                            counter: null,
-                            skeleton: Skeleton(
-                              height: 70,
-                              width: 70,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          ButtonCounterTitle(
-                            onPressed: null,
-                            title: "Following",
-                            counter: null,
-                            skeleton: Skeleton(
-                              height: 70,
-                              width: 70,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                // Divider(),
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    children: [
-                      // todo: change it
-                      // if (isLoading)
-                      if (true)
-                        Skeleton.elevatedButton()
-                      else
-                        userAccount!.isCurrentUser
-                            ? ElevatedButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "Edit profile",
-                                  // style: TextStyle(
-                                  //   fontSize: textTheme.headline6!.fontSize,
-                                  // ),
-                                ),
-                              )
-                            : ElevatedButton(
-                                onPressed: () {},
-                                child: Text("Follow"),
-                              )
-                    ],
-                  ),
-                ),
-                // todo: change it
-                // if (isLoading) ...[
-                if (true) ...[
-                  GridView.count(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 1,
-                    crossAxisSpacing: 1,
-                    children: [
-                      ...List<int>.filled(9, 1)
-                          .map((item) => Skeleton.hardCorners())
-                          .toList()
-                    ],
-                  ),
-                ]
-                // todo: redo it
-                else ...[
-                  GridView.count(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 1,
-                    crossAxisSpacing: 1,
-                    children: [
-                      ...List<int>.filled(9, 1)
-                          .map((item) => Skeleton.hardCorners())
-                          .toList()
-                    ],
-                  ),
-                ]
-              ],
-            ),
+          floatingActionButton: Obx(
+            () => controller.isUserAuthenticated.value
+                ? FloatingActionButton(
+                    child: Icon(
+                      Icons.add,
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
+                    onPressed: controller.createWish,
+                  )
+                : SizedBox.shrink(),
           ),
+          body: NestedScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              headerSliverBuilder: (context, _) {
+                return [
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                      [
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              isLoading
+                                  // true
+                                  ? Skeleton.round(radius: 50)
+                                  : AccountUserAvatar(
+                                      defaultColor: colorScheme.primary,
+                                      userHexColor: userAccount!.userColor,
+                                      imageUrl: userAccount.imageUrl,
+                                      radius: 50,
+                                    ),
+                              Row(
+                                children: [
+                                  ButtonCounterTitle(
+                                    onPressed: null,
+                                    title: "Wishes",
+                                    counter: isLoading
+                                        ? null
+                                        : userAccount?.countOfWishes.toString(),
+                                    skeleton: Skeleton(
+                                      height: 70,
+                                      width: 70,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  ButtonCounterTitle(
+                                    onPressed: null,
+                                    title: "Followers",
+                                    counter: isLoading
+                                        ? null
+                                        : userAccount?.countOfsubscribers
+                                            .toString(),
+                                    skeleton: Skeleton(
+                                      height: 70,
+                                      width: 70,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  ButtonCounterTitle(
+                                    onPressed: null,
+                                    title: "Following",
+                                    counter: isLoading
+                                        ? null
+                                        : userAccount?.countOfSubscribing
+                                            .toString(),
+                                    skeleton: Skeleton(
+                                      height: 70,
+                                      width: 70,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(defaultPadding),
+                          child: Row(
+                            children: [
+                              if (isLoading)
+                                // if (true)
+                                Skeleton.elevatedButton()
+                              else
+                                userAccount!.isCurrentUser
+                                    // todo: Edit profile
+                                    ? ElevatedButton(
+                                        onPressed: () {},
+                                        child: Text(
+                                          "Edit profile",
+                                        ),
+                                      )
+                                    : ElevatedButton(
+                                        onPressed: () {},
+                                        child: Text("Follow"),
+                                      ),
+                            ],
+                          ),
+                        ),
+                        const Divider(),
+                      ],
+                    ),
+                  ),
+                ];
+              },
+              body: RefreshIndicator(
+                onRefresh: controller.refreshAccountData,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    _buildWishGrid(
+                        countOfWishes: userAccount?.countOfWishes,
+                        // countOfWishes: 0,
+                        isLoading: isLoading,
+                        wishList: wishList,
+                        context: context,
+                        controller: controller.wishGridController),
+                  ],
+                ),
+              )),
         );
       },
     );
+  }
+
+  Widget _buildWishGrid(
+      {int? countOfWishes,
+      required RxList<Wish> wishList,
+      required bool isLoading,
+      required BuildContext context,
+      required ScrollController controller}) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    var sliverGridDelegateWithFixedCrossAxisCount =
+        SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: GetPlatform.isMobile ? 1 : 2,
+      mainAxisSpacing: 1,
+      crossAxisSpacing: 1,
+      childAspectRatio: 3 / 1, // for height
+    );
+
+    print("_buildGridView - countOfWishes : ${countOfWishes}");
+    print("_buildGridView - isLoading : $isLoading");
+    print("_buildGridView - wishList?.length : ${wishList.length}");
+
+    // todo: remove it
+    // var testList = List.filled(2, 1, growable: true);
+
+    if (isLoading) {
+      return Expanded(
+        child: GridView.builder(
+          gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
+          itemCount: skeletonItemCount,
+          itemBuilder: (_, i) {
+            return const WishCardSkeleton();
+          },
+        ),
+      );
+      // } else if (countOfWishes == 0 || wishList.isEmpty) {
+    } else if (wishList.isEmpty || countOfWishes == 0) {
+      return Expanded(
+        child: Center(
+          child: Icon(
+            Icons.question_mark,
+            color: colorScheme.primary,
+            size: 100,
+          ),
+        ),
+      );
+    } else {
+      return Expanded(
+        child: GridView.builder(
+          controller: controller,
+          gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
+          itemCount: countOfWishes,
+          itemBuilder: (_, i) {
+            // if (i < (countOfWishes!)) {
+            if (i < (wishList.length)) {
+              return WishCard(wishList[i]);
+            } else {
+              return const WishCardSkeleton();
+            }
+          },
+        ),
+      );
+    }
   }
 }
