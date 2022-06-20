@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/wish/api_services/add_wish_api_service.dart';
@@ -22,15 +23,26 @@ class WishInfoController extends GetxController {
     super.onInit();
   }
 
+  late final int? id; // wish
+  late final String? routeName;
+
   Future<void> getTheWish() async {
     try {
-      final id = Get.arguments["id"] as int;
-      final routeName = Get.arguments["routeName"] as String?;
+      // final id = Get.arguments["id"] as int;
+      // final routeName = Get.arguments["routeName"] as String?;
+      id = Get.arguments["id"] as int;
+      routeName = Get.arguments["routeName"] as String?;
 
       switch (routeName) {
         case HomeView.routeName:
           final theFoundWish =
               homeController.homeWishList.firstWhere((item) => item.id == id);
+          currentWish.value = theFoundWish;
+          break;
+        case AccountView.routeName:
+          final accountController = Get.find<AccountController>();
+          final theFoundWish =
+              accountController.wishList.firstWhere((item) => item.id == id);
           currentWish.value = theFoundWish;
           break;
         default:
@@ -94,11 +106,12 @@ class WishInfoController extends GetxController {
 
   // todo: seeProfile
   void seeProfile() {
-    Get.toNamed(
-      AccountView.routeName,
-      arguments: {
-        "id": currentWish.value!.createdBy.id,
-      },
-    );
+    if (Get.previousRoute == AccountView.routeName)
+      Get.toNamed(
+        AccountView.routeName,
+        arguments: {
+          "id": currentWish.value!.createdBy.id,
+        },
+      );
   }
 }

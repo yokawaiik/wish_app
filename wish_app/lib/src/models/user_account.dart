@@ -9,12 +9,17 @@ class UserAccount {
   int? countOfsubscribers;
   int? countOfSubscribing;
 
+  bool hasSubscribe = false;
+  bool hasSubscription = false;
+
   UserAccount({
     required this.id,
     required this.login,
     this.imageUrl,
     this.userColor,
     this.isCurrentUser = false,
+    this.hasSubscribe = false,
+    this.hasSubscription = false,
   });
 
   UserAccount.fromJson(Map<String, dynamic> data, String? currentUser) {
@@ -23,6 +28,8 @@ class UserAccount {
     imageUrl = data["imageUrl"];
     userColor = data["userColor"];
     isCurrentUser = id == currentUser;
+    hasSubscribe = data["has_subscribe"] ?? false;
+    hasSubscription = data["has_subscription"] ?? false;
   }
 
   @override
@@ -44,5 +51,11 @@ class UserAccount {
     countOfWishes = data['count_of_wishes'];
     countOfsubscribers = data['count_of_subscribers'];
     countOfSubscribing = data['count_of_subscribing'];
+  }
+
+  void setSubscriptionInfoFromMap(Map<String, dynamic> data) {
+    // print("setSubscriptionInfoFromMap - data: $data");
+    hasSubscribe = data["has_subscribe"] ?? false;
+    hasSubscription = data["has_subscription"] ?? false;
   }
 }

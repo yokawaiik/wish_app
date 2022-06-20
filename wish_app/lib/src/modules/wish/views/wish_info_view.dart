@@ -114,11 +114,12 @@ class WishInfoView extends GetView<WishInfoController> {
                       leading: Icon(Icons.link),
                       title: Text(currentWish.link!),
                     ),
-                  ListTile(
-                    onTap: controller.seeProfile,
-                    leading: Icon(Icons.person),
-                    title: Text(currentWish.createdBy.login),
-                  ),
+                  if (!currentWish.createdBy.isCurrentUser)
+                    ListTile(
+                      onTap: controller.seeProfile,
+                      leading: Icon(Icons.person),
+                      title: Text(currentWish.createdBy.login),
+                    ),
                 ],
               )
             ],

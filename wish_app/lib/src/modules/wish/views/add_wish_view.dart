@@ -144,7 +144,11 @@ class AddWishView extends GetView<AddWishController> {
                                   width: 120,
                                   child: Center(
                                     child: controller.isLoading.value
-                                        ? CircularProgressIndicator()
+                                        ? const SizedBox(
+                                            height: 16,
+                                            width: 16,
+                                            child: CircularProgressIndicator(),
+                                          )
                                         : Text(
                                             controller.isEdit.value
                                                 ? "Save"

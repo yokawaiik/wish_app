@@ -38,7 +38,7 @@ class Wish {
 
   @override
   String toString() {
-    return 'Wish: id - $id, title - $title, description - $description, link - $link';
+    return 'Wish: ${toJson()}';
   }
 
   Wish.fromJson(Map<String, dynamic> data, String? currentUserId) {

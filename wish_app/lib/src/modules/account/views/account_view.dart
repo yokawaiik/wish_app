@@ -80,6 +80,9 @@ class AccountView extends GetView<AccountController> {
         final userAccount = controller.userAccount.value;
         final wishList = controller.wishList;
         final isLoading = controller.isLoading.value;
+        final isSubscribing = controller.isSubscribing.value;
+
+        print('userAccount?.hasSubscribe : ${userAccount?.hasSubscribe}');
 
         return Scaffold(
           appBar: AppBar(
@@ -152,6 +155,7 @@ class AccountView extends GetView<AccountController> {
                                     width: 10,
                                   ),
                                   ButtonCounterTitle(
+                                    key: Key("Followers"),
                                     onPressed: null,
                                     title: "Followers",
                                     counter: isLoading
@@ -167,6 +171,7 @@ class AccountView extends GetView<AccountController> {
                                     width: 10,
                                   ),
                                   ButtonCounterTitle(
+                                    key: Key("Following"),
                                     onPressed: null,
                                     title: "Following",
                                     counter: isLoading
@@ -190,19 +195,36 @@ class AccountView extends GetView<AccountController> {
                               if (isLoading)
                                 // if (true)
                                 Skeleton.elevatedButton()
-                              else
-                                userAccount!.isCurrentUser
+                              else ...[
+                                if (controller.isUserAuthenticated.value) ...[
+                                  if (userAccount!.isCurrentUser)
                                     // todo: Edit profile
-                                    ? ElevatedButton(
-                                        onPressed: () {},
-                                        child: Text(
-                                          "Edit profile",
-                                        ),
-                                      )
-                                    : ElevatedButton(
-                                        onPressed: () {},
-                                        child: Text("Follow"),
+                                    ElevatedButton(
+                                      onPressed: controller.editProfile,
+                                      child: Text(
+                                        "Edit profile",
                                       ),
+                                    )
+                                  else
+                                    ElevatedButton(
+                                      onPressed: isSubscribing
+                                          ? null
+                                          : controller.toggleSubscription,
+                                      child: isSubscribing
+                                          ? const SizedBox(
+                                              height: 16,
+                                              width: 16,
+                                              child:
+                                                  CircularProgressIndicator())
+                                          : Text(
+                                              userAccount.hasSubscribe
+                                                  ? "Unfollow"
+                                                  : "Follow",
+                                            ),
+                                    ),
+                                ]
+                              ]
+                              // followButton
                             ],
                           ),
                         ),
@@ -218,12 +240,13 @@ class AccountView extends GetView<AccountController> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     _buildWishGrid(
-                        countOfWishes: userAccount?.countOfWishes,
-                        // countOfWishes: 0,
-                        isLoading: isLoading,
-                        wishList: wishList,
-                        context: context,
-                        controller: controller.wishGridController),
+                      countOfWishes: userAccount?.countOfWishes,
+                      isLoading: isLoading,
+                      wishList: wishList,
+                      context: context,
+                      controller: controller.wishGridController,
+                      onTap: controller.goToWishInfo,
+                    ),
                   ],
                 ),
               )),
@@ -232,12 +255,14 @@ class AccountView extends GetView<AccountController> {
     );
   }
 
-  Widget _buildWishGrid(
-      {int? countOfWishes,
-      required RxList<Wish> wishList,
-      required bool isLoading,
-      required BuildContext context,
-      required ScrollController controller}) {
+  Widget _buildWishGrid({
+    int? countOfWishes,
+    required RxList<Wish> wishList,
+    required bool isLoading,
+    required BuildContext context,
+    required ScrollController controller,
+    required Function onTap,
+  }) {
     final colorScheme = Theme.of(context).colorScheme;
 
     var sliverGridDelegateWithFixedCrossAxisCount =
@@ -248,16 +273,10 @@ class AccountView extends GetView<AccountController> {
       childAspectRatio: 3 / 1, // for height
     );
 
-    print("_buildGridView - countOfWishes : ${countOfWishes}");
-    print("_buildGridView - isLoading : $isLoading");
-    print("_buildGridView - wishList?.length : ${wishList.length}");
-
-    // todo: remove it
-    // var testList = List.filled(2, 1, growable: true);
-
     if (isLoading) {
       return Expanded(
         child: GridView.builder(
+          physics: const AlwaysScrollableScrollPhysics(),
           gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
           itemCount: skeletonItemCount,
           itemBuilder: (_, i) {
@@ -265,7 +284,6 @@ class AccountView extends GetView<AccountController> {
           },
         ),
       );
-      // } else if (countOfWishes == 0 || wishList.isEmpty) {
     } else if (wishList.isEmpty || countOfWishes == 0) {
       return Expanded(
         child: Center(
@@ -279,13 +297,13 @@ class AccountView extends GetView<AccountController> {
     } else {
       return Expanded(
         child: GridView.builder(
+          physics: const AlwaysScrollableScrollPhysics(),
           controller: controller,
           gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
           itemCount: countOfWishes,
           itemBuilder: (_, i) {
-            // if (i < (countOfWishes!)) {
             if (i < (wishList.length)) {
-              return WishCard(wishList[i]);
+              return WishCard(wishList[i], onTap: () => onTap(wishList[i].id));
             } else {
               return const WishCardSkeleton();
             }

@@ -162,4 +162,6 @@ class HomeController extends GetxController {
 
   //todo: seeProfile
   void seeProfile(Wish wish) {}
+
+  void updateTheWish(param0) {}
 }

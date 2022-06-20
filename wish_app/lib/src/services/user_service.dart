@@ -58,31 +58,35 @@ class UserService extends GetxService {
     return RxBool(currentUser == null ? false : true);
   }
 
-  Future<UserAccount?> get getCurrentUserDetail async {
-    try {
-      if (isUserAuthenticated.value) {
-        if (_currentUserDetail == null) {
-          final gotTheUser = await UserApiService.getUser(
-            currentUser!.id,
-            currentUser!.id,
-          );
+  // Future<UserAccount?> get getCurrentUserDetail async {
+  //   try {
+  //     if (isUserAuthenticated.value) {
+  //       if (_currentUserDetail == null) {
+  //         final gotTheUser = await UserApiService.getUser(
+  //           currentUser!.id,
+  //           currentUser!.id,
+  //         );
 
-          final gotUserInfo = await UserApiService.getUserInfo(currentUser!.id);
+  //         final gotUserInfo = await UserApiService.getUserInfo(currentUser!.id);
 
-          gotTheUser!.setUserInfoFromMap(gotUserInfo!);
+  //         gotTheUser!.setUserInfoFromMap(gotUserInfo!);
 
-          _currentUserDetail = gotTheUser;
-          return _currentUserDetail;
-        } else {
-          return _currentUserDetail;
-        }
-      }
+  //         _currentUserDetail = gotTheUser;
+  //         return _currentUserDetail;
+  //       } else {
+  //         return _currentUserDetail;
+  //       }
+  //     }
 
-      return null;
-    } catch (e) {
-      print("UserService - getCurrentUserDetail - e: $e");
-      return null;
-    }
+  //     return null;
+  //   } catch (e) {
+  //     print("UserService - getCurrentUserDetail - e: $e");
+  //     return null;
+  //   }
+  // }
+
+  Future<void> signOut() async {
+    UserApiService.signOut();
   }
 
   // CurrentUser? get user {

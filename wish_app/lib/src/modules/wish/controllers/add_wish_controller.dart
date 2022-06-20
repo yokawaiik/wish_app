@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:wish_app/src/models/supabase_exception.dart';
-import 'package:wish_app/src/models/wish_user.dart';
+import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/navigator/views/navigator_view.dart';
 import 'package:wish_app/src/modules/wish/controllers/wish_info_controller.dart';
@@ -14,6 +14,9 @@ import 'package:wish_app/src/modules/wish/api_services/add_wish_api_service.dart
 import 'package:image_picker/image_picker.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
 import 'package:wish_app/src/services/user_service.dart';
+
+import '../../account/views/account_view.dart';
+import '../../home/views/home_view.dart';
 
 // class AddWishController extends GetxController {
 class AddWishController extends GetxController {
@@ -153,9 +156,20 @@ class AddWishController extends GetxController {
 
       final addedWish = await AddWishService.addWish(wishForm.value);
 
-      // if user come here from url
-      final homeController = Get.find<HomeController>();
-      homeController.addWish(addedWish!);
+      // if user came here from home
+      // or account
+
+      final routes = Get.routeTree.routes.map((e) => e.name).toList();
+
+      if (routes.contains(AccountView.routeName)) {
+        final accountController = Get.find<AccountController>();
+        accountController.addWish(addedWish!);
+      }
+
+      if (routes.contains(HomeView.routeName)) {
+        final homeController = Get.find<HomeController>();
+        homeController.addWish(addedWish!);
+      }
 
       Get.back();
     } on SupabaseException catch (e) {
@@ -181,15 +195,28 @@ class AddWishController extends GetxController {
         userService.currentUser!.id,
       );
 
-      final homeController = Get.find<HomeController>();
-      homeController.updateWish(updatedWish!);
-
+      final routes = Get.routeTree.routes.map((e) => e.name).toList();
       // ? info: update if last screen was WishInfoView
-      if (Get.previousRoute == WishInfoView.routeName) {
+      if (routes.contains(WishInfoView.routeName)) {
         final wishInfoController = Get.find<WishInfoController>();
         Get.back();
         wishInfoController.updateTheWish();
       }
+
+      if (routes.contains(AccountView.routeName)) {
+        final accountController = Get.find<AccountController>();
+        accountController.updateTheWish(updatedWish!);
+      }
+      if (routes.contains(HomeView.routeName)) {
+        final homeController = Get.find<HomeController>();
+        homeController.updateWish(updatedWish!);
+      }
+
+      // if (Get.previousRoute == WishInfoView.routeName) {
+      //   final wishInfoController = Get.find<WishInfoController>();
+      //   Get.back();
+      //   wishInfoController.updateTheWish();
+      // }
     } on SupabaseException catch (e) {
       print("AddWishController - saveWish - SupabaseException - $e");
       Get.snackbar(e.title, e.msg);

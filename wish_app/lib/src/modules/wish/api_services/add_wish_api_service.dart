@@ -35,7 +35,7 @@ class AddWishService {
         final uploadedImageUrl = await uploadImage(imagePath, wishForm.image!);
 
         wishForm.imageUrl = uploadedImageUrl;
-        _updateWish(wishForm);
+        await _updateWish(wishForm);
       }
 
       // final addedWish = (await _supabase
@@ -54,24 +54,9 @@ class AddWishService {
               .execute())
           .data as Map<String, dynamic>;
 
-      // final wish = Wish(
-      //   id: wishForm.id!,
-      //   title: wishForm.title!,
-      //   createdAt: wishForm.createdAt!,
-      //   // createdBy: wishForm.createdBy!,
-      //   createdBy: WishUser(
-      //     id: addedWish["createdBy"],
-      //     login: addedWish["login"],
-      //     imageUrl: addedWish["userImageUrl"],
-      //     userColor: addedWish["userColor"],
-      //     isCurrentUser: true,
-      //   ),
-      //   description: wishForm.description,
-      //   imageUrl: wishForm.imageUrl,
-      //   link: wishForm.link,
-      // );
-
       final wish = Wish.fromJson(addedWish, wishForm.createdBy);
+
+      print(wish);
 
       return wish;
     } catch (e) {
