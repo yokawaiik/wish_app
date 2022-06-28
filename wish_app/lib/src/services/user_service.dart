@@ -67,7 +67,6 @@ class UserService extends GetxService {
 
   void _setUser() {
     final authUser = _supabase.client.auth.currentUser;
-    print('_setUser - authUser : $authUser');
     if (authUser == null) {
       _currentUser = null;
     } else {
@@ -109,9 +108,6 @@ class UserService extends GetxService {
     await UserApiService.signOut();
 
     _setUser();
-
-    final authUser = _supabase.client.auth.currentUser;
-    print("_destroySession - authUser : $authUser");
   }
 
   bool _sessionIsValid() {
@@ -151,17 +147,8 @@ class UserService extends GetxService {
 
   // ? info: methods for another controllers
   Future<void> signOut() async {
-    // todo: bug - its nesseasary to delete currentUser
     await _destroySession();
     await _updateApp();
-
-    final authUser = _supabase.client.auth.currentUser;
-    print("signOut - authUser : $authUser");
-
-    print('signOut - isUserAuthenticated : ${isUserAuthenticated.value}');
-    print('signOut - currentUser : ${currentUser}');
-    print('signOut - _currentUser : ${_currentUser}');
-    print('signOut - currentUser : ${currentUser}');
   }
 
   void signIn() {

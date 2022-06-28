@@ -1,15 +1,14 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wish_app/src/modules/account/bindings/account_bindings.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/home/bindings/home_main_binding.dart';
 import 'package:wish_app/src/modules/home/views/home_main_view.dart';
-import '../../../models/wish.dart';
-import '../../../widgets/grid_wish_item.dart';
+
 import '../../account/models/account_arguments.dart';
 import '../controllers/home_controller.dart';
+
+import '../constants/router_constants.dart' as router_constants;
 
 class HomeView extends GetView<HomeController> {
   static const String routeName = "/home";
@@ -23,26 +22,25 @@ class HomeView extends GetView<HomeController> {
     return WillPopScope(
       onWillPop: controller.onWillPop,
       child: Navigator(
+        // todo: test it
+        observers: [GetObserver((_) {}, Get.routing)],
         // body: GetNavigator(
         key: Get.nestedKey(controller.nestedKey),
         // initialRoute: HomeMainView.routeName,
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
-            case AccountView.routeName:
+            case router_constants.homeAccountRouteName:
               var args = settings.arguments as AccountArguments;
-              var routeName = "/home/account";
-
-              // print("args : ${args.toMap()}");
 
               return GetPageRoute(
-                routeName: routeName,
+                routeName: router_constants.homeAccountRouteName,
                 settings: settings,
                 page: () => AccountView(tag: args.tag),
-                binding: AccountBindings(args.tag),
+                binding: AccountBindings(tag: args.tag, isAnotherUser: true),
               );
             default:
               return GetPageRoute(
-                routeName: HomeMainView.routeName,
+                routeName: router_constants.homeMainRouteName,
                 settings: settings,
                 page: () => HomeMainView(),
                 binding: HomeMainBindings(),

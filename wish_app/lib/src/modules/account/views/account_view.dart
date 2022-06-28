@@ -43,7 +43,7 @@ class AccountView extends GetView<AccountController> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
-                    onPressed: () => Get.back(),
+                    onPressed: () => controller.closeModalBottomSheet(),
                     icon: Icon(
                       Icons.close,
                       size: 36,
@@ -54,20 +54,34 @@ class AccountView extends GetView<AccountController> {
               ListView(
                 shrinkWrap: true,
                 children: [
-                  if (userService.isUserAuthenticated.value) ...[
+                  // if (userService.isUserAuthenticated.value) ...[
+                  if (controller.isCurrentUser.value) ...[
                     ListTile(
                       leading: Icon(Icons.create),
                       title: Text("Create new wish"),
-                      onTap: () => controller.createWish(),
+                      onTap: controller.createWish,
                     ),
+                    // ListTile(
+                    //   leading: Icon(Icons.person),
+                    //   title: Text("Exit"),
+                    //   onTap: controller.exit,
+                    // )
                   ],
+                  if (userService.isUserAuthenticated.value &&
+                      !controller.isCurrentUser.value)
+                    ListTile(
+                      leading: Icon(Icons.person),
+                      title: Text("My Account"),
+                      onTap: controller.goToMyAccountPage,
+                    ),
+
                   ListTile(
                     leading: Icon(Icons.person),
                     title: Text(userService.isUserAuthenticated.value
-                        ? "Exit"
+                        ? "Sign Out"
                         : "Log In"),
-                    onTap: () => (userService.isUserAuthenticated.value
-                        ? controller.exit()
+                    onTap: () => (controller.isCurrentUser.value
+                        ? controller.signOut()
                         : controller.goToLoginPage()),
                   ),
                 ],
@@ -83,8 +97,6 @@ class AccountView extends GetView<AccountController> {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-
-    // ScrollController _nestedScrollViewController = ScrollController();
 
     return Obx(
       () {

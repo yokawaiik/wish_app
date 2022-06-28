@@ -6,6 +6,7 @@ import 'package:wish_app/src/models/user_account.dart';
 import 'package:wish_app/src/modules/account/api_services/account_api_service.dart';
 import 'package:wish_app/src/modules/account/models/account_arguments.dart';
 import 'package:wish_app/src/modules/auth/views/auth_view.dart';
+import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/home/controllers/home_main_controller.dart';
 import 'package:wish_app/src/modules/navigator/controllers/navigator_controller.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
@@ -21,6 +22,8 @@ import '../views/account_view.dart';
 
 class AccountController extends GetxController {
   final _userService = Get.find<UserService>();
+  final _navigatorController = Get.find<NavigatorController>();
+  final _homeController = Get.find<HomeController>();
 
   var userAccount = Rxn<UserAccount>();
   var isLoading = Rx<bool>(false);
@@ -30,48 +33,50 @@ class AccountController extends GetxController {
   final _limit = account_constants.itemCountLimit;
   late final ScrollController wishGridController;
 
-  Rx<bool> get isUserAuthenticated => _userService.isUserAuthenticated;
+  RxBool get isUserAuthenticated => _userService.isUserAuthenticated;
+  RxBool get isCurrentUser => RxBool(userAccount.value?.isCurrentUser ?? false);
 
   bool isWishListLoad = false;
+
+  late final AccountArguments? args;
 
   @override
   void onInit() async {
     wishGridController = ScrollController();
-    wishGridController.addListener(() async {
-      // ? info: it needs to not to load wish list again while previous load wasnt ready
-      if (isWishListLoad == true) return;
-      if (userAccount.value!.countOfWishes == null) return;
-      if (_offset >= userAccount.value!.countOfWishes!) return;
+    wishGridController.addListener(wishListScrollListener);
 
-      final itemRatio = _offset / userAccount.value!.countOfWishes!;
-      final scrollPosition = wishGridController.offset /
-          wishGridController.position.maxScrollExtent;
-
-      print('itemRatio : ${itemRatio}');
-      print('scrollPosition : $scrollPosition');
-      // final itemRatio = _offset / userAccount.value!.countOfWishes!;
-      // final scrollPosition = wishGridController.position.pixels /
-      //     wishGridController.position.maxScrollExtent;
-
-      // final itemRatio = _offset / userAccount.value!.countOfWishes!;
-      // final scrollPosition = wishGridController.positions.last.pixels /
-      //     wishGridController.positions.last.maxScrollExtent;
-
-      if (scrollPosition + account_constants.loadOffset >= itemRatio) {
-        await loadWishList();
-      }
-    });
-
-    initLoading();
+    await initLoading();
     super.onInit();
   }
 
-  // todo: arguments
-  void initLoading() async {
-    final data = Get.rawRoute?.settings.arguments as AccountArguments?;
-    // final data = Get.arguments as AccountArguments?;
-    print('AccountController - initLoading - data.toMap() : ${data?.toMap()}');
+  void wishListScrollListener() async {
+    if (isWishListLoad == true) return;
+    if (userAccount.value?.countOfWishes == null) return;
+    if (userAccount.value!.countOfWishes != null &&
+        _offset >= userAccount.value!.countOfWishes!) return;
 
+    final itemRatio = _offset / userAccount.value!.countOfWishes!;
+    final scrollPosition =
+        wishGridController.offset / wishGridController.position.maxScrollExtent;
+
+    print('itemRatio : ${itemRatio}');
+    print('scrollPosition : $scrollPosition');
+    // final itemRatio = _offset / userAccount.value!.countOfWishes!;
+    // final scrollPosition = wishGridController.position.pixels /
+    //     wishGridController.position.maxScrollExtent;
+
+    // final itemRatio = _offset / userAccount.value!.countOfWishes!;
+    // final scrollPosition = wishGridController.positions.last.pixels /
+    //     wishGridController.positions.last.maxScrollExtent;
+
+    if (scrollPosition + account_constants.loadOffset >= itemRatio) {
+      await loadWishList();
+    }
+  }
+
+  // todo: arguments
+  Future<void> initLoading() async {
+    args = Get.arguments as AccountArguments?;
     isLoading.value = true;
     await getUser();
     await loadWishList();
@@ -81,32 +86,22 @@ class AccountController extends GetxController {
   Future<void> getUser() async {
     print("AccountController - getUser()");
     try {
+      print('AccountController - initLoading - args : ${args}');
+
       // an unknown user visits someone's account
-      if (Get.arguments != null && Get.arguments["id"] != null) {
+      if (args != null && args!.tag != null) {
         final gotTheUser = await AccountApiService.getUser(
-          Get.arguments["id"],
-          // null,
+          args!.tag!,
           _userService.currentUser?.id,
         );
-        // if (gotTheUser == null) {
-        //   throw SupabaseException("Error", "Such an user didn't find.");
-        // }
 
         userAccount.value = gotTheUser;
-        // userAccount.refresh();
-        // my account
-        // load subscription info
       } else if (_userService.isUserAuthenticated.value) {
         // final gotTheUser = (await _userService.getCurrentUserDetail);
         final gotTheUser = await AccountApiService.getUser(
           _userService.currentUser!.id,
           _userService.currentUser!.id,
         );
-
-        // if (gotTheUser == null) {
-        //   throw SupabaseException(
-        //       "Error", "Something went wrong when get user details...");
-        // }
 
         userAccount.value = gotTheUser;
         // userAccount.refresh();
@@ -166,23 +161,26 @@ class AccountController extends GetxController {
   }
 
   void createWish() async {
+    closeModalBottomSheet();
     await Get.toNamed(AddWishView.routeName);
   }
 
-  void exit() async {
-    Get.back();
-    // await _userService.signOut();
-    final nc = Get.find<NavigatorController>();
-    // navigatorController.onItemTapped(navigatorController.selectedIndex.value);
-    // await Get.forceAppUpdate();
-    // _userService.signOut();
-    await nc.signOut();
+  void signOut() async {
+    closeModalBottomSheet(); // hide bottomModalSheet
 
-    // navigatorController.updateAccount();
+    if (isCurrentUser.isFalse) {
+      Get.back(id: _homeController.nestedKey);
+    }
+
+    await _navigatorController.signOut();
   }
 
   // todo: goToLoginPage
-  void goToLoginPage() {}
+  // ? shows only for unauth user who sees profile belongs to another users
+  void goToLoginPage() async {
+    closeModalBottomSheet();
+    await Get.toNamed(AuthView.routeName);
+  }
 
   // todo: deleteWish
   void deleteWish(int id) {
@@ -192,6 +190,7 @@ class AccountController extends GetxController {
     wishList.refresh();
   }
 
+  // todo: ERROR when click
   void goToWishInfo(int id) async {
     await Get.toNamed(
       WishInfoView.routeName,
@@ -246,4 +245,17 @@ class AccountController extends GetxController {
 
   // todo: editProfile
   void editProfile() {}
+
+  void goToMyAccountPage() {
+    Get.back(id: _homeController.nestedKey);
+    _navigatorController.onItemTapped(2);
+  }
+
+  closeModalBottomSheet() {
+    if (isCurrentUser.isFalse) {
+      Get.back(closeOverlays: true, id: _homeController.nestedKey);
+    } else {
+      Get.back();
+    }
+  }
 }

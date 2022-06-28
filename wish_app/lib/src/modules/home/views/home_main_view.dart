@@ -79,6 +79,9 @@ class HomeMainView extends GetView<HomeMainController> {
     return WillPopScope(
       onWillPop: Get.find<HomeController>().onWillPop,
       child: Scaffold(
+        appBar: AppBar(
+          title: Text("Home"),
+        ),
         body: RefreshIndicator(
           onRefresh: () async {
             await controller.refreshWishList();

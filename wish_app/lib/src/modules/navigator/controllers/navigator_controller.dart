@@ -56,38 +56,23 @@ class NavigatorController extends GetxController {
 
   Future<void> signOut() async {
     try {
-      // print("NavigatorController - signOut - start");
       final tag = userService.currentUser!.id;
 
       final acIsRegistered = Get.isRegistered<AccountController>(tag: tag);
 
-      // print('NavigatorController - acIsRegistered : ${acIsRegistered}');
       if (!isUserAuthenticated.value && acIsRegistered) {
-        final ac = Get.find<AccountController>(tag: tag);
-        ac.dispose();
+        // final ac = Get.find<AccountController>(tag: tag);
+        // ac.dispose();
+        await Get.delete<AccountController>(tag: tag);
       }
 
-      // print("NavigatorController - signOut - before 1");
-
       await userService.signOut();
-
-      // print("NavigatorController - signOut - after 1");
-
-      // only for account screen
-      print(
-          "NavigatorController - selectedIndex.value : ${selectedIndex.value}");
 
       if (selectedIndex.value == 2) {
         onItemTapped(selectedIndex.value);
       }
 
       updateAccountView();
-
-      // await Get.toNamed(AuthView.routeName);
-
-      // final hmc = Get.find<HomeMainController>();
-      // await hmc.refreshWishList();
-      // print("NavigatorController - signOut - finish");
     } catch (e) {
       print('NavigatorController - e : $e');
       Get.snackbar("Error", "Something went wrong.");
@@ -102,11 +87,6 @@ class NavigatorController extends GetxController {
   void onItemTapped(int value) {
     switch (value) {
       case 2:
-        // if (!userService.isUserAuthenticated.value)
-        print(
-            'onItemTapped - !userService.isUserAuthenticated.value : ${!userService.isUserAuthenticated.value}');
-        print(
-            'onItemTapped - userService.isUserAuthenticated.value : ${userService.isUserAuthenticated.value}');
         if (!userService.isUserAuthenticated.value) {
           Get.toNamed(AuthView.routeName);
           selectedIndex.value = 1;
@@ -128,14 +108,11 @@ class NavigatorController extends GetxController {
     final homeController = Get.find<HomeController>();
 
     if (!(await homeController.onWillPop())) return false;
-    // if (Get.nestedKey(homeController.nestedKey)!.currentState!.canPop()) {
-    //   return false;
-    // }
+
     return (await showExitPopup());
   }
 
   void updateAccountView() {
-    // setUser();
     views.last = _createAccountView();
   }
 }
