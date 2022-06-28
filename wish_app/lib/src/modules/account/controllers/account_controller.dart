@@ -4,7 +4,10 @@ import 'package:wish_app/src/api_services/user_api_service.dart';
 import 'package:wish_app/src/models/supabase_exception.dart';
 import 'package:wish_app/src/models/user_account.dart';
 import 'package:wish_app/src/modules/account/api_services/account_api_service.dart';
+import 'package:wish_app/src/modules/account/models/account_arguments.dart';
 import 'package:wish_app/src/modules/auth/views/auth_view.dart';
+import 'package:wish_app/src/modules/home/controllers/home_main_controller.dart';
+import 'package:wish_app/src/modules/navigator/controllers/navigator_controller.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
 import 'package:wish_app/src/services/user_service.dart';
@@ -39,9 +42,21 @@ class AccountController extends GetxController {
       if (isWishListLoad == true) return;
       if (userAccount.value!.countOfWishes == null) return;
       if (_offset >= userAccount.value!.countOfWishes!) return;
+
       final itemRatio = _offset / userAccount.value!.countOfWishes!;
       final scrollPosition = wishGridController.offset /
           wishGridController.position.maxScrollExtent;
+
+      print('itemRatio : ${itemRatio}');
+      print('scrollPosition : $scrollPosition');
+      // final itemRatio = _offset / userAccount.value!.countOfWishes!;
+      // final scrollPosition = wishGridController.position.pixels /
+      //     wishGridController.position.maxScrollExtent;
+
+      // final itemRatio = _offset / userAccount.value!.countOfWishes!;
+      // final scrollPosition = wishGridController.positions.last.pixels /
+      //     wishGridController.positions.last.maxScrollExtent;
+
       if (scrollPosition + account_constants.loadOffset >= itemRatio) {
         await loadWishList();
       }
@@ -51,7 +66,12 @@ class AccountController extends GetxController {
     super.onInit();
   }
 
+  // todo: arguments
   void initLoading() async {
+    final data = Get.rawRoute?.settings.arguments as AccountArguments?;
+    // final data = Get.arguments as AccountArguments?;
+    print('AccountController - initLoading - data.toMap() : ${data?.toMap()}');
+
     isLoading.value = true;
     await getUser();
     await loadWishList();
@@ -145,14 +165,20 @@ class AccountController extends GetxController {
     isLoading.value = false;
   }
 
-  // todo: createWish
   void createWish() async {
     await Get.toNamed(AddWishView.routeName);
   }
 
   void exit() async {
-    await _userService.signOut();
-    await Get.offNamed(AuthView.routeName);
+    Get.back();
+    // await _userService.signOut();
+    final nc = Get.find<NavigatorController>();
+    // navigatorController.onItemTapped(navigatorController.selectedIndex.value);
+    // await Get.forceAppUpdate();
+    // _userService.signOut();
+    await nc.signOut();
+
+    // navigatorController.updateAccount();
   }
 
   // todo: goToLoginPage

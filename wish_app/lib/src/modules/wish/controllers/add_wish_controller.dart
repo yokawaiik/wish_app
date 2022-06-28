@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 import 'package:wish_app/src/models/supabase_exception.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
-import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/navigator/views/navigator_view.dart';
 import 'package:wish_app/src/modules/wish/controllers/wish_info_controller.dart';
 import 'package:wish_app/src/modules/wish/models/wish_form.dart';
@@ -16,6 +15,7 @@ import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
 import 'package:wish_app/src/services/user_service.dart';
 
 import '../../account/views/account_view.dart';
+import '../../home/controllers/home_main_controller.dart';
 import '../../home/views/home_view.dart';
 
 // class AddWishController extends GetxController {
@@ -162,12 +162,13 @@ class AddWishController extends GetxController {
       final routes = Get.routeTree.routes.map((e) => e.name).toList();
 
       if (routes.contains(AccountView.routeName)) {
-        final accountController = Get.find<AccountController>();
+        final tag = userService.currentUser!.id;
+        final accountController = Get.find<AccountController>(tag: tag);
         accountController.addWish(addedWish!);
       }
 
       if (routes.contains(HomeView.routeName)) {
-        final homeController = Get.find<HomeController>();
+        final homeController = Get.find<HomeMainController>();
         homeController.addWish(addedWish!);
       }
 
@@ -208,7 +209,7 @@ class AddWishController extends GetxController {
         accountController.updateTheWish(updatedWish!);
       }
       if (routes.contains(HomeView.routeName)) {
-        final homeController = Get.find<HomeController>();
+        final homeController = Get.find<HomeMainController>();
         homeController.updateWish(updatedWish!);
       }
 

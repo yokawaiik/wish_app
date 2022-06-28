@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
+import 'package:wish_app/src/modules/account/models/account_arguments.dart';
 import 'package:wish_app/src/modules/account/widget/button_counter_title.dart';
 import 'package:wish_app/src/services/user_service.dart';
 import 'package:wish_app/src/widgets/account_user_avatar.dart';
@@ -15,7 +17,14 @@ import '../../../constants/account_constants.dart' show skeletonItemCount;
 
 class AccountView extends GetView<AccountController> {
   static const String routeName = "/account";
-  const AccountView({Key? key}) : super(key: key);
+
+  @override
+  final String? tag;
+
+  const AccountView({
+    this.tag,
+    Key? key,
+  }) : super(key: key);
 
   void _showMenu(
     BuildContext context,
@@ -75,6 +84,8 @@ class AccountView extends GetView<AccountController> {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
+    // ScrollController _nestedScrollViewController = ScrollController();
+
     return Obx(
       () {
         final userAccount = controller.userAccount.value;
@@ -82,14 +93,8 @@ class AccountView extends GetView<AccountController> {
         final isLoading = controller.isLoading.value;
         final isSubscribing = controller.isSubscribing.value;
 
-        print('userAccount?.hasSubscribe : ${userAccount?.hasSubscribe}');
-
         return Scaffold(
           appBar: AppBar(
-            // leading: IconButton(
-            //   icon: Icon(Icons.arrow_back_ios_new),
-            //   onPressed: Get.back,
-            // ),
             title: isLoading
                 // title: true
                 ? Skeleton(
@@ -118,8 +123,12 @@ class AccountView extends GetView<AccountController> {
                 : SizedBox.shrink(),
           ),
           body: NestedScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              headerSliverBuilder: (context, _) {
+              controller: controller.wishGridController,
+              // controller: ,
+              // controller: _nestedScrollViewController,
+              // floatHeaderSlivers: true,
+              // physics: const AlwaysScrollableScrollPhysics(),
+              headerSliverBuilder: (_c, _) {
                 return [
                   SliverList(
                     delegate: SliverChildListDelegate(
@@ -239,6 +248,11 @@ class AccountView extends GetView<AccountController> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    // Padding(
+                    //   padding: EdgeInsets.all(10),
+                    //   child: Icon(Icons.arrow_drop_up),
+                    // ),
+                    SizedBox.shrink(),
                     _buildWishGrid(
                       countOfWishes: userAccount?.countOfWishes,
                       isLoading: isLoading,
@@ -276,7 +290,9 @@ class AccountView extends GetView<AccountController> {
     if (isLoading) {
       return Expanded(
         child: GridView.builder(
-          physics: const AlwaysScrollableScrollPhysics(),
+          // physics: const AlwaysScrollableScrollPhysics(),
+          // physics: NeverScrollableScrollPhysics(),
+          physics: ClampingScrollPhysics(),
           gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
           itemCount: skeletonItemCount,
           itemBuilder: (_, i) {
@@ -297,8 +313,10 @@ class AccountView extends GetView<AccountController> {
     } else {
       return Expanded(
         child: GridView.builder(
-          physics: const AlwaysScrollableScrollPhysics(),
-          controller: controller,
+          // physics: ClampingScrollPhysics(),
+          physics: NeverScrollableScrollPhysics(),
+          // physics: const AlwaysScrollableScrollPhysics(),
+          // controller: controller,
           gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
           itemCount: countOfWishes,
           itemBuilder: (_, i) {

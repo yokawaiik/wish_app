@@ -35,9 +35,9 @@ class WishInfoController extends GetxController {
 
       switch (routeName) {
         case HomeView.routeName:
-          final theFoundWish =
-              homeController.homeWishList.firstWhere((item) => item.id == id);
-          currentWish.value = theFoundWish;
+          // final theFoundWish = // todo: realize it
+          // homeController.homeWishList.firstWhere((item) => item.id == id); // todo: realize it
+          // currentWish.value = theFoundWish; // todo: realize it
           break;
         case AccountView.routeName:
           final accountController = Get.find<AccountController>();
@@ -89,7 +89,7 @@ class WishInfoController extends GetxController {
 
       if ([NavigatorView.routeName].contains(Get.previousRoute)) {
         Get.back();
-        homeController.deleteWish(theWish.id);
+        // homeController.deleteWish(theWish.id); // todo: realize it
       }
     } catch (e) {
       print("WishInfoController - deleteTheWish - e: $e");

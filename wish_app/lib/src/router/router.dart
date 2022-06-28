@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:wish_app/src/middlewares/auth_guard.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/auth/bindings/auth_bindings.dart';
 import 'package:wish_app/src/modules/auth/views/auth_view.dart';
