@@ -62,16 +62,6 @@ class AccountController extends GetxController {
     final scrollPosition =
         wishGridController.offset / wishGridController.position.maxScrollExtent;
 
-    print('itemRatio : ${itemRatio}');
-    print('scrollPosition : $scrollPosition');
-    // final itemRatio = _offset / userAccount.value!.countOfWishes!;
-    // final scrollPosition = wishGridController.position.pixels /
-    //     wishGridController.position.maxScrollExtent;
-
-    // final itemRatio = _offset / userAccount.value!.countOfWishes!;
-    // final scrollPosition = wishGridController.positions.last.pixels /
-    //     wishGridController.positions.last.maxScrollExtent;
-
     if (scrollPosition + account_constants.loadOffset >= itemRatio) {
       await loadWishList();
     }
@@ -190,7 +180,10 @@ class AccountController extends GetxController {
   void deleteWish(int id) {
     wishList.removeWhere((element) => element.id == id);
     userAccount.value!.countOfWishes = userAccount.value!.countOfWishes! - 1;
-    _offset = -1;
+    if (_offset > 0) {
+      _offset -= 1;
+    }
+
     wishList.refresh();
   }
 
