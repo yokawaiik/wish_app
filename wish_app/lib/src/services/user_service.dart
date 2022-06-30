@@ -92,13 +92,18 @@ class UserService extends GetxService {
           KindOfException.jwtExpired,
         );
       }
-      // // todo: timer start again
+      _startTimer();
+      // await _updateApp();
     } on SupabaseException catch (e) {
+      print('UserService - _recoverSession - SupabaseException - e : $e');
+
       await _destroySession();
-      await _updateApp();
+      // await _updateApp();
     } catch (e) {
       print('UserService - _recoverSession - e : $e');
       await _destroySession();
+      // await _updateApp();
+    } finally {
       await _updateApp();
     }
   }
@@ -123,27 +128,6 @@ class UserService extends GetxService {
   Future<void> _updateApp() async {
     await Get.forceAppUpdate();
   }
-
-  // CurrentUser? get currentUser {
-  //   final authUser = _supabase.client.auth.currentUser;
-
-  //   if (authUser == null) {
-  //     return null;
-  //   } else {
-
-  //     final currentUser = CurrentUser(
-  //       id: authUser.id,
-  //       appMetadata: authUser.appMetadata,
-  //       userMetadata: authUser.userMetadata,
-  //       aud: authUser.aud,
-  //       email: authUser.email,
-  //       phone: authUser.phone,
-  //       createdAt: authUser.createdAt,
-  //       // login: user["login"],
-  //     );
-  //     return currentUser;
-  //   }
-  // }
 
   // ? info: methods for another controllers
   Future<void> signOut() async {

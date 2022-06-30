@@ -21,7 +21,7 @@ class AccountView extends GetView<AccountController> {
   @override
   final String? tag;
 
-  const AccountView({
+  AccountView({
     this.tag,
     Key? key,
   }) : super(key: key);
@@ -140,7 +140,7 @@ class AccountView extends GetView<AccountController> {
               // controller: _nestedScrollViewController,
               // floatHeaderSlivers: true,
               // physics: const AlwaysScrollableScrollPhysics(),
-              headerSliverBuilder: (_c, _) {
+              headerSliverBuilder: (_c, _hsb) {
                 return [
                   SliverList(
                     delegate: SliverChildListDelegate(
@@ -325,21 +325,58 @@ class AccountView extends GetView<AccountController> {
     } else {
       return Expanded(
         child: GridView.builder(
-          // physics: ClampingScrollPhysics(),
-          physics: NeverScrollableScrollPhysics(),
-          // physics: const AlwaysScrollableScrollPhysics(),
-          // controller: controller,
-          gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
-          itemCount: countOfWishes,
-          itemBuilder: (_, i) {
-            if (i < (wishList.length)) {
-              return WishCard(wishList[i], onTap: () => onTap(wishList[i].id));
-            } else {
-              return const WishCardSkeleton();
-            }
-          },
-        ),
+            // physics: ClampingScrollPhysics(),
+            physics: NeverScrollableScrollPhysics(),
+            // physics: const AlwaysScrollableScrollPhysics(),
+            // controller: controller,
+            gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
+            itemCount: countOfWishes,
+            itemBuilder: (ctx, i) {
+              if (i < (wishList.length)) {
+                return WishCard(
+                  wishList[i],
+                  onTap: () => onTap(wishList[i].id),
+                  onTapDown: _storePosition,
+                  onLongPress: () => _showPopupMenu(ctx, wishList[i].id),
+                );
+              } else {
+                return const WishCardSkeleton();
+              }
+            }),
       );
     }
+  }
+
+  Offset? _tapPosition;
+
+  /// Pass this method to an onTapDown parameter to record the tap position.
+  void _storePosition(TapDownDetails details) =>
+      _tapPosition = details.globalPosition;
+
+  void _showPopupMenu(
+    BuildContext context,
+    int id,
+  ) {
+    final overlay =
+        Overlay.of(context)!.context.findRenderObject() as RenderBox;
+
+    showMenu(
+      position: RelativeRect.fromLTRB(
+        _tapPosition!.dx,
+        _tapPosition!.dy,
+        overlay.size.width - _tapPosition!.dx,
+        overlay.size.height - _tapPosition!.dy,
+      ),
+      items: [
+        PopupMenuItem(
+          onTap: () => controller.removeWish(id),
+          child: ListTile(
+            leading: Icon(Icons.work),
+            title: Text('Delete wish'),
+          ),
+        )
+      ],
+      context: context,
+    );
   }
 }

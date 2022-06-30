@@ -1,63 +1,107 @@
 import 'package:get/get.dart';
+import 'package:wish_app/src/models/supabase_exception.dart';
+import 'package:wish_app/src/models/unknown_exception.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
-import 'package:wish_app/src/modules/wish/api_services/add_wish_api_service.dart';
+import 'package:wish_app/src/api_services/add_wish_api_service.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
+import 'package:wish_app/src/services/user_service.dart';
 
 import '../../../models/wish.dart';
+import '../../home/controllers/home_main_controller.dart';
 import '../../home/views/home_view.dart';
 import '../../navigator/views/navigator_view.dart';
 import '../../../utils/generate_wish_image_path.dart';
+import '../models/wish_info_arguments.dart';
 
-class WishInfoController extends GetxController {
-  final homeController = Get.find<HomeController>();
+import '../../home/constants/router_constants.dart' as router_constants;
+
+class WishInfoController extends GetxController with StateMixin<Wish> {
+  final hmc = Get.find<HomeMainController>();
 
   // Wish? currentWish;
 
-  var currentWish = Rxn<Wish?>();
+  var currentWish = Rxn<Wish>();
+
+  late final WishInfoArguments _args;
+  bool _isInitialized = false;
 
   @override
-  void onInit() {
+  void onInit() async {
+    // change(null, status: RxStatus.loading());
     getTheWish();
     super.onInit();
   }
 
-  late final int? id; // wish
-  late final String? routeName;
+  void setInfoArguments() {
+    if (!_isInitialized) {
+      final rawArgs = Get.arguments;
+      // ? info: for web
+      if (rawArgs == null) {
+        throw UnknownException("Error", "It isn't correct path...");
+      } else if (rawArgs is WishInfoArguments) {
+        _args = rawArgs;
+      } else {
+        final id = rawArgs["id"] as int;
+        final routeName = rawArgs["routeName"] as String?;
+        _args = WishInfoArguments(wishId: id, previousRouteName: routeName);
+      }
+      _isInitialized = true;
+    }
+  }
 
   Future<void> getTheWish() async {
     try {
-      // final id = Get.arguments["id"] as int;
-      // final routeName = Get.arguments["routeName"] as String?;
-      id = Get.arguments["id"] as int;
-      routeName = Get.arguments["routeName"] as String?;
+      change(currentWish.value, status: RxStatus.loading());
 
-      switch (routeName) {
+      setInfoArguments();
+
+      switch (_args.previousRouteName) {
         case HomeView.routeName:
-          // final theFoundWish = // todo: realize it
-          // homeController.homeWishList.firstWhere((item) => item.id == id); // todo: realize it
-          // currentWish.value = theFoundWish; // todo: realize it
+          final theFoundWish = hmc.getWishById(_args.wishId);
+          currentWish.value = theFoundWish;
+
           break;
         case AccountView.routeName:
-          final accountController = Get.find<AccountController>();
+          final us = Get.find<UserService>();
+          final tag = us.currentUser!.id;
+
+          final ac = Get.find<AccountController>(tag: tag);
           final theFoundWish =
-              accountController.wishList.firstWhere((item) => item.id == id);
+              ac.wishList.firstWhere((item) => item.id == _args.wishId);
           currentWish.value = theFoundWish;
           break;
+        case router_constants.homeMainRouteName:
+          final hmc = Get.find<HomeMainController>();
+          final theFoundWish = hmc.getWishById(_args.wishId);
+          currentWish.value = theFoundWish;
+          break;
+
         default:
           // todo: request to service if user came by link
-          print('It\'s need to get from server');
+          throw 'It\'s need to get from server';
       }
 
-      if (currentWish == null) {
-        Get.offNamed(HomeView.routeName);
-        Get.snackbar("Ops...", "The wish was deleted.");
+      if (currentWish.value == null) {
+        change(currentWish.value, status: RxStatus.error());
+        throw SupabaseException(
+            "Error", "The wish was deleted.", KindOfException.notFound);
       }
+
+      change(currentWish.value, status: RxStatus.success());
+    } on SupabaseException catch (e) {
+      Get.back();
+      Get.snackbar(e.title, e.msg);
+    } on UnknownException catch (e) {
+      Get.snackbar(e.title!, e.msg!);
     } catch (e) {
       print("WishInfoController - getTheWish - e: $e");
-      Get.offNamedUntil(NavigatorView.routeName, (route) => false);
-      Get.snackbar("Error", "Error when load the wish.");
+
+      Get.snackbar("Error", "Something went wrong.");
+      await Get.offNamedUntil(NavigatorView.routeName, (route) => false);
+
+      // Get.back();
     }
   }
 
@@ -67,10 +111,13 @@ class WishInfoController extends GetxController {
   }
 
   Future<void> editTheWish() async {
-    await Get.toNamed(AddWishView.routeName, arguments: {
-      "isEdit": true,
-      ...currentWish.value!.toJson(),
-    });
+    await Get.toNamed(
+      AddWishView.routeName,
+      arguments: {
+        "isEdit": true,
+        ...currentWish.value!.toJson(),
+      },
+    );
   }
 
   deleteTheWish() async {
@@ -85,11 +132,21 @@ class WishInfoController extends GetxController {
         );
       }
 
-      await AddWishService.deleteWish(theWish.id, imagePath);
+      await AddWishApiService.deleteWish(theWish.id, imagePath);
+
+      if (Get.isRegistered<HomeMainController>()) {
+        Get.find<HomeMainController>().deleteWish(theWish.id);
+      }
+
+      if (Get.isRegistered<AccountController>(tag: theWish.createdBy.id)) {
+        Get.find<AccountController>(tag: theWish.createdBy.id)
+            .deleteWish(theWish.id);
+      }
 
       if ([NavigatorView.routeName].contains(Get.previousRoute)) {
         Get.back();
-        // homeController.deleteWish(theWish.id); // todo: realize it
+
+        hmc.deleteWish(theWish.id);
       }
     } catch (e) {
       print("WishInfoController - deleteTheWish - e: $e");
@@ -106,12 +163,17 @@ class WishInfoController extends GetxController {
 
   // todo: seeProfile
   void seeProfile() {
-    if (Get.previousRoute == AccountView.routeName)
-      Get.toNamed(
-        AccountView.routeName,
-        arguments: {
-          "id": currentWish.value!.createdBy.id,
-        },
-      );
+    // if (Get.previousRoute == AccountView.routeName)
+    //   Get.toNamed(
+    //     AccountView.routeName,
+    //     arguments: {
+    //       "id": currentWish.value!.createdBy.id,
+    //     },
+    //   );
+  }
+
+  void updateWish(Wish wish) {
+    currentWish.value = wish;
+    currentWish.refresh();
   }
 }

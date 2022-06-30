@@ -15,7 +15,7 @@ Future<bool> showExitPopup() async {
       }
     },
     onCancel: () {
-      Get.back(result: false);
+      Get.back(result: false, closeOverlays: true);
     },
   );
 

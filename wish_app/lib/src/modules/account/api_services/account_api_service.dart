@@ -21,11 +21,8 @@ class AccountApiService {
       if (currentUserId != null) {
         final gotSubscriptionInfo =
             await getSubscriptionInfo(currentUserId, id);
-        // print(gotSubscriptionInfo);
         theUser.setSubscriptionInfoFromMap(gotSubscriptionInfo!);
       }
-
-      // print("AccountApiService - getUser - gotUserInfo : ${gotUserInfo}");
 
       theUser.setUserInfoFromMap(gotUserInfo!);
 

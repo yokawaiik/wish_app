@@ -8,6 +8,8 @@ class WishCard extends StatelessWidget {
   final Wish wish;
   final double radius;
   final void Function()? onTap;
+  final void Function()? onLongPress;
+  final void Function(TapDownDetails)? onTapDown;
 
   const WishCard(
     this.wish, {
@@ -15,6 +17,8 @@ class WishCard extends StatelessWidget {
     this.defaultPadding = global_constants.defaultPadding,
     this.radius = global_constants.defaultSquareRadius,
     this.onTap,
+    this.onLongPress,
+    this.onTapDown,
   }) : super(key: key);
 
   @override
@@ -23,6 +27,8 @@ class WishCard extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
+      onLongPress: onLongPress,
+      onTapDown: onTapDown,
       child: Padding(
         padding: EdgeInsets.all(defaultPadding),
         child: Row(

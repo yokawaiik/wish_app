@@ -9,9 +9,12 @@ import 'package:wish_app/src/modules/auth/views/auth_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/home/controllers/home_main_controller.dart';
 import 'package:wish_app/src/modules/navigator/controllers/navigator_controller.dart';
+import 'package:wish_app/src/api_services/add_wish_api_service.dart';
+import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
 import 'package:wish_app/src/services/user_service.dart';
+import 'package:wish_app/src/utils/generate_wish_image_path.dart';
 
 import '../../../models/wish.dart';
 import "../../../utils/router_utils.dart" as router_utils;
@@ -74,13 +77,16 @@ class AccountController extends GetxController {
     }
   }
 
-  // todo: arguments
   Future<void> initLoading() async {
-    args = Get.arguments as AccountArguments?;
+    _setArguments();
     isLoading.value = true;
     await getUser();
     await loadWishList();
     isLoading.value = false;
+  }
+
+  void _setArguments() {
+    args = Get.arguments as AccountArguments?;
   }
 
   Future<void> getUser() async {
@@ -175,26 +181,26 @@ class AccountController extends GetxController {
     await _navigatorController.signOut();
   }
 
-  // todo: goToLoginPage
   // ? shows only for unauth user who sees profile belongs to another users
   void goToLoginPage() async {
     closeModalBottomSheet();
     await Get.toNamed(AuthView.routeName);
   }
 
-  // todo: deleteWish
   void deleteWish(int id) {
-    wishList.removeWhere((element) => false);
+    wishList.removeWhere((element) => element.id == id);
     userAccount.value!.countOfWishes = userAccount.value!.countOfWishes! - 1;
     _offset = -1;
     wishList.refresh();
   }
 
-  // todo: ERROR when click
   void goToWishInfo(int id) async {
     await Get.toNamed(
       WishInfoView.routeName,
-      arguments: {"id": id, "routeName": AccountView.routeName},
+      arguments: WishInfoArguments(
+        wishId: id,
+        previousRouteName: AccountView.routeName,
+      ),
     );
   }
 
@@ -225,7 +231,6 @@ class AccountController extends GetxController {
     } finally {
       isSubscribing.value = false;
       userAccount.refresh();
-      // refresh();
     }
   }
 
@@ -256,6 +261,26 @@ class AccountController extends GetxController {
       Get.back(closeOverlays: true, id: _homeController.nestedKey);
     } else {
       Get.back();
+    }
+  }
+
+  Future<void> removeWish(int id) async {
+    try {
+      final theFoundWish = wishList.firstWhere((item) => item.id == id);
+
+      String? imagePath;
+      if (theFoundWish.hasImage) {
+        imagePath =
+            generateWishImagePath(theFoundWish.imageUrl!, id.toString());
+      }
+
+      await AddWishApiService.deleteWish(id, imagePath);
+
+      deleteWish(id);
+    } on SupabaseException catch (e) {
+      Get.snackbar("Error", "Error when subscribe.");
+    } catch (e) {
+      Get.snackbar("Error", "Unknown error...");
     }
   }
 }

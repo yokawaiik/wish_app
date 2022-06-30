@@ -7,11 +7,13 @@ import 'package:wish_app/src/modules/account/models/account_arguments.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/home/api_services/home_api_service.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
-import 'package:wish_app/src/modules/wish/api_services/add_wish_api_service.dart';
+import 'package:wish_app/src/api_services/add_wish_api_service.dart';
+import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 import '../../../services/user_service.dart';
 import '../../navigator/controllers/navigator_controller.dart';
 
+import '../../wish/views/wish_info_view.dart';
 import '../constants/router_constants.dart' as router_constants;
 
 class HomeMainController extends GetxController {
@@ -143,24 +145,17 @@ class HomeMainController extends GetxController {
     homeWishList.refresh();
   }
 
-  // todo: change it
   Future<void> onClickWishItem(int id) async {
-    //     Get.put(AccountView.routeName, tag: 'user/$id');
-    // Get.toNamed(page);
-
     final homeController = Get.find<HomeController>();
 
-    // todo: add go to account view
-
-    // await Get.toNamed(
-    //   AccountTestPage.routeName,
-    //   id: homeController.nestedKey,
-    // );
-
-    // await Get.toNamed(
-    //   WishInfoView.routeName,
-    //   arguments: {"id": id, "routeName": HomeView.routeName},
-    // );
+    await Get.toNamed(
+      WishInfoView.routeName,
+      // arguments: {"id": id, "routeName": HomeView.routeName},
+      arguments: WishInfoArguments(
+        wishId: id,
+        previousRouteName: router_constants.homeMainRouteName,
+      ),
+    );
   }
 
   //todo: shareWish
@@ -178,7 +173,7 @@ class HomeMainController extends GetxController {
     try {
       Get.back(); // close modalBottomSheet
       isDeleting.value = true;
-      await AddWishService.deleteWish(wish.id, wish.imagePath);
+      await AddWishApiService.deleteWish(wish.id, wish.imagePath);
       deleteWish(wish.id);
     } catch (e) {
       print(e);
@@ -189,29 +184,12 @@ class HomeMainController extends GetxController {
     }
   }
 
-  //todo: seeProfile
   void seeProfile(Wish wish) async {
-    print('HomeMainController - seeProfile');
-    // todo: open another user account
     if (wish.createdBy.isCurrentUser) {
       Get.find<NavigatorController>().onItemTapped(2);
     } else {
-      // Get.put(
-      //   AccountController(),
-      //   tag: wish.createdBy.id,
-      // );
-
-      // await Get.nestedKey(_homeController.nestedKey)!.currentState!.pushNamed(
-      //       router_constants.homeAccountRouteName,
-      //       arguments: AccountArguments(
-      //         wish.createdBy.id,
-      //       ),
-      //     );
-
       await Get.toNamed(
-        // AccountTestPage.routeName,
         router_constants.homeAccountRouteName,
-        // AccountView.routeName,
         arguments: AccountArguments(
           wish.createdBy.id,
         ),
@@ -221,5 +199,7 @@ class HomeMainController extends GetxController {
     }
   }
 
-  void updateTheWish(param0) {}
+  Wish getWishById(int id) {
+    return homeWishList.firstWhere((wish) => wish.id == id);
+  }
 }

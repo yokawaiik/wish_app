@@ -8,7 +8,7 @@ import 'package:wish_app/src/modules/account/controllers/account_controller.dart
 import 'package:wish_app/src/modules/navigator/views/navigator_view.dart';
 import 'package:wish_app/src/modules/wish/controllers/wish_info_controller.dart';
 import 'package:wish_app/src/modules/wish/models/wish_form.dart';
-import 'package:wish_app/src/modules/wish/api_services/add_wish_api_service.dart';
+import 'package:wish_app/src/api_services/add_wish_api_service.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
@@ -80,16 +80,8 @@ class AddWishController extends GetxController {
 
   Future<void> getWIshForEdit(int id) async {
     try {
-      // make status to loading
       isWishLoading.value = true;
-      // change(null, status: RxStatus.loading());
-      // isGetWIshForEdit = true;
-
-      print("AddWishController - getWIshForEdit");
-      // print("id : $id");
-      // print("userService.currentUser!.id : ${userService.currentUser!.id}");
-
-      final gotTheWish = await AddWishService.getWish(
+      final gotTheWish = await AddWishApiService.getWish(
         id,
         userService.currentUser!.id,
       );
@@ -101,20 +93,16 @@ class AddWishController extends GetxController {
           KindOfException.notFound,
         );
 
-      print("AddWishController - getWIshForEdit - title: ${gotTheWish.title}");
-      // print("AddWishController - getWIshForEdit - title: ${gotTheWish.title}");
-
       wishForm.value = WishForm(
         id: gotTheWish.id,
         title: gotTheWish.title,
         description: gotTheWish.description,
         link: gotTheWish.link,
         imageUrl: gotTheWish.imageUrl,
-        // createdBy: gotTheWish.createdBy,
         createdBy: gotTheWish.createdBy.id,
       );
 
-      print(wishForm.toJson());
+      // print(wishForm.toJson());
 
       // ? info: to set initial values
       titleController.text = wishForm.value.title ?? "";
@@ -140,9 +128,6 @@ class AddWishController extends GetxController {
       Get.snackbar("Exception", "Error get the wish.");
       Get.offNamedUntil(NavigatorView.routeName, (route) => false);
     } finally {
-      // isGetWIshForEdit = false;
-      // if done, change status to success
-      // change(null, status: RxStatus.success());
       isWishLoading.value = false;
     }
   }
@@ -154,7 +139,7 @@ class AddWishController extends GetxController {
       // wishForm.value.createdBy = userService.user?.id;
       wishForm.value.createdBy = userService.currentUser?.id;
 
-      final addedWish = await AddWishService.addWish(wishForm.value);
+      final addedWish = await AddWishApiService.addWish(wishForm.value);
 
       // if user came here from home
       // or account
@@ -188,36 +173,29 @@ class AddWishController extends GetxController {
     try {
       isLoading.value = true;
       if (!validateFields()) return;
-      // wishForm.value.createdBy = userService.user?.id;
       wishForm.value.createdBy = userService.currentUser?.id;
 
-      final updatedWish = await AddWishService.updateWish(
+      final updatedWish = await AddWishApiService.updateWish(
         wishForm.value,
         userService.currentUser!.id,
       );
 
-      final routes = Get.routeTree.routes.map((e) => e.name).toList();
+      if (Get.isRegistered<AccountController>()) {
+        final tag = userService.currentUser!.id;
+        final ac = Get.find<AccountController>(tag: tag);
+        ac.updateTheWish(updatedWish!);
+      }
+      if (Get.isRegistered<HomeMainController>()) {
+        final hc = Get.find<HomeMainController>();
+        hc.updateWish(updatedWish!);
+      }
+
       // ? info: update if last screen was WishInfoView
-      if (routes.contains(WishInfoView.routeName)) {
-        final wishInfoController = Get.find<WishInfoController>();
+      if (Get.previousRoute == WishInfoView.routeName) {
+        final wic = Get.find<WishInfoController>();
+        wic.updateWish(updatedWish!);
         Get.back();
-        wishInfoController.updateTheWish();
       }
-
-      if (routes.contains(AccountView.routeName)) {
-        final accountController = Get.find<AccountController>();
-        accountController.updateTheWish(updatedWish!);
-      }
-      if (routes.contains(HomeView.routeName)) {
-        final homeController = Get.find<HomeMainController>();
-        homeController.updateWish(updatedWish!);
-      }
-
-      // if (Get.previousRoute == WishInfoView.routeName) {
-      //   final wishInfoController = Get.find<WishInfoController>();
-      //   Get.back();
-      //   wishInfoController.updateTheWish();
-      // }
     } on SupabaseException catch (e) {
       print("AddWishController - saveWish - SupabaseException - $e");
       Get.snackbar(e.title, e.msg);
@@ -241,11 +219,13 @@ class AddWishController extends GetxController {
       if (pickedImage == null) return;
 
       wishForm.value.image = File(pickedImage.path);
-      print(wishForm.value.image);
       wishForm.value.wasImageUpdate = true;
 
       wishForm.refresh();
-      // update();
+
+      if (isEdit.value) {
+        wishForm.value.wasImageUpdate = true;
+      }
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     }

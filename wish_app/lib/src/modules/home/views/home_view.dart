@@ -13,7 +13,7 @@ import '../constants/router_constants.dart' as router_constants;
 class HomeView extends GetView<HomeController> {
   static const String routeName = "/home";
 
-  HomeView({
+  const HomeView({
     Key? key,
   }) : super(key: key);
 
@@ -22,7 +22,6 @@ class HomeView extends GetView<HomeController> {
     return WillPopScope(
       onWillPop: controller.onWillPop,
       child: Navigator(
-        // todo: test it
         observers: [GetObserver((_) {}, Get.routing)],
         // body: GetNavigator(
         key: Get.nestedKey(controller.nestedKey),
@@ -51,31 +50,3 @@ class HomeView extends GetView<HomeController> {
     );
   }
 }
-
-// class AccountTestPage extends StatelessWidget {
-//   static const routeName = '/home/account';
-
-//   final homeController = Get.find<HomeController>();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: Column(
-//           children: [],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// class AccountTestController extends GetxController {
-//   final title = 'AccountTest'.obs;
-// }
-
-// class AccountTestBinding extends Bindings {
-//   @override
-//   void dependencies() {
-//     Get.lazyPut(() => AccountTestController());
-//   }
-// }

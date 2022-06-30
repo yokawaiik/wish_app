@@ -7,7 +7,7 @@ import 'package:wish_app/src/modules/wish/models/wish_form.dart';
 import 'package:wish_app/src/services/user_service.dart';
 import 'package:wish_app/src/utils/generate_wish_image_path.dart';
 
-class AddWishService {
+class AddWishApiService {
   static final _supabase = Supabase.instance.client;
 
   // Todo: error
@@ -83,13 +83,17 @@ class AddWishService {
   ) async {
     try {
       if (wishForm.wasImageUpdate) {
+        print(wishForm.imageUrl);
+        print(wishForm.image!.path);
+
         final imagePath = generateWishImagePath(
           wishForm.imageUrl ?? wishForm.image!.path,
           wishForm.id.toString(),
         );
 
-        // await removeImage(wishForm.imagePath!);
-        await removeImage(imagePath);
+        print(imagePath);
+
+        // await removeImage(imagePath);
 
         final uploadedImageUrl = await uploadImage(
           imagePath,
@@ -139,11 +143,12 @@ class AddWishService {
     }
   }
 
-  static Future<String?> removeImage(String path) async {
+  static Future<void> removeImage(String path) async {
     try {
       print('removeImage - path : $path');
       final removedResponse =
           await _supabase.storage.from("wish.app.bucket").remove([path]);
+
       if (removedResponse.error != null) {
         throw SupabaseException(
           "Error when removed image",
@@ -151,6 +156,9 @@ class AddWishService {
         );
       }
       print("removedResponse.data : ${removedResponse.data}");
+    } on SupabaseException catch (e) {
+      print('AddWishService - removeImage - SupabaseException : ${e}');
+      rethrow;
     } catch (e) {
       print('AddWishService - removeImage: ${e}');
       rethrow;
@@ -163,7 +171,17 @@ class AddWishService {
           await _supabase.storage.from("wish.app.bucket").upload(
                 path,
                 file,
+                fileOptions: const FileOptions(
+                  upsert: true,
+                  cacheControl: '0',
+                ),
               );
+      // final uploadResponse =
+      //     await _supabase.storage.from("wish.app.bucket").update(
+      //           path,
+      //           file,
+      //           fileOptions: const FileOptions(upsert: true),
+      //         );
 
       if (uploadResponse.error != null) {
         throw SupabaseException(

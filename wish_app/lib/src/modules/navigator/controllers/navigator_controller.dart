@@ -31,7 +31,6 @@ class NavigatorController extends GetxController {
 
   @override
   void onInit() {
-    // todo: observe user to update this screen after exit user
     views = [
       FavoritesView(),
       HomeView(),
@@ -41,7 +40,6 @@ class NavigatorController extends GetxController {
     super.onInit();
   }
 
-  // todo: change AccountArguments when it will be update
   AccountView _createAccountView() {
     if (isUserAuthenticated.value) {
       accountArguments = AccountArguments(userService.currentUser!.id);

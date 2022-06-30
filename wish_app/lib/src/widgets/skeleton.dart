@@ -21,15 +21,8 @@ class Skeleton extends StatelessWidget {
   late final _ConstructorType _constructorType;
 
   static const Color _defaultColor = Colors.black;
-  // static const Color _defaultColor = Colors.black.withOpacity(0.05);
   static const double _defaultRadius = 15;
-  // const Skeleton({
-  //   Key? key,
-  //   required this.height,
-  //   required this.widFth,
-  //   this.color,
-  //   this.radius,
-  // }) : super(key: key);
+
   Skeleton({
     Key? key,
     this.height,

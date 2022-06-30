@@ -5,7 +5,7 @@ import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/home/api_services/home_api_service.dart';
 import 'package:wish_app/src/modules/home/views/home_view.dart';
-import 'package:wish_app/src/modules/wish/api_services/add_wish_api_service.dart';
+import 'package:wish_app/src/api_services/add_wish_api_service.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
 import '../../../services/user_service.dart';

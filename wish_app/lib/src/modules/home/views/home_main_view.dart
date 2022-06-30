@@ -154,8 +154,6 @@ class HomeMainView extends GetView<HomeMainController> {
         ),
         floatingActionButton: Obx(
           () {
-            // todo: bug: doesnt update this var
-
             return controller.userService.isUserAuthenticated.value
                 ? FloatingActionButton(
                     child: Icon(
