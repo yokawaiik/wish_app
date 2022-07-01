@@ -23,9 +23,7 @@ class HomeView extends GetView<HomeController> {
       onWillPop: controller.onWillPop,
       child: Navigator(
         observers: [GetObserver((_) {}, Get.routing)],
-        // body: GetNavigator(
         key: Get.nestedKey(controller.nestedKey),
-        // initialRoute: HomeMainView.routeName,
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
             case router_constants.homeAccountRouteName:

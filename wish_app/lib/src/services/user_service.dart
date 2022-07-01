@@ -1,14 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/api_services/user_api_service.dart';
 import 'package:wish_app/src/models/current_user.dart';
 import 'package:wish_app/src/models/supabase_exception.dart';
-import 'package:wish_app/src/models/user_account.dart';
-import 'package:wish_app/src/modules/home/controllers/home_main_controller.dart';
-import 'package:wish_app/src/modules/navigator/controllers/navigator_controller.dart';
 
 class UserService extends GetxService {
   final _supabase = Supabase.instance;

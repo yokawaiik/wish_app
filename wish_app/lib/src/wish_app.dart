@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wish_app/src/theme/theme_wish_app.dart' as theme_wish_app;
 import './router/router.dart' as router;
+import 'bindings/global_bindings.dart';
 
 class WishApp extends StatelessWidget {
   const WishApp({Key? key}) : super(key: key);
@@ -12,10 +13,8 @@ class WishApp extends StatelessWidget {
       theme: theme_wish_app.theme,
       darkTheme: theme_wish_app.darkTheme,
       getPages: router.getPages,
-      // home: NavigatorView(),
       initialRoute: router.initialRoute,
       unknownRoute: router.unknownRoute,
-      // initialBinding: GlobalBindings(),
     );
   }
 }
