@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
+import 'package:wish_app/src/modules/favorites/controllers/favorites_controllers.dart';
 import 'package:wish_app/src/modules/favorites/views/favorites_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_main_controller.dart';
 import 'package:wish_app/src/modules/home/views/home_view.dart';
@@ -59,14 +60,12 @@ class NavigatorController extends GetxController {
       final acIsRegistered = Get.isRegistered<AccountController>(tag: tag);
 
       if (!isUserAuthenticated.value && acIsRegistered) {
-        // final ac = Get.find<AccountController>(tag: tag);
-        // ac.dispose();
         await Get.delete<AccountController>(tag: tag);
       }
 
       await userService.signOut();
 
-      if (selectedIndex.value == 2) {
+      if ([0, 2].contains(selectedIndex.value)) {
         onItemTapped(selectedIndex.value);
       }
 
@@ -84,6 +83,7 @@ class NavigatorController extends GetxController {
 
   void onItemTapped(int value) {
     switch (value) {
+      case 0:
       case 2:
         if (!userService.isUserAuthenticated.value) {
           Get.toNamed(AuthView.routeName);
@@ -94,6 +94,12 @@ class NavigatorController extends GetxController {
             tag: accountArguments.tag,
             permanent: true,
           );
+
+          Get.put(
+            FavoritesControllers(),
+            permanent: true,
+          );
+
           selectedIndex.value = value;
         }
         break;

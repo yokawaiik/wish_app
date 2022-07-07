@@ -34,6 +34,7 @@ class AccountController extends GetxController {
 
   var _offset = 0;
   final _limit = account_constants.itemCountLimit;
+  // final _limit = 2;
   late final ScrollController wishGridController;
 
   RxBool get isUserAuthenticated => _userService.isUserAuthenticated;

@@ -1,3 +1,3 @@
 const double defaultPadding = 20;
 
-const double defaultSquareRadius = 15;
+const double defaultRadius = 15;

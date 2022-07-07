@@ -260,16 +260,11 @@ class AccountView extends GetView<AccountController> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    // Padding(
-                    //   padding: EdgeInsets.all(10),
-                    //   child: Icon(Icons.arrow_drop_up),
-                    // ),
-                    SizedBox.shrink(),
                     _buildWishGrid(
                       countOfWishes: userAccount?.countOfWishes,
                       isLoading: isLoading,
                       wishList: wishList,
-                      context: context,
+                      // context: context,
                       controller: controller.wishGridController,
                       onTap: controller.goToWishInfo,
                     ),
@@ -285,11 +280,12 @@ class AccountView extends GetView<AccountController> {
     int? countOfWishes,
     required RxList<Wish> wishList,
     required bool isLoading,
-    required BuildContext context,
+    // required BuildContext context,
     required ScrollController controller,
     required Function onTap,
   }) {
-    final colorScheme = Theme.of(context).colorScheme;
+    // final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Get.theme.colorScheme;
 
     var sliverGridDelegateWithFixedCrossAxisCount =
         SliverGridDelegateWithFixedCrossAxisCount(
@@ -325,19 +321,18 @@ class AccountView extends GetView<AccountController> {
     } else {
       return Expanded(
         child: GridView.builder(
-            // physics: ClampingScrollPhysics(),
-            physics: NeverScrollableScrollPhysics(),
-            // physics: const AlwaysScrollableScrollPhysics(),
-            // controller: controller,
+            // physics: NeverScrollableScrollPhysics(),
             gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
             itemCount: countOfWishes,
             itemBuilder: (ctx, i) {
-              if (i < (wishList.length)) {
+              if (i < wishList.length) {
+                final wish = wishList[i];
+
                 return WishCard(
-                  wishList[i],
-                  onTap: () => onTap(wishList[i].id),
+                  wish,
+                  onTap: () => onTap(wish.id),
                   onTapDown: _storePosition,
-                  onLongPress: () => _showPopupMenu(ctx, wishList[i].id),
+                  onLongPress: () => _showPopupMenu(ctx, wish.id),
                 );
               } else {
                 return const WishCardSkeleton();

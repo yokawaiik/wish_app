@@ -19,69 +19,69 @@ class NavigatorView extends GetView<NavigatorController> {
         final cms = Get.find<ConnectionManagerService>();
 
         return RequireConnectionWidget(
-            hasConnection: cms.connectionType.value != 0,
-            primaryWidget: WillPopScope(
-              onWillPop: controller.appOnWillPop,
-              child: Scaffold(
-                // for account screen other AppBar
-                appBar:
-                    ![1, 2].toList().contains(controller.selectedIndex.value)
-                        //  controller.selectedIndex.value != 2
-                        ? AppBar(
-                            actions: [
-                              PopupMenuButton(
-                                icon: const Icon(Icons.menu),
-                                onSelected: (int v) {
-                                  switch (v) {
-                                    case 0:
-                                      controller.signOut();
-                                      break;
-                                    case 1:
-                                      controller.goToAuthView();
-                                      break;
-                                    default:
-                                  }
-                                },
-                                itemBuilder: (ctx) {
-                                  return [
-                                    // controller.userService.isAuthenticated
-                                    controller.isUserAuthenticated.value
-                                        ? PopupMenuItem(
-                                            child: Text("Sign Out"),
-                                            value: 0,
-                                          )
-                                        : PopupMenuItem(
-                                            child: Text("Sign In"),
-                                            value: 1,
-                                          ),
-                                  ];
-                                },
-                              ),
-                            ],
-                          )
-                        : null,
+          hasConnection: cms.connectionType.value != 0,
+          primaryWidget: WillPopScope(
+            onWillPop: controller.appOnWillPop,
+            child: Scaffold(
+              // for account screen other AppBar
+              appBar: ![1, 2].toList().contains(controller.selectedIndex.value)
+                  //  controller.selectedIndex.value != 2
+                  ? AppBar(
+                      actions: [
+                        PopupMenuButton(
+                          icon: const Icon(Icons.menu),
+                          onSelected: (int v) {
+                            switch (v) {
+                              case 0:
+                                controller.signOut();
+                                break;
+                              case 1:
+                                controller.goToAuthView();
+                                break;
+                              default:
+                            }
+                          },
+                          itemBuilder: (ctx) {
+                            return [
+                              // controller.userService.isAuthenticated
+                              controller.isUserAuthenticated.value
+                                  ? PopupMenuItem(
+                                      child: Text("Sign Out"),
+                                      value: 0,
+                                    )
+                                  : PopupMenuItem(
+                                      child: Text("Sign In"),
+                                      value: 1,
+                                    ),
+                            ];
+                          },
+                        ),
+                      ],
+                    )
+                  : null,
 
-                body: controller.currentView,
-                bottomNavigationBar: NavigationBar(
-                  selectedIndex: controller.selectedIndex.value,
-                  onDestinationSelected: controller.onItemTapped,
-                  destinations: [
-                    NavigationDestination(
-                      icon: Icon(Icons.star),
-                      label: "Favorites",
-                    ),
-                    NavigationDestination(
-                      icon: Icon(Icons.home),
-                      label: "Home",
-                    ),
-                    NavigationDestination(
-                      icon: Icon(Icons.person),
-                      label: "Account",
-                    ),
-                  ],
-                ),
+              body: controller.currentView,
+              bottomNavigationBar: NavigationBar(
+                selectedIndex: controller.selectedIndex.value,
+                onDestinationSelected: controller.onItemTapped,
+                destinations: [
+                  NavigationDestination(
+                    icon: Icon(Icons.star),
+                    label: "Favorites",
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.home),
+                    label: "Home",
+                  ),
+                  NavigationDestination(
+                    icon: Icon(Icons.person),
+                    label: "Account",
+                  ),
+                ],
               ),
-            ));
+            ),
+          ),
+        );
       },
     );
   }

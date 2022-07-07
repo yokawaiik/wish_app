@@ -11,6 +11,7 @@ class Wish {
   late DateTime createdAt;
   late WishUser createdBy;
   // late bool isCurrentUser;
+  late bool isFavorite;
 
   bool get hasImage => imageUrl != null ? true : false;
 
@@ -33,7 +34,7 @@ class Wish {
     this.imageUrl,
     required this.createdAt,
     required this.createdBy,
-    // this.isCurrentUser = false,
+    this.isFavorite = false,
   });
 
   @override
@@ -41,23 +42,17 @@ class Wish {
     return 'Wish: ${toJson()}';
   }
 
-  Wish.fromJson(Map<String, dynamic> data, String? currentUserId) {
+  Wish.fromJson(
+    Map<String, dynamic> data,
+    String? currentUserId, {
+    bool isFavorite = false,
+  }) {
     id = data["id"];
     title = data["title"];
     description = data["description"];
     link = data["link"];
     imageUrl = data["imageUrl"];
     createdAt = DateTime.parse(data["createdAt"] as String);
-
-    // only for UI
-    // createdBy = WishUser(
-    //   id: data["createdBy"],
-    //   login: data["login"],
-    //   imageUrl: data["userImageUrl"],
-    //   userColor: data["userColor"],
-    //   isCurrentUser: data["createdBy"] == currentUserId,
-    // );
-
     createdBy = WishUser(
       id: data["createdBy"]["id"],
       login: data["createdBy"]["login"],
@@ -65,7 +60,7 @@ class Wish {
       userColor: data["createdBy"]["userColor"],
       isCurrentUser: data["createdBy"]["id"] == currentUserId,
     );
-    // isCurrentUser = data["createdBy"] == currentUserId;
+    this.isFavorite = isFavorite;
   }
 
   Map<String, dynamic> toJson() {
@@ -83,7 +78,7 @@ class Wish {
         "userColor": createdBy.userColor,
         "isCurrentUser": createdBy.isCurrentUser,
       },
-      // "isCurrentUser": createdBy.isCurrentUser,
+      "isFavorite": isFavorite,
     };
   }
 }

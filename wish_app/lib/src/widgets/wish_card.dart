@@ -15,7 +15,7 @@ class WishCard extends StatelessWidget {
     this.wish, {
     Key? key,
     this.defaultPadding = global_constants.defaultPadding,
-    this.radius = global_constants.defaultSquareRadius,
+    this.radius = global_constants.defaultRadius,
     this.onTap,
     this.onLongPress,
     this.onTapDown,

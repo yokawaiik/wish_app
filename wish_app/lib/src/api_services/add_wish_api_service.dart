@@ -176,13 +176,6 @@ class AddWishApiService {
                   cacheControl: '0',
                 ),
               );
-      // final uploadResponse =
-      //     await _supabase.storage.from("wish.app.bucket").update(
-      //           path,
-      //           file,
-      //           fileOptions: const FileOptions(upsert: true),
-      //         );
-
       if (uploadResponse.error != null) {
         throw SupabaseException(
           "Error when upload image",
