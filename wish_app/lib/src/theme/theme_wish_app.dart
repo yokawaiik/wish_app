@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-Color seedColorTheme = Colors.teal;
-Color seedColorDarkTheme = Colors.purple;
+const Color seedColorTheme = Colors.teal;
+const Color seedColorDarkTheme = Colors.purple;
+
+const favoriteColor = Colors.purple;
+const unFavoriteColor = Colors.grey;
 
 final ThemeData theme = ThemeData(
   useMaterial3: true,

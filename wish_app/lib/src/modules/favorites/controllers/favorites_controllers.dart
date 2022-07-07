@@ -22,8 +22,8 @@ class FavoritesControllers extends GetxController {
   late final ScrollController favoriteWishGridController;
   var isWishListLoad = false;
   var _offset = 0;
-  // final _limit = favorites_constants.itemCountLimit;
-  final _limit = 3;
+  final _limit = favorites_constants.itemCountLimit;
+  // final _limit = 3;
 
   @override
   void onInit() async {
@@ -65,26 +65,30 @@ class FavoritesControllers extends GetxController {
     }
   }
 
-  //todo: add pagination logic
   void addFavoriteHandler(Wish addedWish) {
-    favoritesWishList.add(addedWish);
+    favoritesWishList.insert(0, addedWish);
     countOfFavorites.value += 1;
     _offset += 1;
     favoritesWishList.refresh();
+    countOfFavorites.refresh();
   }
 
-  //todo: add pagination logic
   void deleteFavoriteHandler(int deletedWishId) {
-    favoritesWishList.removeWhere((wish) => wish.id == deletedWishId);
+    bool _findWish(Wish wish) => wish.id == deletedWishId;
+
+    // ? info: if favoritesWishList doesn't have exists row in cloud database
+    if (favoritesWishList.indexWhere(_findWish) != -1) {
+      favoritesWishList.removeWhere(_findWish);
+      _offset -= 1;
+      favoritesWishList.refresh();
+    }
     countOfFavorites.value -= 1;
-    _offset -= 1;
-    favoritesWishList.refresh();
+    countOfFavorites.refresh();
   }
 
   Future<void> loadFavoriteWishList() async {
     try {
       isWishListLoad = true;
-
       final gotThePartOfFavoriteWishList =
           await FavoritesApiService.loadFavoriteWishList(
         limit: _limit,
@@ -92,31 +96,13 @@ class FavoritesControllers extends GetxController {
         currentUserId: _us.currentUser!.id,
       );
 
-      // print(
-      //     "loadWishList - wishList.value?.length : ${gotThePartOfFavoriteWishList?.length}");
-
-      // print(
-      //     'loadFavoriteWishList - conditions : ${gotThePartOfFavoriteWishList == null || gotThePartOfFavoriteWishList.isEmpty}');
-
       if (gotThePartOfFavoriteWishList == null ||
           gotThePartOfFavoriteWishList.isEmpty) return;
-
       favoritesWishList.addAll(gotThePartOfFavoriteWishList);
-      // favoritesWishList.refresh();
-
       _offset += gotThePartOfFavoriteWishList.length;
-      // print('_offset : $_offset');
-
-      // favoritesWishList.refresh();
-
-      // print(
-      //     'loadFavoriteWishList - favoritesWishList.length : ${favoritesWishList.length}');
     } on SupabaseException catch (e) {
-      print(
-          "FavoritesController - loadFavoriteWishList() - SupabaseException - e : $e");
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      print("FavoritesController - loadFavoriteWishList() - e : $e");
       Get.snackbar("Error", "Unknown error...");
     } finally {
       isWishListLoad = false;
@@ -130,36 +116,36 @@ class FavoritesControllers extends GetxController {
           await FavoritesApiService.getCountOfFavorites(_us.currentUser!.id);
 
       countOfFavorites.value = gotThePartOfFavoriteWishList ?? 0;
-      // countOfFavorites.refresh();
     } on SupabaseException catch (e) {
-      print(
-          "FavoritesController - getCountOfFavorites() - SupabaseException - e : $e");
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      print("FavoritesController - getCountOfFavorites() - e : $e");
       Get.snackbar("Error", "Unknown error...");
     } finally {
       isWishListLoad = false;
     }
   }
 
-// todo: refreshFavoritesWishList
   Future<void> refreshFavorites() async {
     isLoading.value = true;
     _offset = 0;
     await getCountOfFavorites();
     favoritesWishList.clear();
-    // favoritesWishList.refresh();
-
     await loadFavoriteWishList();
-
     isLoading.value = false;
     favoritesWishList.refresh();
     countOfFavorites.refresh();
   }
 
-  // todo: toggleFavorite
-  toggleFavorite(int id) {}
+  Future<void> toggleFavorite(int id) async {
+    try {
+      // todo, toggleFavorite: maybe add load animation while element deleting
+      await FavoritesApiService.toggleFavorite(id, _us.currentUser!.id);
+    } on SupabaseException catch (e) {
+      Get.snackbar(e.title, e.msg);
+    } catch (e) {
+      Get.snackbar("Error", "Unknown error...");
+    }
+  }
 
   // todo: onCardTap
 

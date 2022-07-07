@@ -8,11 +8,32 @@ class FavoritesApiService {
   static final _supabase = Supabase.instance;
 
   // todo: FavoritesApiService toggleFavorite
-  static Future<bool?> toggleFavorite() async {}
+  static Future<void> toggleFavorite(int wishId, String currentUserId) async {
+    try {
+      final params = {
+        "in_wish_id": wishId,
+        "in_user_id": currentUserId,
+      };
+
+      await _supabase.client
+          .rpc(
+            "toggle_favorite",
+            params: params,
+          )
+          .execute();
+    } on SupabaseException catch (e) {
+      print(
+          "FavoritesApiService - toggleFavorite - SupabaseException - e : ${e.toString()}");
+      rethrow;
+    } catch (e) {
+      print("FavoritesApiService - toggleFavorite - e : $e");
+      rethrow;
+    }
+  }
 
   // todo: FavoritesApiService getCountOfFavorites
   static Future<int?> getCountOfFavorites(String currentUserId) async {
-// count_of_favorites
+    // count_of_favorites
     try {
       final params = {
         "in_user_id": currentUserId,

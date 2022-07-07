@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wish_app/src/widgets/skeleton.dart';
 
 import '../constants/global_constants.dart' as global_constants;
+import '../theme/theme_wish_app.dart' as theme_wish_app;
+
 import '../models/wish.dart';
 
 class WishMediumCard extends StatelessWidget {
@@ -65,10 +67,6 @@ class WishMediumCard extends StatelessWidget {
                   ),
                 ),
               ),
-              // Skeleton(
-              //   height: imageHeight,
-              //   width: double.infinity,
-              // ),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -81,6 +79,9 @@ class WishMediumCard extends StatelessWidget {
                           IconButton(
                             onPressed: toggleFavorite,
                             icon: const Icon(Icons.favorite),
+                            color: wish.isFavorite
+                                ? theme_wish_app.favoriteColor
+                                : theme_wish_app.unFavoriteColor,
                             iconSize: 36,
                           ),
                           IconButton(
