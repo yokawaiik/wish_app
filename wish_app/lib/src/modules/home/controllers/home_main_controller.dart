@@ -161,17 +161,22 @@ class HomeMainController extends GetxController {
   //todo: shareWish
   void shareWish() {}
 
-  //todo: addToFavorites
-  void addToFavorites() {}
+  //todo: addToFavorites - add getting touch with api
+  void addToFavorites(int id) async {
+    final foundWish = homeWishList.firstWhere((wish) => wish.id == id);
+
+    foundWish.isFavorite = !foundWish.isFavorite;
+    homeWishList.refresh();
+  }
 
   void deleteWish(int id) {
     homeWishList.removeWhere((wish) => wish.id == id);
     homeWishList.refresh();
   }
 
-  Future<void> actionDeleteWish(Wish wish) async {
+  void actionDeleteWish(Wish wish) async {
     try {
-      Get.back(); // close modalBottomSheet
+      Get.back(closeOverlays: true); // close modalBottomSheet
       isDeleting.value = true;
       await AddWishApiService.deleteWish(wish.id, wish.imagePath);
       deleteWish(wish.id);
@@ -185,6 +190,7 @@ class HomeMainController extends GetxController {
   }
 
   void seeProfile(Wish wish) async {
+    Get.back(closeOverlays: true);
     if (wish.createdBy.isCurrentUser) {
       Get.find<NavigatorController>().onItemTapped(2);
     } else {

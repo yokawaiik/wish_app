@@ -3,6 +3,7 @@ import 'package:wish_app/src/models/supabase_exception.dart';
 import 'package:wish_app/src/models/unknown_exception.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
+import 'package:wish_app/src/modules/favorites/views/favorites_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/api_services/add_wish_api_service.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
@@ -80,6 +81,7 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
           break;
 
         case router_constants.homeAccountRouteName:
+        case FavoritesView.routeName:
           // todo: request to service if user came by link
           final theFoundWish = await AddWishApiService.getWish(
             _args.wishId,

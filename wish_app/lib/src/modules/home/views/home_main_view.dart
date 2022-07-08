@@ -13,54 +13,51 @@ class HomeMainView extends GetView<HomeMainController> {
   HomeMainView({Key? key}) : super(key: key);
 
   void _showModalBottomSheet(
-    BuildContext context,
     Wish wish,
   ) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: () => Get.back(),
-                    icon: Icon(
-                      Icons.close,
-                      size: 36,
-                    ),
+    Get.bottomSheet(
+      Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  onPressed: () => Get.back(closeOverlays: true),
+                  icon: Icon(
+                    Icons.close,
+                    size: 36,
                   ),
-                ],
-              ),
-              ListView(
-                shrinkWrap: true,
-                children: [
+                ),
+              ],
+            ),
+            ListView(
+              shrinkWrap: true,
+              children: [
+                ListTile(
+                  leading: Icon(Icons.send),
+                  title: Text("Share"),
+                  onTap: controller.shareWish,
+                ),
+                if (wish.createdBy.isCurrentUser)
                   ListTile(
-                    leading: Icon(Icons.send),
-                    title: Text("Share"),
-                    onTap: controller.shareWish,
+                    leading: Icon(Icons.delete),
+                    title: Text("Delete"),
+                    onTap: () => controller.actionDeleteWish(wish),
                   ),
-                  if (wish.createdBy.isCurrentUser)
-                    ListTile(
-                      leading: Icon(Icons.delete),
-                      title: Text("Delete"),
-                      onTap: () => controller.actionDeleteWish(wish),
-                    ),
-                  ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text("See profile"),
-                    onTap: () => controller.seeProfile(wish),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
+                ListTile(
+                  leading: Icon(Icons.person),
+                  title: Text("See profile"),
+                  onTap: () => controller.seeProfile(wish),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      backgroundColor: Get.theme.colorScheme.background,
     );
   }
 
@@ -108,20 +105,19 @@ class HomeMainView extends GetView<HomeMainController> {
                             gridItemHeight: gridItemHeight,
                             onPressedMore: () {
                               _showModalBottomSheet(
-                                context,
                                 wish,
                               );
                             },
                             onLongPress: () {
                               _showModalBottomSheet(
-                                context,
                                 wish,
                               );
                             },
                             clickOnAuthor: () => controller.seeProfile(wish),
                             clickOnWish: () =>
                                 controller.onClickWishItem(wish.id),
-                            onPressedAddToFavorites: controller.addToFavorites,
+                            onPressedAddToFavorites: () =>
+                                controller.addToFavorites(wish.id),
                             onPressedShare: controller.shareWish,
                           );
                         },

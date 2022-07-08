@@ -7,7 +7,6 @@ import 'package:wish_app/src/models/wish.dart';
 class FavoritesApiService {
   static final _supabase = Supabase.instance;
 
-  // todo: FavoritesApiService toggleFavorite
   static Future<void> toggleFavorite(int wishId, String currentUserId) async {
     try {
       final params = {
@@ -31,7 +30,6 @@ class FavoritesApiService {
     }
   }
 
-  // todo: FavoritesApiService getCountOfFavorites
   static Future<int?> getCountOfFavorites(String currentUserId) async {
     // count_of_favorites
     try {
@@ -71,8 +69,6 @@ class FavoritesApiService {
     _supabase.client
         .from('favorites:userId=eq.${_supabase.client.auth.currentUser!.id}')
         .on(SupabaseEventTypes.insert, (payload) async {
-      // todo: convert to model wish
-      // todo: get wish
       final wishId = payload.newRecord!['wishId'];
       final gotWish = await _getAddedFavoriteWish(wishId, currentUserId);
 
@@ -82,7 +78,6 @@ class FavoritesApiService {
     }).subscribe();
   }
 
-  // todo: test: deleteFavorite
   static void deleteFavorite(void Function(int) callback) {
     _supabase.client
         .from('favorites:userId=eq.${_supabase.client.auth.currentUser!.id}')
@@ -91,7 +86,6 @@ class FavoritesApiService {
     }).subscribe();
   }
 
-  // todo: test: _getAddedFavoriteWish
   static Future<Wish?> _getAddedFavoriteWish(
     int wishId,
     String currentUserId,
@@ -128,7 +122,6 @@ class FavoritesApiService {
     }
   }
 
-  // todo: test: deleteFavoriteWish
   static Future<bool> deleteFavoriteWish(int id) async {
     try {
       final deletedWish = await _supabase.client

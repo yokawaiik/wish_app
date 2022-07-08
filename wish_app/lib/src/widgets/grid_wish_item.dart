@@ -126,7 +126,9 @@ class GridWishItem extends StatelessWidget {
                             padding: EdgeInsets.zero,
                             // todo: add to favorite
                             onPressed: onPressedAddToFavorites,
-                            icon: Icon(Icons.star_border_outlined),
+                            icon: Icon(wish.isFavorite
+                                ? Icons.star
+                                : Icons.star_border_outlined),
                           ),
                           IconButton(
                             iconSize: 36,
@@ -138,17 +140,6 @@ class GridWishItem extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // SizedBox(
-                      //   height: 10,
-                      // ),
-                      // todo: add Likes Count
-                      // Text(
-                      //   "LikesCount",
-                      //   style: TextStyle(
-                      //     fontSize: textTheme.bodyText1!.fontSize,
-                      //     // fontSize: 10,
-                      //   ),
-                      // ),
                       SizedBox(
                         height: 10,
                       ),

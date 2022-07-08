@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/favorites/api_services/favorites_api_service.dart';
+import 'package:wish_app/src/modules/favorites/views/favorites_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/navigator/controllers/navigator_controller.dart';
+import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
+import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
 import 'package:wish_app/src/services/user_service.dart';
 
 import '../../../models/supabase_exception.dart';
@@ -162,23 +165,28 @@ class FavoritesControllers extends GetxController {
     }
   }
 
-  // todo: onCardTap
-  onCardTap(int id) {}
+  void onCardTap(int id) async {
+    await Get.toNamed(
+      WishInfoView.routeName,
+      arguments: WishInfoArguments(
+        wishId: id,
+        previousRouteName: FavoritesView.routeName,
+      ),
+    );
+  }
 
-  // todo: seeProfile
-  seeProfile(Wish wish) async {
-    // todo: go to screen 1 and show profile
+  void seeProfile(Wish wish) async {
     Get.back(closeOverlays: true);
     _nc.onItemTapped(1);
 
-    // await Get.toNamed(
-    //   home_router_constants.homeAccountRouteName,
-    //   id: _hc.nestedKey,
-    //   arguments: AccountArguments(
-    //     wish.createdBy.id,
-    //   ),
-    //   preventDuplicates: false,
-    // );
+    await Get.toNamed(
+      home_router_constants.homeAccountRouteName,
+      id: _hc.nestedKey,
+      arguments: AccountArguments(
+        wish.createdBy.id,
+      ),
+      preventDuplicates: false,
+    );
   }
 
   void removeFromFavorite(int id) async {

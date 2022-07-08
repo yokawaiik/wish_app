@@ -10,6 +10,7 @@ import '../../../widgets/wish_medium_card.dart';
 import '../../../widgets/wish_medium_card_skeleton.dart';
 
 class FavoritesView extends GetView<FavoritesControllers> {
+  static const routeName = "/favorites";
   const FavoritesView({Key? key}) : super(key: key);
 
   @override
@@ -134,13 +135,6 @@ class FavoritesView extends GetView<FavoritesControllers> {
     );
   }
 
-  // // todo: _tapOnMore
-  // void _tapOnMore(Wish wish) {}
-
-  // // todo: _onLongPress
-  // void _onLongPress() {}
-
-  // todo: _snowModalBottomSheetMenu
   void _snowModalBottomSheetMenu(BuildContext context, Wish wish) {
     showModalBottomSheet(
       context: context,

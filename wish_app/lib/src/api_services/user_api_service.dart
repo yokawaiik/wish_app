@@ -58,7 +58,6 @@ class UserApiService {
     }
   }
 
-  // todo: use it everywhere
   static Future<void> signOut() async {
     try {
       await _supabase.auth.signOut();
