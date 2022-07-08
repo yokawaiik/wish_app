@@ -9,6 +9,7 @@ import 'package:wish_app/src/modules/home/controllers/home_main_controller.dart'
 import 'package:wish_app/src/modules/home/views/home_view.dart';
 import 'package:wish_app/src/services/user_service.dart';
 
+import '../../../widgets/keep_alive_wrapper.dart';
 import '../../account/models/account_arguments.dart';
 import '../../auth/views/auth_view.dart';
 import '../../home/controllers/home_controller.dart';
@@ -17,26 +18,31 @@ import '../utils/show_exit_app.dart';
 
 class NavigatorController extends GetxController {
   final _supabase = Supabase.instance;
-
   final userService = Get.find<UserService>();
 
   RxBool get isUserAuthenticated => userService.isUserAuthenticated;
-
   late AccountArguments accountArguments;
 
   var selectedIndex = RxInt(1);
+  late final PageController pageViewController;
 
   late List<Widget> views;
-
   Widget get currentView => views[selectedIndex.value];
 
   @override
   void onInit() {
+    // views = [
+    //   FavoritesView(),
+    //   HomeView(),
+    //   _createAccountView(),
+    // ];
     views = [
-      FavoritesView(),
-      HomeView(),
-      _createAccountView(),
+      KeepAliveWrapper(child: FavoritesView()),
+      KeepAliveWrapper(child: HomeView()),
+      KeepAliveWrapper(child: _createAccountView()),
     ];
+
+    pageViewController = PageController(initialPage: selectedIndex.value);
 
     super.onInit();
   }
@@ -106,6 +112,8 @@ class NavigatorController extends GetxController {
       default:
         selectedIndex.value = value;
     }
+
+    pageViewController.jumpToPage(selectedIndex.value);
   }
 
   Future<bool> appOnWillPop() async {
@@ -117,6 +125,6 @@ class NavigatorController extends GetxController {
   }
 
   void updateAccountView() {
-    views.last = _createAccountView();
+    views.last = KeepAliveWrapper(child: _createAccountView());
   }
 }

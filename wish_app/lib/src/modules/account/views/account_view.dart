@@ -5,6 +5,7 @@ import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/account/models/account_arguments.dart';
 import 'package:wish_app/src/modules/account/widget/button_counter_title.dart';
+import 'package:wish_app/src/modules/navigator/views/navigator_view.dart';
 import 'package:wish_app/src/services/user_service.dart';
 import 'package:wish_app/src/widgets/account_user_avatar.dart';
 import 'package:wish_app/src/widgets/skeleton.dart';

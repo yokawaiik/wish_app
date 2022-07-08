@@ -19,6 +19,7 @@ import '../../home/constants/router_constants.dart' as router_constants;
 
 class WishInfoController extends GetxController with StateMixin<Wish> {
   final hmc = Get.find<HomeMainController>();
+  final _us = Get.find<UserService>();
 
   // Wish? currentWish;
 
@@ -78,10 +79,19 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
           currentWish.value = theFoundWish;
           break;
 
-        default:
+        case router_constants.homeAccountRouteName:
           // todo: request to service if user came by link
+          final theFoundWish = await AddWishApiService.getWish(
+            _args.wishId,
+            _us.currentUser!.id,
+          );
+          currentWish.value = theFoundWish;
+          break;
+        default:
           throw 'It\'s need to get from server';
       }
+
+      print('сurrentWish.value : ${currentWish.value}');
 
       if (currentWish.value == null) {
         change(currentWish.value, status: RxStatus.error());

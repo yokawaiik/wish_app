@@ -55,8 +55,9 @@ class FavoritesView extends GetView<FavoritesControllers> {
                       hasActions: true,
                       onCardTap: () => controller.onCardTap(wish.id),
                       toggleFavorite: () => controller.toggleFavorite(wish.id),
-                      tapOnMore: () => _tapOnMore(wish),
-                      onLongPress: _onLongPress,
+                      // tapOnMore: () => _tapOnMore(wish),
+                      tapOnMore: () => _snowModalBottomSheetMenu(ctx, wish),
+                      onLongPress: () => _snowModalBottomSheetMenu(ctx, wish),
                     );
                   } else {
                     return WishMediumCardSkeleton(
@@ -133,9 +134,58 @@ class FavoritesView extends GetView<FavoritesControllers> {
     );
   }
 
-  // todo: _tapOnMore
-  void _tapOnMore(Wish wish) {}
+  // // todo: _tapOnMore
+  // void _tapOnMore(Wish wish) {}
 
-  // todo: _onLongPress
-  void _onLongPress() {}
+  // // todo: _onLongPress
+  // void _onLongPress() {}
+
+  // todo: _snowModalBottomSheetMenu
+  void _snowModalBottomSheetMenu(BuildContext context, Wish wish) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: () => Get.back(),
+                    icon: Icon(
+                      Icons.close,
+                      size: 36,
+                    ),
+                  ),
+                ],
+              ),
+              ListView(
+                shrinkWrap: true,
+                children: [
+                  // ListTile(
+                  //   leading: Icon(Icons.send),
+                  //   title: Text("Share"),
+                  //   onTap: controller.shareWish,
+                  // ),
+                  ListTile(
+                    leading: Icon(Icons.favorite),
+                    title: Text("Remove from favorites"),
+                    onTap: () => controller.removeFromFavorite(wish.id),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.person),
+                    title: Text("See profile"),
+                    onTap: () => controller.seeProfile(wish),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

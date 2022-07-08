@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/favorites/api_services/favorites_api_service.dart';
+import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
+import 'package:wish_app/src/modules/navigator/controllers/navigator_controller.dart';
 import 'package:wish_app/src/services/user_service.dart';
 
 import '../../../models/supabase_exception.dart';
 
+import '../../account/models/account_arguments.dart';
 import '../constants/favorites_constants.dart' as favorites_constants;
+import '../../home/constants/router_constants.dart' as home_router_constants;
 
 class FavoritesControllers extends GetxController {
   final _us = Get.find<UserService>();
+  final _nc = Get.find<NavigatorController>();
+  final _hc = Get.find<HomeController>();
 
   var favoritesWishList = RxList<Wish>([]);
   var countOfFavorites = RxInt(0);
@@ -20,6 +26,7 @@ class FavoritesControllers extends GetxController {
 
   // ? info: for infinite scroll
   late final ScrollController favoriteWishGridController;
+
   var isWishListLoad = false;
   var _offset = 0;
   final _limit = favorites_constants.itemCountLimit;
@@ -46,13 +53,21 @@ class FavoritesControllers extends GetxController {
     favoritesWishList.refresh();
   }
 
+  // ScrollPosition _scrollOffsetPosition = ScrollPosition.;
+
   void favoritesWishListScrollListener() async {
+    // _scrollOffsetPosition = favoriteWishGridController.positions.last;
+
+    // favoriteWishGridController.attach(_scrollOffsetPosition);
+
     if (isWishListLoad == true) return;
     if (countOfFavorites.value == 0) return;
 
     if (_offset >= countOfFavorites.value) {
       return;
     }
+
+    // initialScrollOffset: widget.getOffsetMethod()
 
     final itemRatio = _offset / countOfFavorites.value;
     final scrollPosition = favoriteWishGridController.position.pixels /
@@ -148,6 +163,26 @@ class FavoritesControllers extends GetxController {
   }
 
   // todo: onCardTap
-
   onCardTap(int id) {}
+
+  // todo: seeProfile
+  seeProfile(Wish wish) async {
+    // todo: go to screen 1 and show profile
+    Get.back(closeOverlays: true);
+    _nc.onItemTapped(1);
+
+    // await Get.toNamed(
+    //   home_router_constants.homeAccountRouteName,
+    //   id: _hc.nestedKey,
+    //   arguments: AccountArguments(
+    //     wish.createdBy.id,
+    //   ),
+    //   preventDuplicates: false,
+    // );
+  }
+
+  void removeFromFavorite(int id) async {
+    Get.back(closeOverlays: true);
+    await toggleFavorite(id);
+  }
 }

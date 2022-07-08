@@ -21,6 +21,7 @@ import "../../../utils/router_utils.dart" as router_utils;
 
 // import '../../../constants/account_constants.dart' show itemCountLimit, loadOffset;
 import '../../../constants/account_constants.dart' as account_constants;
+import '../../home/constants/router_constants.dart' as home_router_constants;
 import '../views/account_view.dart';
 
 class AccountController extends GetxController {
@@ -42,7 +43,7 @@ class AccountController extends GetxController {
 
   bool isWishListLoad = false;
 
-  late final AccountArguments? args;
+  late final AccountArguments? _args;
 
   @override
   void onInit() async {
@@ -77,18 +78,18 @@ class AccountController extends GetxController {
   }
 
   void _setArguments() {
-    args = Get.arguments as AccountArguments?;
+    _args = Get.arguments as AccountArguments?;
   }
 
   Future<void> getUser() async {
     print("AccountController - getUser()");
     try {
-      print('AccountController - initLoading - args : ${args}');
+      print('AccountController - initLoading - _args : ${_args}');
 
       // an unknown user visits someone's account
-      if (args != null && args!.tag != null) {
+      if (_args != null && _args!.tag != null) {
         final gotTheUser = await AccountApiService.getUser(
-          args!.tag!,
+          _args!.tag!,
           _userService.currentUser?.id,
         );
 
@@ -193,7 +194,9 @@ class AccountController extends GetxController {
       WishInfoView.routeName,
       arguments: WishInfoArguments(
         wishId: id,
-        previousRouteName: AccountView.routeName,
+        previousRouteName: isCurrentUser.value
+            ? AccountView.routeName
+            : home_router_constants.homeAccountRouteName,
       ),
     );
   }

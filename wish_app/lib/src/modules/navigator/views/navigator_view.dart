@@ -60,7 +60,15 @@ class NavigatorView extends GetView<NavigatorController> {
                     )
                   : null,
 
-              body: controller.currentView,
+              // body: controller.currentView,
+              // body: IndexedStack(
+              //   index: controller.selectedIndex.value,
+              //   children: controller.views,
+              // ),
+              body: PageView(
+                controller: controller.pageViewController,
+                children: controller.views,
+              ),
               bottomNavigationBar: NavigationBar(
                 selectedIndex: controller.selectedIndex.value,
                 onDestinationSelected: controller.onItemTapped,
