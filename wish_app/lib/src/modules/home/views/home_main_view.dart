@@ -150,7 +150,8 @@ class HomeMainView extends GetView<HomeMainController> {
         ),
         floatingActionButton: Obx(
           () {
-            return controller.userService.isUserAuthenticated.value
+            // return controller.userService.isUserAuthenticated.value
+            return controller.isUserAuthenticated.value
                 ? FloatingActionButton(
                     child: Icon(
                       Icons.add,

@@ -82,7 +82,6 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
 
         case router_constants.homeAccountRouteName:
         case FavoritesView.routeName:
-          // todo: request to service if user came by link
           final theFoundWish = await AddWishApiService.getWish(
             _args.wishId,
             _us.currentUser!.id,

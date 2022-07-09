@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:wish_app/src/models/supabase_exception.dart';
 import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/account/models/account_arguments.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
+import 'package:wish_app/src/modules/favorites/api_services/favorites_api_service.dart';
 import 'package:wish_app/src/modules/home/api_services/home_api_service.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/api_services/add_wish_api_service.dart';
@@ -18,12 +20,12 @@ import '../constants/router_constants.dart' as router_constants;
 
 class HomeMainController extends GetxController {
   final _supabase = Supabase.instance;
-  final userService = Get.find<UserService>();
+  final _userService = Get.find<UserService>();
   final _homeController = Get.find<HomeController>();
 
   late final ScrollController scrollController;
 
-  RxBool get isUserAuthenticated => userService.isUserAuthenticated;
+  RxBool get isUserAuthenticated => _userService.isUserAuthenticated;
   // bool get isUserAuthenticated2 => userService.isUserAuthenticated.value;
 
   @override
@@ -81,7 +83,7 @@ class HomeMainController extends GetxController {
     try {
       print("loadCountOfWishInSubscriptions");
       final loadedCountOfWish = await HomeService.countOfWishInSubscriptions(
-        currentUserId: userService.currentUser?.id,
+        currentUserId: _userService.currentUser?.id,
       );
 
       print(loadedCountOfWish);
@@ -106,7 +108,7 @@ class HomeMainController extends GetxController {
         loadedWishList = await HomeService.loadWishList(
           limit: limit,
           offset: countLoadedWish,
-          currentUserId: userService.currentUser!.id,
+          currentUserId: _userService.currentUser!.id,
         );
       } else {
         // for guest
@@ -161,12 +163,20 @@ class HomeMainController extends GetxController {
   //todo: shareWish
   void shareWish() {}
 
-  //todo: addToFavorites - add getting touch with api
   void addToFavorites(int id) async {
-    final foundWish = homeWishList.firstWhere((wish) => wish.id == id);
+    try {
+      final foundWish = homeWishList.firstWhere((wish) => wish.id == id);
 
-    foundWish.isFavorite = !foundWish.isFavorite;
-    homeWishList.refresh();
+      await FavoritesApiService.toggleFavorite(
+          id, _userService.currentUser!.id);
+
+      foundWish.isFavorite = !foundWish.isFavorite;
+      homeWishList.refresh();
+    } on SupabaseException catch (e) {
+      Get.snackbar(e.title, e.msg);
+    } catch (e) {
+      Get.snackbar("Unexpected error", "Something went wrong.");
+    }
   }
 
   void deleteWish(int id) {
