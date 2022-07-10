@@ -32,62 +32,58 @@ class WishCard extends StatelessWidget {
         onTap: onTap,
         onLongPress: onLongPress,
         onTapDown: onTapDown,
-        child: Container(
-          decoration: BoxDecoration(
-            color: colorScheme.secondaryContainer.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(global_constants.defaultPadding / 2),
-            child: Row(
-              children: [
-                Container(
-                  height: 120,
-                  width: 120,
-                  clipBehavior: Clip.antiAlias,
-                  child: wish.imageUrl != null
-                      ? Image.network(
-                          wish.imageUrl!,
-                          fit: BoxFit.cover,
-                        )
-                      : Icon(
-                          Icons.question_mark,
-                          size: 50,
-                          color: colorScheme.onPrimary,
-                        ),
-                  decoration: BoxDecoration(
-                    color: colorScheme.primary,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(radius),
-                    ),
+        highlightColor: colorScheme.secondaryContainer.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: const EdgeInsets.all(global_constants.defaultPadding / 2),
+          child: Row(
+            children: [
+              Container(
+                height: 120,
+                width: 120,
+                clipBehavior: Clip.antiAlias,
+                child: wish.imageUrl != null
+                    ? Image.network(
+                        wish.imageUrl!,
+                        fit: BoxFit.cover,
+                      )
+                    : Icon(
+                        Icons.question_mark,
+                        size: 50,
+                        color: colorScheme.onPrimary,
+                      ),
+                decoration: BoxDecoration(
+                  color: colorScheme.primary,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(radius),
                   ),
                 ),
-                const SizedBox(
-                  width: global_constants.defaultPadding / 2,
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+              ),
+              const SizedBox(
+                width: global_constants.defaultPadding / 2,
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      wish.title,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: textTheme.bodyText1,
+                    ),
+                    if (wish.description != null)
                       Text(
-                        wish.title,
+                        wish.description!,
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                        maxLines: 2,
                         style: textTheme.bodyText1,
                       ),
-                      if (wish.description != null)
-                        Text(
-                          wish.description!,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: textTheme.bodyText1,
-                        ),
-                    ],
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

@@ -10,6 +10,7 @@ import '../controllers/home_controller.dart';
 import '../controllers/home_main_controller.dart';
 
 import '../../../constants/global_constants.dart' as global_constants;
+import '../../../theme/theme_wish_app.dart' as theme_wish_app;
 
 class HomeMainView extends GetView<HomeMainController> {
   static const String routeName = "/home/main";
@@ -39,6 +40,15 @@ class HomeMainView extends GetView<HomeMainController> {
             ListView(
               shrinkWrap: true,
               children: [
+                if (!wish.createdBy.isCurrentUser)
+                  ListTile(
+                    leading: Icon(
+                      Icons.favorite,
+                      color: theme_wish_app.favoriteColor,
+                    ),
+                    title: Text("Add to favorites"),
+                    onTap: () => controller.addToFavorites(wish.id),
+                  ),
                 ListTile(
                   leading: Icon(Icons.send),
                   title: Text("Share"),
