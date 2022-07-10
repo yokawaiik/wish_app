@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
+import 'package:wish_app/src/modules/favorites/controllers/favorites_controllers.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/services/user_service.dart';
 
@@ -18,6 +19,10 @@ class NavigatorBindings extends Bindings {
         Get.put(
           AccountController(),
           tag: userService.currentUser!.id,
+          permanent: true,
+        );
+        Get.put(
+          FavoritesController(),
           permanent: true,
         );
       }

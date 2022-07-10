@@ -4,6 +4,6 @@ import 'package:wish_app/src/modules/favorites/controllers/favorites_controllers
 class FavoritesBindings extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => FavoritesControllers());
+    Get.lazyPut(() => FavoritesController());
   }
 }

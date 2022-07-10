@@ -15,7 +15,7 @@ import '../../account/models/account_arguments.dart';
 import '../constants/favorites_constants.dart' as favorites_constants;
 import '../../home/constants/router_constants.dart' as home_router_constants;
 
-class FavoritesControllers extends GetxController {
+class FavoritesController extends GetxController {
   final _us = Get.find<UserService>();
   final _nc = Get.find<NavigatorController>();
   final _hc = Get.find<HomeController>();

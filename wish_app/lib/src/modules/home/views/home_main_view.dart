@@ -1,16 +1,19 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:wish_app/src/services/user_service.dart';
+import 'package:wish_app/src/widgets/bouncing_icon_button.dart';
+import 'package:wish_app/src/widgets/wish_grid_item.dart';
 import '../../../models/wish.dart';
-import '../../../widgets/grid_wish_item.dart';
 import '../controllers/home_controller.dart';
 import '../controllers/home_main_controller.dart';
 
+import '../../../constants/global_constants.dart' as global_constants;
+
 class HomeMainView extends GetView<HomeMainController> {
   static const String routeName = "/home/main";
-  HomeMainView({Key? key}) : super(key: key);
+  const HomeMainView({Key? key}) : super(key: key);
 
   void _showModalBottomSheet(
     Wish wish,
@@ -63,16 +66,6 @@ class HomeMainView extends GetView<HomeMainController> {
 
   @override
   Widget build(BuildContext context) {
-    final userService = Get.find<UserService>();
-
-    // calculate size for items
-    final mediaQuery = MediaQuery.of(context);
-    final size = mediaQuery.size;
-    final double gridItemHeight =
-        (size.height - (kBottomNavigationBarHeight + kToolbarHeight + 40));
-
-    // final double gridItemWidth = size.width;
-
     return WillPopScope(
       onWillPop: Get.find<HomeController>().onWillPop,
       child: Scaffold(
@@ -87,41 +80,7 @@ class HomeMainView extends GetView<HomeMainController> {
             () => Stack(
               children: [
                 controller.homeWishList.isNotEmpty
-                    ? GridView.builder(
-                        // ? ListView.builder(
-                        controller: controller.scrollController,
-                        // padding: const EdgeInsets.all(10.0),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1,
-                          mainAxisExtent: gridItemHeight,
-                        ),
-
-                        itemCount: controller.homeWishList.length,
-                        itemBuilder: (ctx, i) {
-                          final wish = controller.homeWishList[i];
-
-                          return GridWishItem(
-                            wish: controller.homeWishList[i],
-                            gridItemHeight: gridItemHeight,
-                            onPressedMore: () {
-                              _showModalBottomSheet(
-                                wish,
-                              );
-                            },
-                            onLongPress: () {
-                              _showModalBottomSheet(
-                                wish,
-                              );
-                            },
-                            clickOnAuthor: () => controller.seeProfile(wish),
-                            clickOnWish: () =>
-                                controller.onClickWishItem(wish.id),
-                            onPressedAddToFavorites: () =>
-                                controller.addToFavorites(wish.id),
-                            onPressedShare: controller.shareWish,
-                          );
-                        },
-                      )
+                    ? _gridBuild()
                     : Center(
                         child: Icon(
                           Icons.add_photo_alternate_outlined,
@@ -150,7 +109,6 @@ class HomeMainView extends GetView<HomeMainController> {
         ),
         floatingActionButton: Obx(
           () {
-            // return controller.userService.isUserAuthenticated.value
             return controller.isUserAuthenticated.value
                 ? FloatingActionButton(
                     child: Icon(
@@ -165,6 +123,32 @@ class HomeMainView extends GetView<HomeMainController> {
           },
         ),
       ),
+    );
+  }
+
+  Widget _gridBuild() {
+    // final mediaQuery = Get.mediaQuery;
+    // final size = mediaQuery.size;
+    // final gridItemHeight = 500.0;
+    // todo, optional: implement grid to desktop
+
+    return MasonryGridView.builder(
+      padding: EdgeInsets.all(global_constants.paddingInsideGridView),
+      gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+      ),
+      mainAxisSpacing: global_constants.paddingInsideGridView,
+      crossAxisSpacing: global_constants.paddingInsideGridView,
+      itemCount: controller.homeWishList.length,
+      itemBuilder: (_, i) {
+        final wish = controller.homeWishList[i];
+        return WishGridItem(
+          wish: wish,
+          clickOnWish: () => controller.onClickWishItem(wish.id),
+          onPressedMore: () => _showModalBottomSheet(wish),
+          onLongPress: () => _showModalBottomSheet(wish),
+        );
+      },
     );
   }
 }

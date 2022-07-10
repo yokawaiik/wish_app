@@ -9,7 +9,7 @@ import 'package:wish_app/src/modules/favorites/controllers/favorites_controllers
 import '../../../widgets/wish_medium_card.dart';
 import '../../../widgets/wish_medium_card_skeleton.dart';
 
-class FavoritesView extends GetView<FavoritesControllers> {
+class FavoritesView extends GetView<FavoritesController> {
   static const routeName = "/favorites";
   const FavoritesView({Key? key}) : super(key: key);
 

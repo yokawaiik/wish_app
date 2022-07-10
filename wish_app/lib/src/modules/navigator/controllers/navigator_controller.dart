@@ -102,7 +102,7 @@ class NavigatorController extends GetxController {
           );
 
           Get.put(
-            FavoritesControllers(),
+            FavoritesController(),
             permanent: true,
           );
 
