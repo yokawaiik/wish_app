@@ -20,4 +20,16 @@ class CurrentUser {
     //
     // required this.login,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      "id": id,
+      "appMetadata": appMetadata,
+      "userMetadata": userMetadata,
+      "aud": aud,
+      "email": email,
+      "phone": phone,
+      "createdAt": createdAt,
+    };
+  }
 }

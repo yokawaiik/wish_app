@@ -2,7 +2,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/models/supabase_exception.dart';
 import 'package:wish_app/src/modules/auth/models/auth_user_form.dart';
 
-class AuthService {
+class AuthApiService {
   static final _supabase = Supabase.instance;
 
   static Future<void> signIn(AuthUserForm authUserForm) async {
@@ -82,15 +82,15 @@ class AuthService {
   static Future<Map<String, dynamic>> checkIfUserExists(
       Map<String, dynamic> params) async {
     try {
-      // prc pararms: {"login": login, }
+      // print(params);
       final recordedUser = await _supabase.client
           .rpc(
             "check_if_user_exist",
             params: params,
           )
-          // .single()
           .execute();
-      // print(recordedUser.data);
+      // print(recordedUser.toJson());
+
       return recordedUser.data;
     } catch (e) {
       print("AuthService - checkIfLoginExists - e: $e");

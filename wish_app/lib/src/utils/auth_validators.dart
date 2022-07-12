@@ -55,8 +55,9 @@ String? checkPassword(
 
 String? checkLogin(
   String? value, {
+  bool isRequired = true,
   String? emptyLengthMessage,
-  int minLength = 10,
+  int minLength = 5,
   String? minLengthMessage,
   int maxLength = 100,
   String? maxLengthMessage,
@@ -70,6 +71,7 @@ String? checkLogin(
     emptyLengthMessage: emptyLengthMessage,
     maxLength: maxLength,
     maxLengthMessage: maxLengthMessage,
+    isRequired: isRequired,
   );
   return baseCheck;
 }

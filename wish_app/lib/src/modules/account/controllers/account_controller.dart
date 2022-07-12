@@ -5,6 +5,7 @@ import 'package:wish_app/src/models/supabase_exception.dart';
 import 'package:wish_app/src/models/user_account.dart';
 import 'package:wish_app/src/modules/account/api_services/account_api_service.dart';
 import 'package:wish_app/src/modules/account/models/account_arguments.dart';
+import 'package:wish_app/src/modules/account/views/account_edit_view.dart';
 import 'package:wish_app/src/modules/auth/views/auth_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/home/controllers/home_main_controller.dart';
@@ -245,8 +246,9 @@ class AccountController extends GetxController {
     wishList.refresh();
   }
 
-  // todo: editProfile
-  void editProfile() {}
+  void editProfile() {
+    Get.toNamed(AccountEditView.routeName);
+  }
 
   void goToMyAccountPage() {
     Get.back(id: _homeController.nestedKey);
@@ -279,5 +281,13 @@ class AccountController extends GetxController {
     } catch (e) {
       Get.snackbar("Error", "Unknown error...");
     }
+  }
+
+  void updateUserAccountInfoByFields({String? login}) {
+    if (login != null) {
+      userAccount.value!.login = login;
+    }
+
+    userAccount.refresh();
   }
 }

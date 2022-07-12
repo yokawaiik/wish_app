@@ -121,6 +121,7 @@ class HomeMainView extends GetView<HomeMainController> {
           () {
             return controller.isUserAuthenticated.value
                 ? FloatingActionButton(
+                    heroTag: UniqueKey(),
                     child: Icon(
                       Icons.add,
                       color: Theme.of(context).colorScheme.onSecondary,

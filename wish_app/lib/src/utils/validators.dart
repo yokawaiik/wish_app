@@ -51,7 +51,7 @@ String? onlyNumbersAndLettersCheck(
     isRequired: isRequired,
   );
   if (baseCheck == null) {
-    message ??= "$fieldName must contain only letters and numbers.";
+    message ??= "'$fieldName' must contain only letters and numbers.";
 
     if (validateByRegExp) {
       bool isValid = RegExp(r"[\w.-]{0,19}[0-9a-zA-Z]$").hasMatch(value!);

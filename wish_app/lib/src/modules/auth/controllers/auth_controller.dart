@@ -43,7 +43,7 @@ class AuthController extends GetxController {
 
       if (!validateFields()) return;
 
-      await AuthService.signIn(authUserForm);
+      await AuthApiService.signIn(authUserForm);
       // await Get.offAllNamed(NavigatorView.routeName);
       Get.back();
 
@@ -69,7 +69,7 @@ class AuthController extends GetxController {
       if (!validateFields()) return;
 
       authUserForm.userColor = WishColor.generateColor().toHex();
-      await AuthService.signUp(authUserForm);
+      await AuthApiService.signUp(authUserForm);
 
       Get.back();
       _userService.signUp();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../widgets/default_text_field.dart';
+import 'default_text_field.dart';
 
 class PasswordTextField extends StatefulWidget {
   String? labelText;

@@ -102,7 +102,7 @@ class _ImageNetworkForGridItem extends StatefulWidget {
 }
 
 class _ImageNetworkForGridItemState extends State<_ImageNetworkForGridItem> {
-  bool loading = false;
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +120,7 @@ class _ImageNetworkForGridItemState extends State<_ImageNetworkForGridItem> {
         }
         return AnimatedOpacity(
           child: child,
-          opacity: loading ? 0 : 1,
+          opacity: _loading ? 0 : 1,
           duration: const Duration(seconds: 3),
           curve: Curves.easeOut,
         );
@@ -134,12 +134,14 @@ class _ImageNetworkForGridItemState extends State<_ImageNetworkForGridItem> {
           // The child (AnimatedOpacity) is build with loading == true, and then the setState will
           // change loading to false, which trigger the animation
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            setState(() => loading = false);
+            if (mounted) {
+              setState(() => _loading = false);
+            }
           });
 
           return child;
         }
-        loading = true;
+        _loading = true;
         return SizedBox(
           height: 250,
           child: Center(

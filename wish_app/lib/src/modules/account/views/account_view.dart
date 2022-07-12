@@ -125,6 +125,7 @@ class AccountView extends GetView<AccountController> {
           floatingActionButton: Obx(
             () => controller.isUserAuthenticated.value
                 ? FloatingActionButton(
+                    heroTag: UniqueKey(),
                     child: Icon(
                       Icons.add,
                       color: Theme.of(context).colorScheme.onSecondary,
@@ -137,10 +138,6 @@ class AccountView extends GetView<AccountController> {
           ),
           body: NestedScrollView(
               controller: controller.wishGridController,
-              // controller: ,
-              // controller: _nestedScrollViewController,
-              // floatHeaderSlivers: true,
-              // physics: const AlwaysScrollableScrollPhysics(),
               headerSliverBuilder: (_c, _hsb) {
                 return [
                   SliverList(

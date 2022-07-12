@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:wish_app/src/middlewares/auth_guard.dart';
+import 'package:wish_app/src/modules/account/views/account_edit_view.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/auth/bindings/auth_bindings.dart';
 import 'package:wish_app/src/modules/auth/views/auth_view.dart';
@@ -15,6 +16,7 @@ import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
 
 import '../middlewares/guest_guard.dart';
 import '../modules/account/bindings/account_bindings.dart';
+import '../modules/account/bindings/account_edit_bindings.dart';
 import '../modules/unknown/bindings/unknown_bindings.dart';
 import '../modules/unknown/views/unknown_view.dart';
 import '../modules/wish/bindings/wish_info_bindings.dart';
@@ -48,6 +50,11 @@ final List<GetPage> getPages = [
     name: AccountView.routeName,
     page: () => AccountView(),
     binding: AccountBindings(),
+  ),
+  GetPage(
+    name: AccountEditView.routeName,
+    page: () => AccountEditView(),
+    binding: AccountEditBindings(),
   ),
   GetPage(
     name: AddWishView.routeName,
