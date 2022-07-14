@@ -1,4 +1,4 @@
-import '../../../utils/validators.dart';
+import '../../global/utils/validators.dart';
 
 String? checkLink(
   String? value, {

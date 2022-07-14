@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:wish_app/src/models/user_account.dart';
-import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
-import 'package:wish_app/src/modules/account/models/account_arguments.dart';
 import 'package:wish_app/src/modules/account/widget/button_counter_title.dart';
-import 'package:wish_app/src/modules/navigator/views/navigator_view.dart';
-import 'package:wish_app/src/services/user_service.dart';
-import 'package:wish_app/src/widgets/account_user_avatar.dart';
-import 'package:wish_app/src/widgets/skeleton.dart';
-import 'package:wish_app/src/widgets/wish_card.dart';
-
-import '../../../widgets/wish_card_skeleton.dart';
-
-import '../../../constants/global_constants.dart' show defaultPadding;
-import '../../../constants/account_constants.dart' show skeletonItemCount;
+import '../../global/constants/global_constants.dart' show defaultPadding;
+import '../../global/constants/account_constants.dart' show skeletonItemCount;
+import '../../global/models/wish.dart';
+import '../../global/services/user_service.dart';
+import '../../global/widgets/account_user_avatar.dart';
+import '../../global/widgets/skeleton.dart';
+import '../../global/widgets/wish_card.dart';
+import '../../global/widgets/wish_card_skeleton.dart';
 
 class AccountView extends GetView<AccountController> {
   static const String routeName = "/account";

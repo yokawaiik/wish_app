@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wish_app/src/theme/theme_wish_app.dart' as theme_wish_app;
-import './router/router.dart' as router;
-import 'bindings/global_bindings.dart';
+import 'package:wish_app/src/modules/global/theme/theme_wish_app.dart'
+    as theme_wish_app;
+import './modules/global/router/router.dart' as router;
 
 class WishApp extends StatelessWidget {
   const WishApp({Key? key}) : super(key: key);

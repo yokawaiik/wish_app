@@ -1,13 +1,12 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wish_app/src/api_services/user_api_service.dart';
-import 'package:wish_app/src/models/supabase_exception.dart';
-import 'package:wish_app/src/models/user_account.dart';
-import 'package:wish_app/src/models/wish.dart';
+import '../../global/api_services/user_api_service.dart';
+import '../../global/models/supabase_exception.dart';
+import '../../global/models/user_account.dart';
+import '../../global/models/wish.dart';
 
 class AccountApiService {
   static final _supabase = Supabase.instance.client;
 
-  // getUser
   static Future<UserAccount?> getUser(String id, String? currentUserId) async {
     try {
       final theUser = await UserApiService.getUser(id, currentUserId);

@@ -2,12 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wish_app/src/widgets/default_text_field.dart';
 
+import '../../global/widgets/default_text_field.dart';
 import '../controllers/add_wish_controller.dart';
 
 import "../utils/add_wish_validators.dart" as add_wish_validators;
-import "../../../utils/validators.dart" as validators;
+import "../../global/utils/validators.dart" as validators;
 
 // class AddWishView extends StatelessWidget {
 class AddWishView extends GetView<AddWishController> {

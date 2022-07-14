@@ -1,19 +1,18 @@
 import 'package:get/get.dart';
-import 'package:wish_app/src/models/supabase_exception.dart';
-import 'package:wish_app/src/models/unknown_exception.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/favorites/views/favorites_view.dart';
-import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
-import 'package:wish_app/src/api_services/add_wish_api_service.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
-import 'package:wish_app/src/services/user_service.dart';
 
-import '../../../models/wish.dart';
+import '../../global/api_services/add_wish_api_service.dart';
+import '../../global/models/supabase_exception.dart';
+import '../../global/models/unknown_exception.dart';
+import '../../global/models/wish.dart';
+import '../../global/services/user_service.dart';
+import '../../global/utils/generate_wish_image_path.dart';
 import '../../home/controllers/home_main_controller.dart';
 import '../../home/views/home_view.dart';
 import '../../navigator/views/navigator_view.dart';
-import '../../../utils/generate_wish_image_path.dart';
 import '../models/wish_info_arguments.dart';
 
 import '../../home/constants/router_constants.dart' as router_constants;

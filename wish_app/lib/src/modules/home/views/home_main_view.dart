@@ -3,14 +3,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:wish_app/src/widgets/bouncing_icon_button.dart';
-import 'package:wish_app/src/widgets/wish_grid_item.dart';
-import '../../../models/wish.dart';
+
+import '../../global/models/wish.dart';
+import '../../global/widgets/wish_grid_item.dart';
 import '../controllers/home_controller.dart';
 import '../controllers/home_main_controller.dart';
 
-import '../../../constants/global_constants.dart' as global_constants;
-import '../../../theme/theme_wish_app.dart' as theme_wish_app;
+import '../../global/constants/global_constants.dart' as global_constants;
+import '../../global/theme/theme_wish_app.dart' as theme_wish_app;
 
 class HomeMainView extends GetView<HomeMainController> {
   static const String routeName = "/home/main";

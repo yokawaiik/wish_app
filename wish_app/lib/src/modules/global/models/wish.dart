@@ -1,6 +1,5 @@
-import 'package:wish_app/src/models/wish_user.dart';
-
 import '../utils/generate_wish_image_path.dart';
+import 'wish_user.dart';
 
 class Wish {
   late int id;

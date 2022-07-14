@@ -3,11 +3,11 @@ import 'dart:ui';
 import 'package:emojis/emojis.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/favorites/controllers/favorites_controllers.dart';
 
-import '../../../widgets/wish_medium_card.dart';
-import '../../../widgets/wish_medium_card_skeleton.dart';
+import '../../global/models/wish.dart';
+import '../../global/widgets/wish_medium_card.dart';
+import '../../global/widgets/wish_medium_card_skeleton.dart';
 
 class FavoritesView extends GetView<FavoritesController> {
   static const routeName = "/favorites";

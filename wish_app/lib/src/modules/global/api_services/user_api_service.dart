@@ -1,7 +1,7 @@
-import 'package:wish_app/src/models/user_account.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/supabase_exception.dart';
+import '../models/user_account.dart';
 
 class UserApiService {
   static final _supabase = Supabase.instance.client;

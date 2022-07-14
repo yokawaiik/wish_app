@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wish_app/src/modules/account/controllers/account_edit_controller.dart';
-import 'package:wish_app/src/modules/account/models/account_edit_user.dart';
-import 'package:wish_app/src/widgets/default_text_field.dart';
-import 'package:wish_app/src/widgets/password_text_field.dart';
 
-import '../../../constants/global_constants.dart' as global_constants;
-import '../../../utils/auth_validators.dart' as auth_validators;
-import '../../../widgets/account_user_avatar.dart';
+import '../../global/constants/global_constants.dart' as global_constants;
+import '../../global/utils/auth_validators.dart' as auth_validators;
+import '../../global/widgets/account_user_avatar.dart';
+import '../../global/widgets/default_text_field.dart';
+import '../../global/widgets/password_text_field.dart';
+import '../../global/widgets/skeleton.dart';
 import '../utils/account_edit_validators.dart' as account_edit_validators;
-import '../../../widgets/skeleton.dart';
 
 class AccountEditView extends GetView<AccountEditController> {
   static const routeName = '/account/edit';

@@ -5,15 +5,12 @@ import 'package:wish_app/src/modules/account/controllers/account_controller.dart
 import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/favorites/controllers/favorites_controllers.dart';
 import 'package:wish_app/src/modules/favorites/views/favorites_view.dart';
-import 'package:wish_app/src/modules/home/controllers/home_main_controller.dart';
 import 'package:wish_app/src/modules/home/views/home_view.dart';
-import 'package:wish_app/src/services/user_service.dart';
-
-import '../../../widgets/keep_alive_wrapper.dart';
 import '../../account/models/account_arguments.dart';
 import '../../auth/views/auth_view.dart';
+import '../../global/services/user_service.dart';
+import '../../global/widgets/keep_alive_wrapper.dart';
 import '../../home/controllers/home_controller.dart';
-import '../api_services/navigator_api_service.dart';
 import '../utils/show_exit_app.dart';
 
 class NavigatorController extends GetxController {
@@ -31,11 +28,6 @@ class NavigatorController extends GetxController {
 
   @override
   void onInit() {
-    // views = [
-    //   FavoritesView(),
-    //   HomeView(),
-    //   _createAccountView(),
-    // ];
     views = [
       KeepAliveWrapper(child: FavoritesView()),
       KeepAliveWrapper(child: HomeView()),

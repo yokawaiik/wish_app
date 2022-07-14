@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wish_app/src/models/supabase_exception.dart';
-import 'package:wish_app/src/models/wish.dart';
-import 'package:wish_app/src/models/wish_user.dart';
+
 import 'package:wish_app/src/modules/wish/models/wish_form.dart';
-import 'package:wish_app/src/services/user_service.dart';
-import 'package:wish_app/src/utils/generate_wish_image_path.dart';
+
+import '../models/supabase_exception.dart';
+import '../models/wish.dart';
+import '../utils/generate_wish_image_path.dart';
 
 class AddWishApiService {
   static final _supabase = Supabase.instance.client;
@@ -38,14 +38,6 @@ class AddWishApiService {
         await _updateWish(wishForm);
       }
 
-      // final addedWish = (await _supabase
-      //         .rpc(
-      //           "select_wish_list",
-      //         )
-      //         .eq("id", wishForm.id)
-      //         .single()
-      //         .execute())
-      //     .data;
       final addedWish = (await _supabase
               .from("wishes_view")
               .select()

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wish_app/src/widgets/skeleton.dart';
+
+import 'skeleton.dart';
 
 class WishCardSkeleton extends StatelessWidget {
   final double defaultPadding;

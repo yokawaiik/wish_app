@@ -1,4 +1,4 @@
-import '../../../utils/validators.dart' as validators;
+import '../../global/utils/validators.dart' as validators;
 
 String? checkPassword(
   String? value, {

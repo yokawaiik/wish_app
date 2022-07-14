@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wish_app/src/api_services/user_api_service.dart';
-import 'package:wish_app/src/models/current_user.dart';
-import 'package:wish_app/src/models/supabase_exception.dart';
+
+import '../api_services/user_api_service.dart';
+import '../models/current_user.dart';
+import '../models/supabase_exception.dart';
 
 class UserService extends GetxService {
   final _supabase = Supabase.instance;
@@ -24,18 +25,6 @@ class UserService extends GetxService {
   @override
   void onInit() {
     _tryAutoLogin();
-
-    // _supabase.client.auth.onAuthStateChange((event, session) {
-    //   print('_supabase.client.auth.onAuthStateChange - event : ${event.name}');
-    //   if (event.name == 'signedOut') {
-    //     print("currentUser is SIGNED_OUT");
-    //   } else if (event.name == 'signedIn') {
-    //     print("currentUser is signedIn");
-    //   } else {
-    //     print("currentUser is null");
-    //   }
-    //   _setUser();
-    // });
     super.onInit();
   }
 

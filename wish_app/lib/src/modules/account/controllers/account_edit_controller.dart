@@ -7,9 +7,8 @@ import 'package:wish_app/src/modules/account/api_services/account_edit_api_servi
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/account/models/account_edit_user.dart';
 
-import 'package:wish_app/src/services/user_service.dart';
-
-import '../../../models/supabase_exception.dart';
+import '../../global/models/supabase_exception.dart';
+import '../../global/services/user_service.dart';
 
 class AccountEditController extends GetxController {
   late final UserService _us;

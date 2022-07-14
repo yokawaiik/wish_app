@@ -1,14 +1,9 @@
 import 'dart:io';
-
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wish_app/src/api_services/user_api_service.dart';
-import 'package:wish_app/src/models/supabase_exception.dart';
-import 'package:wish_app/src/models/user_account.dart';
-import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/account/models/account_edit_user.dart';
-import 'package:wish_app/src/utils/generate_profile_image_path.dart';
-
 import '../../auth/api_services/auth_api_service.dart';
+import '../../global/models/supabase_exception.dart';
+import '../../global/utils/generate_profile_image_path.dart';
 
 class AccountEditApiService {
   static final _supabase = Supabase.instance.client;

@@ -1,4 +1,4 @@
-import 'package:wish_app/src/utils/validators.dart' as validators;
+import 'validators.dart' as validators;
 
 String? checkEmail(
   String? value, {

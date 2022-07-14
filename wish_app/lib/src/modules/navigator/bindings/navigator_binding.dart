@@ -2,8 +2,8 @@ import 'package:get/get.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/favorites/controllers/favorites_controllers.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
-import 'package:wish_app/src/services/user_service.dart';
 
+import '../../global/services/user_service.dart';
 import '../controllers/navigator_controller.dart';
 
 class NavigatorBindings extends Bindings {

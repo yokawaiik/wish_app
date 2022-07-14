@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:wish_app/src/middlewares/auth_guard.dart';
 import 'package:wish_app/src/modules/account/views/account_edit_view.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/auth/bindings/auth_bindings.dart';
@@ -13,13 +12,12 @@ import 'package:wish_app/src/modules/splash/views/splash_view.dart';
 import 'package:wish_app/src/modules/wish/bindings/add_wish_bindings.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
-
+import '../../account/bindings/account_bindings.dart';
+import '../../account/bindings/account_edit_bindings.dart';
+import '../../unknown/bindings/unknown_bindings.dart';
+import '../../unknown/views/unknown_view.dart';
+import '../../wish/bindings/wish_info_bindings.dart';
 import '../middlewares/guest_guard.dart';
-import '../modules/account/bindings/account_bindings.dart';
-import '../modules/account/bindings/account_edit_bindings.dart';
-import '../modules/unknown/bindings/unknown_bindings.dart';
-import '../modules/unknown/views/unknown_view.dart';
-import '../modules/wish/bindings/wish_info_bindings.dart';
 
 final List<GetPage> getPages = [
   GetPage(

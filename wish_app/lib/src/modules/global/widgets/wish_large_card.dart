@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wish_app/src/widgets/skeleton.dart';
 
 import '../constants/global_constants.dart' as global_constants;
 import '../theme/theme_wish_app.dart' as theme_wish_app;

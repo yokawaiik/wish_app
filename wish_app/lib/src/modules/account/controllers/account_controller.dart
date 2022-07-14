@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wish_app/src/models/supabase_exception.dart';
-import 'package:wish_app/src/models/user_account.dart';
 import 'package:wish_app/src/modules/account/api_services/account_api_service.dart';
 import 'package:wish_app/src/modules/account/models/account_arguments.dart';
 import 'package:wish_app/src/modules/account/views/account_edit_view.dart';
 import 'package:wish_app/src/modules/auth/views/auth_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/navigator/controllers/navigator_controller.dart';
-import 'package:wish_app/src/api_services/add_wish_api_service.dart';
 import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
-import 'package:wish_app/src/services/user_service.dart';
-import 'package:wish_app/src/utils/generate_wish_image_path.dart';
-
-import '../../../models/wish.dart';
-import "../../../utils/router_utils.dart" as router_utils;
-
-import '../../../constants/account_constants.dart' as account_constants;
+import '../../global/models/user_account.dart';
+import '../../global/services/user_service.dart';
+import "../../global/utils/router_utils.dart" as router_utils;
+import '../../global/constants/account_constants.dart' as account_constants;
+import '../../global/api_services/add_wish_api_service.dart';
+import '../../global/models/supabase_exception.dart';
+import '../../global/models/wish.dart';
+import '../../global/utils/generate_wish_image_path.dart';
 import '../../home/constants/router_constants.dart' as home_router_constants;
 import '../views/account_view.dart';
 
@@ -289,13 +287,7 @@ class AccountController extends GetxController {
 
     if (imageUrl != null) {
       userAccount.value!.imageUrl = imageUrl;
-      // todo: bug - doesnt refresh
-
-      // refreshAccountData();
-      // refresh();
     }
-
-    // userAccount.refresh();
     userAccount.refresh();
   }
 }

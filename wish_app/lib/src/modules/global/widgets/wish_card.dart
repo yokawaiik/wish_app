@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wish_app/src/models/wish.dart';
 
 import '../constants/global_constants.dart' as global_constants;
+import '../models/wish.dart';
 
 class WishCard extends StatelessWidget {
   // final double defaultPadding;

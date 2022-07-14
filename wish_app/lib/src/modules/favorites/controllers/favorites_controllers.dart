@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/favorites/api_services/favorites_api_service.dart';
 import 'package:wish_app/src/modules/favorites/views/favorites_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/navigator/controllers/navigator_controller.dart';
 import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
-import 'package:wish_app/src/services/user_service.dart';
-
-import '../../../models/supabase_exception.dart';
 
 import '../../account/models/account_arguments.dart';
+import '../../global/models/supabase_exception.dart';
+import '../../global/models/wish.dart';
+import '../../global/services/user_service.dart';
 import '../constants/favorites_constants.dart' as favorites_constants;
 import '../../home/constants/router_constants.dart' as home_router_constants;
 

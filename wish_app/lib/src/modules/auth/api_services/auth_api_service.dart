@@ -1,6 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wish_app/src/models/supabase_exception.dart';
 import 'package:wish_app/src/modules/auth/models/auth_user_form.dart';
+
+import '../../global/models/supabase_exception.dart';
 
 class AuthApiService {
   static final _supabase = Supabase.instance;

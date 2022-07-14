@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wish_app/src/modules/wish/controllers/wish_info_controller.dart';
-
-import '../../../constants/global_constants.dart' as global_constants;
-import '../../../widgets/icon_title_button.dart';
-import '../../../widgets/skeleton.dart';
+import '../../global/constants/global_constants.dart' as global_constants;
+import '../../global/widgets/icon_title_button.dart';
+import '../../global/widgets/skeleton.dart';
 
 class WishInfoView extends GetView<WishInfoController> {
   static const String routeName = "/wish-info";

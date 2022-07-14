@@ -3,18 +3,18 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:wish_app/src/models/supabase_exception.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/navigator/views/navigator_view.dart';
 import 'package:wish_app/src/modules/wish/controllers/wish_info_controller.dart';
 import 'package:wish_app/src/modules/wish/models/wish_form.dart';
-import 'package:wish_app/src/api_services/add_wish_api_service.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
-import 'package:wish_app/src/services/user_service.dart';
 
 import '../../account/views/account_view.dart';
+import '../../global/api_services/add_wish_api_service.dart';
+import '../../global/models/supabase_exception.dart';
+import '../../global/services/user_service.dart';
 import '../../home/controllers/home_main_controller.dart';
 import '../../home/views/home_view.dart';
 

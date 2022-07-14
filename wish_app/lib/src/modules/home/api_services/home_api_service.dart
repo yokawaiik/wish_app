@@ -1,7 +1,8 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:wish_app/src/models/supabase_exception.dart';
-import 'package:wish_app/src/models/unknown_exception.dart';
-import 'package:wish_app/src/models/wish.dart';
+
+import '../../global/models/supabase_exception.dart';
+import '../../global/models/unknown_exception.dart';
+import '../../global/models/wish.dart';
 
 class HomeService {
   static final _supabase = Supabase.instance;

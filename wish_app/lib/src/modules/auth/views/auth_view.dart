@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wish_app/src/widgets/password_text_field.dart';
-import 'package:wish_app/src/widgets/default_text_field.dart';
 
+import '../../global/widgets/default_text_field.dart';
+import '../../global/widgets/password_text_field.dart';
 import '../controllers/auth_controller.dart';
 import '../widgets/rounded_button.dart';
 
-import '../../../utils/auth_validators.dart' as auth_validators;
+import '../../global/utils/auth_validators.dart' as auth_validators;
 
 class AuthView extends GetView<AuthController> {
   static const routeName = "/auth";
@@ -29,7 +29,6 @@ class AuthView extends GetView<AuthController> {
           ),
         ],
       ),
-      // backgroundColor: Get.theme.colorScheme.secondaryContainer,
       body: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:wish_app/src/widgets/skeleton.dart';
 
 import '../constants/global_constants.dart' as global_constants;
+import 'skeleton.dart';
 
 class WishMediumCardSkeleton extends StatelessWidget {
   final double imageHeight;
