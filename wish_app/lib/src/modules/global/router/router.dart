@@ -7,6 +7,7 @@ import 'package:wish_app/src/modules/home/bindings/home_binding.dart';
 import 'package:wish_app/src/modules/home/views/home_view.dart';
 import 'package:wish_app/src/modules/navigator/bindings/navigator_binding.dart';
 import 'package:wish_app/src/modules/navigator/views/navigator_view.dart';
+import 'package:wish_app/src/modules/settings/views/setting_view.dart';
 import 'package:wish_app/src/modules/splash/bindings/splash_binding.dart';
 import 'package:wish_app/src/modules/splash/views/splash_view.dart';
 import 'package:wish_app/src/modules/wish/bindings/add_wish_bindings.dart';
@@ -14,6 +15,7 @@ import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
 import '../../account/bindings/account_bindings.dart';
 import '../../account/bindings/account_edit_bindings.dart';
+import '../../settings/bindings/settings_bindings.dart';
 import '../../unknown/bindings/unknown_bindings.dart';
 import '../../unknown/views/unknown_view.dart';
 import '../../wish/bindings/wish_info_bindings.dart';
@@ -41,7 +43,7 @@ final List<GetPage> getPages = [
   ),
   GetPage(
     name: HomeView.routeName,
-    page: () => HomeView(),
+    page: () => const HomeView(),
     binding: HomeBindings(),
   ),
   GetPage(
@@ -51,7 +53,7 @@ final List<GetPage> getPages = [
   ),
   GetPage(
     name: AccountEditView.routeName,
-    page: () => AccountEditView(),
+    page: () => const AccountEditView(),
     binding: AccountEditBindings(),
   ),
   GetPage(
@@ -64,12 +66,17 @@ final List<GetPage> getPages = [
     page: () => const WishInfoView(),
     binding: WishInfoBindings(),
   ),
+  GetPage(
+    name: SettingView.routeName,
+    page: () => const SettingView(),
+    binding: SettingsBindings(),
+  ),
 ];
 
 final unknownRoute = GetPage(
   name: UnknownView.routeName,
-  page: () => UnknownView(),
+  page: () => const UnknownView(),
   binding: UnknownBindings(),
 );
 
-final initialRoute = NavigatorView.routeName;
+const initialRoute = NavigatorView.routeName;

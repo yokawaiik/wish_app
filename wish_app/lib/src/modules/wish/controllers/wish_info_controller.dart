@@ -40,7 +40,9 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
       final rawArgs = Get.arguments;
       // ? info: for web
       if (rawArgs == null) {
-        throw UnknownException("Error", "It isn't correct path...");
+        // throw UnknownException("Error", "It isn't correct path...");
+        throw UnknownException(
+            "error_title".tr, "error_it_is_not_correct_path".tr);
       } else if (rawArgs is WishInfoArguments) {
         _args = rawArgs;
       } else {
@@ -88,6 +90,7 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
           currentWish.value = theFoundWish;
           break;
         default:
+          // throw 'It\'s need to get from server';
           throw 'It\'s need to get from server';
       }
 
@@ -96,7 +99,10 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
       if (currentWish.value == null) {
         change(currentWish.value, status: RxStatus.error());
         throw SupabaseException(
-            "Error", "The wish was deleted.", KindOfException.notFound);
+          // "Error", "The wish was deleted.", KindOfException.notFound);
+          "error_title".tr, "error_the_wish_was_delete".tr,
+          KindOfException.notFound,
+        );
       }
 
       change(currentWish.value, status: RxStatus.success());
@@ -108,7 +114,8 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
     } catch (e) {
       print("WishInfoController - getTheWish - e: $e");
 
-      Get.snackbar("Error", "Something went wrong.");
+      // Get.snackbar("Error", "Something went wrong.");
+      Get.snackbar("error_title".tr, "error_something_went_wrong".tr);
       await Get.offNamedUntil(NavigatorView.routeName, (route) => false);
 
       // Get.back();
@@ -161,7 +168,8 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
     } catch (e) {
       print("WishInfoController - deleteTheWish - e: $e");
       // Get.offNamedUntil(NavigatorView.routeName, (route) => false);
-      Get.snackbar("Error", "Error when delete the wish. Try later.");
+      // Get.snackbar("Error", "Error when delete the wish. Try later.");
+      Get.snackbar('error_title'.tr, "error_when_delete_the_wish".tr);
     }
   }
 

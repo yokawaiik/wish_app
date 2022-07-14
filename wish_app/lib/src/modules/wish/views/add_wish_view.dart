@@ -21,7 +21,10 @@ class AddWishView extends GetView<AddWishController> {
         children: [
           Scaffold(
             appBar: AppBar(
-              title: Text(controller.isEdit.value ? "Edit wish" : "New wish"),
+              // title: Text(controller.isEdit.value ? "Edit wish" : "New wish"),
+              title: Text(controller.isEdit.value
+                  ? "wish_add_appbar_title_is_edit_true".tr
+                  : "wish_add_appbar_title_is_edit_false".tr),
             ),
             body: SingleChildScrollView(
               child: Form(
@@ -80,7 +83,8 @@ class AddWishView extends GetView<AddWishController> {
                             validator: (value) =>
                                 validators.onlyNumbersAndLettersCheck(
                               value,
-                              "Title",
+                              // "Title",
+                              "wish_add_default_text_field_title_label".tr,
                               minLength: 5,
                               isRequired: true,
                             ),
@@ -89,27 +93,33 @@ class AddWishView extends GetView<AddWishController> {
                               controller.wishForm.value.title = v;
                             },
                             maxLength: 100,
-                            labelText: "Title",
+                            // labelText: "Title",
+                            labelText:
+                                "wish_add_default_text_field_title_label".tr,
                           ),
                           SizedBox(
                             height: 10,
                           ),
                           DefaultTextField(
-                            prefixIcon: Icon(Icons.description),
-                            validator: (value) =>
-                                validators.onlyNumbersAndLettersCheck(
-                              value,
-                              "Description",
-                            ),
-                            controller: controller.descriptionController,
-                            onChanged: (v) {
-                              controller.wishForm.value.description = v;
-                            },
-                            minLines: 1,
-                            maxLines: 15,
-                            maxLength: 600,
-                            labelText: "Description",
-                          ),
+                              prefixIcon: Icon(Icons.description),
+                              validator: (value) =>
+                                  validators.onlyNumbersAndLettersCheck(
+                                    value,
+                                    // "Description",
+                                    "wish_add_default_text_field_description_label"
+                                        .tr,
+                                  ),
+                              controller: controller.descriptionController,
+                              onChanged: (v) {
+                                controller.wishForm.value.description = v;
+                              },
+                              minLines: 1,
+                              maxLines: 15,
+                              maxLength: 600,
+                              // labelText: "Description",
+                              labelText:
+                                  'wish_add_default_text_field_description_label'
+                                      .tr),
                           SizedBox(
                             height: 10,
                           ),
@@ -125,7 +135,9 @@ class AddWishView extends GetView<AddWishController> {
                             minLines: 1,
                             maxLines: 15,
                             maxLength: 1000,
-                            labelText: "Link",
+                            // labelText: "Link",
+                            labelText:
+                                "wish_add_default_text_field_link_label".tr,
                           ),
                           SizedBox(
                             height: 10,
@@ -151,8 +163,12 @@ class AddWishView extends GetView<AddWishController> {
                                           )
                                         : Text(
                                             controller.isEdit.value
-                                                ? "Save"
-                                                : "Create",
+                                                // // ? "Save"
+                                                // : "Create",
+                                                ? "wish_add_elevated_button_text_is_edit_true"
+                                                    .tr
+                                                : "wish_add_elevated_button_text_is_edit_false"
+                                                    .tr,
                                             style: TextStyle(
                                               fontSize: Theme.of(context)
                                                   .textTheme

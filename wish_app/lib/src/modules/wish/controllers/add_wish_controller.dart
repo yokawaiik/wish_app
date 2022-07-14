@@ -59,14 +59,17 @@ class AddWishController extends GetxController {
         if (!isCurrentUser) {
           // Get.offAndToNamed(HomeView.routeName);
           Get.offNamedUntil(NavigatorView.routeName, (route) => false);
-          Get.snackbar("Error", "You are not a creator");
+          // Get.snackbar("Error", "You are not a creator");
+          Get.snackbar("error_title".tr, "wa_e_not_a_creator".tr);
         }
 
         if (id == null) {
           // Get.offAndToNamed(NavigatorView.routeName);
           Get.offNamedUntil(NavigatorView.routeName, (route) => false);
-          Get.snackbar("Error",
-              "You want to edit wish but wish with this id doesn't exist or was deleted.");
+          // Get.snackbar("Error",
+          //     "You want to edit wish but wish with this id doesn't exist or was deleted.");
+          Get.snackbar(
+              "error_title".tr, "wa_e_wish_does_not_exist_or_was_delete".tr);
           return;
         }
         // get the wish
@@ -88,8 +91,11 @@ class AddWishController extends GetxController {
 
       if (gotTheWish == null)
         throw SupabaseException(
-          "Error",
-          "Not found thw wish",
+          // "Error",
+          // "Not found the wish",
+          "error_title".tr,
+          // "Not found the wish",
+          "wa_es_wish_not_found".tr,
           KindOfException.notFound,
         );
 
@@ -113,8 +119,9 @@ class AddWishController extends GetxController {
     } on SupabaseException catch (e) {
       print("AddWishController - getWIshForEdit - SupabaseException - $e");
 
-      var title = "Error";
-      var message = "Error in Api.";
+      // var title = "Error";
+      var title = "error_title".tr;
+      var message = "error_in_api".tr;
 
       if (e.kindOfException == KindOfException.notFound) {
         title = e.title;
@@ -125,7 +132,11 @@ class AddWishController extends GetxController {
       Get.offNamedUntil(NavigatorView.routeName, (route) => false);
     } catch (e) {
       print("AddWishController - getWIshForEdit - Exception - ${e}");
-      Get.snackbar("Exception", "Error get the wish.");
+      // Get.snackbar("Exception", "Error get the wish.");
+      Get.snackbar(
+        "error_title".tr,
+        "wa_e_getting_wish".tr,
+      );
       Get.offNamedUntil(NavigatorView.routeName, (route) => false);
     } finally {
       isWishLoading.value = false;
@@ -163,7 +174,11 @@ class AddWishController extends GetxController {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
       print("AddWishController - addWish - Exception - ${e}");
-      Get.snackbar("Exception", "Error create wish");
+      // Get.snackbar("Exception", "Error create wish");
+      Get.snackbar(
+        "error_title".tr,
+        "wa_e_creating_wish".tr,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -201,7 +216,11 @@ class AddWishController extends GetxController {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
       print("AddWishController - saveWish - Exception - ${e}");
-      Get.snackbar("Exception", "Error updating wish.");
+      // Get.snackbar("Exception", "Error updating wish.");
+      Get.snackbar(
+        "error_title".tr,
+        "wa_e_updating_wish".tr,
+      );
     } finally {
       isLoading.value = false;
     }

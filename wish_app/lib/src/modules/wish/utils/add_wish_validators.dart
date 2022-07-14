@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 import '../../global/utils/validators.dart';
 
 String? checkLink(
@@ -12,7 +14,8 @@ String? checkLink(
   String? linkMessage,
 }) {
   var baseCheck = baseFieldCheck(
-    "Link",
+    // 'Link',
+    'wish_utils_check_link_field_name'.tr,
     value,
     minLength: minLength,
     emptyLengthMessage: emptyLengthMessage,
@@ -21,7 +24,8 @@ String? checkLink(
     isRequired: isRequired,
   );
   if (baseCheck == null && isRequired) {
-    linkMessage ??= "Link is wrong.";
+    // linkMessage ??= "Link is wrong.";
+    linkMessage ??= "wish_utils_check_link_link_message".tr;
 
     if (validateByRegExp) {
       bool isLinkValid = Uri.tryParse(value!)?.hasAbsolutePath ?? false;

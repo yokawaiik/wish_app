@@ -18,7 +18,8 @@ class WishInfoView extends GetView<WishInfoController> {
         // actions: [
         //   IconButton(onPressed: onPressed, icon: icon)
         // ],
-        title: const Text("Wish info"),
+        // title: const Text("Wish info"),
+        title: Text('wish_info_appbar_title'.tr),
       ),
       body: Obx(
         () {
@@ -102,12 +103,16 @@ class WishInfoView extends GetView<WishInfoController> {
                             IconTitleButton(
                               onPressed: () => controller.editTheWish(),
                               icon: const Icon(Icons.edit),
-                              title: const Text("Edit"),
+                              // title:  Text("Edit"),
+                              title:
+                                  Text("wish_info_icon_title_button_edit".tr),
                             ),
                             IconTitleButton(
                               onPressed: () => controller.deleteTheWish(),
                               icon: const Icon(Icons.delete),
-                              title: const Text("Delete"),
+                              // title:  Text("Delete"),
+                              title:
+                                  Text("wish_info_icon_title_button_delete".tr),
                             ),
                             // IconTitleButton(
                             //   onPressed: () => controller.shareTheWish(),
@@ -126,11 +131,6 @@ class WishInfoView extends GetView<WishInfoController> {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 children: [
-                  // ListTile(
-                  //   // leading: Text("Title"),
-                  //   leading: Icon(Icons.title),
-                  //   title: Text(currentWish.title),
-                  // ),
                   if (isLoading)
                     ListTile(
                         // leading: Text("Description"),
