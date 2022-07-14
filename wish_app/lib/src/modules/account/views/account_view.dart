@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:wish_app/src/models/user_account.dart';
 import 'package:wish_app/src/models/wish.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/account/models/account_arguments.dart';
@@ -45,7 +46,7 @@ class AccountView extends GetView<AccountController> {
                 children: [
                   IconButton(
                     onPressed: () => controller.closeModalBottomSheet(),
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.close,
                       size: 36,
                     ),
@@ -58,8 +59,8 @@ class AccountView extends GetView<AccountController> {
                   // if (userService.isUserAuthenticated.value) ...[
                   if (controller.isCurrentUser.value) ...[
                     ListTile(
-                      leading: Icon(Icons.create),
-                      title: Text("Create new wish"),
+                      leading: const Icon(Icons.create),
+                      title: const Text("Create new wish"),
                       onTap: controller.createWish,
                     ),
                     // ListTile(
@@ -71,13 +72,13 @@ class AccountView extends GetView<AccountController> {
                   if (userService.isUserAuthenticated.value &&
                       !controller.isCurrentUser.value)
                     ListTile(
-                      leading: Icon(Icons.person),
-                      title: Text("My Account"),
+                      leading: const Icon(Icons.person),
+                      title: const Text("My Account"),
                       onTap: controller.goToMyAccountPage,
                     ),
 
                   ListTile(
-                    leading: Icon(Icons.person),
+                    leading: const Icon(Icons.person),
                     title: Text(userService.isUserAuthenticated.value
                         ? "Sign Out"
                         : "Log In"),
@@ -96,7 +97,7 @@ class AccountView extends GetView<AccountController> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    // final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Obx(
@@ -105,6 +106,8 @@ class AccountView extends GetView<AccountController> {
         final wishList = controller.wishList;
         final isLoading = controller.isLoading.value;
         final isSubscribing = controller.isSubscribing.value;
+
+        // print("userAccount?.imageUrl : ${userAccount?.imageUrl}");
 
         return Scaffold(
           appBar: AppBar(
@@ -117,25 +120,23 @@ class AccountView extends GetView<AccountController> {
                 : Text(userAccount!.login),
             actions: [
               IconButton(
-                icon: Icon(Icons.menu),
+                icon: const Icon(Icons.menu),
                 onPressed: () => isLoading ? null : _showMenu(context),
               ),
             ],
           ),
-          floatingActionButton: Obx(
-            () => controller.isUserAuthenticated.value
-                ? FloatingActionButton(
-                    heroTag: UniqueKey(),
-                    child: Icon(
-                      Icons.add,
-                      color: Theme.of(context).colorScheme.onSecondary,
-                    ),
-                    clipBehavior: Clip.hardEdge,
-                    backgroundColor: Theme.of(context).colorScheme.secondary,
-                    onPressed: controller.createWish,
-                  )
-                : SizedBox.shrink(),
-          ),
+          floatingActionButton: controller.isUserAuthenticated.value
+              ? FloatingActionButton(
+                  heroTag: UniqueKey(),
+                  child: Icon(
+                    Icons.add,
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  onPressed: controller.createWish,
+                )
+              : const SizedBox.shrink(),
           body: NestedScrollView(
               controller: controller.wishGridController,
               headerSliverBuilder: (_c, _hsb) {
@@ -152,8 +153,11 @@ class AccountView extends GetView<AccountController> {
                                   // true
                                   ? Skeleton.round(radius: 50)
                                   : AccountUserAvatar(
+                                      key: ValueKey(userAccount!
+                                          .imageUrl), // ? info: to update widget image
+
                                       defaultColor: colorScheme.primary,
-                                      userHexColor: userAccount!.userColor,
+                                      userHexColor: userAccount.userColor,
                                       imageUrl: userAccount.imageUrl,
                                       radius: 50,
                                     ),
@@ -170,11 +174,11 @@ class AccountView extends GetView<AccountController> {
                                       width: 70,
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                   ),
                                   ButtonCounterTitle(
-                                    key: Key("Followers"),
+                                    key: const Key("Followers"),
                                     onPressed: null,
                                     title: "Followers",
                                     counter: isLoading
@@ -186,11 +190,11 @@ class AccountView extends GetView<AccountController> {
                                       width: 70,
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 10,
                                   ),
                                   ButtonCounterTitle(
-                                    key: Key("Following"),
+                                    key: const Key("Following"),
                                     onPressed: null,
                                     title: "Following",
                                     counter: isLoading
@@ -208,7 +212,7 @@ class AccountView extends GetView<AccountController> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.all(defaultPadding),
+                          padding: const EdgeInsets.all(defaultPadding),
                           child: Row(
                             children: [
                               if (isLoading)
@@ -217,10 +221,9 @@ class AccountView extends GetView<AccountController> {
                               else ...[
                                 if (controller.isUserAuthenticated.value) ...[
                                   if (userAccount!.isCurrentUser)
-                                    // todo: Edit profile
                                     ElevatedButton(
                                       onPressed: controller.editProfile,
-                                      child: Text(
+                                      child: const Text(
                                         "Edit profile",
                                       ),
                                     )
@@ -298,7 +301,7 @@ class AccountView extends GetView<AccountController> {
         child: GridView.builder(
           // physics: const AlwaysScrollableScrollPhysics(),
           // physics: NeverScrollableScrollPhysics(),
-          physics: ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
           itemCount: skeletonItemCount,
           itemBuilder: (_, i) {
@@ -363,9 +366,9 @@ class AccountView extends GetView<AccountController> {
       items: [
         PopupMenuItem(
           onTap: () => controller.removeWish(id),
-          child: ListTile(
-            leading: Icon(Icons.work),
-            title: Text('Delete wish'),
+          child: const ListTile(
+            leading: const Icon(Icons.work),
+            title: const Text('Delete wish'),
           ),
         )
       ],

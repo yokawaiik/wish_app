@@ -15,9 +15,9 @@ class AccountEditUser {
   String? userColor;
 
   // bool get isNameChanged => previousName != name;
-  bool get isLoginChanged => previousLogin != login;
+  bool get isLoginChanged => login == null ? false : previousLogin != login;
 
-  bool get isUserInfoChanged => isLoginChanged;
+  bool get isUserInfoChanged => isLoginChanged == true;
 
   bool get isPasswordsEqual => password == repeatPassword;
 
@@ -44,7 +44,7 @@ class AccountEditUser {
   Map<String, dynamic> toMap() {
     return {
       "id": id,
-      "login": login,
+      "login": login ?? previousLogin,
       "imageUrl": imageUrl,
     };
   }

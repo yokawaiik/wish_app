@@ -10,7 +10,6 @@ import 'package:wish_app/src/modules/account/models/account_edit_user.dart';
 import 'package:wish_app/src/services/user_service.dart';
 
 import '../../../models/supabase_exception.dart';
-import '../../auth/api_services/auth_api_service.dart';
 
 class AccountEditController extends GetxController {
   late final UserService _us;
@@ -41,7 +40,9 @@ class AccountEditController extends GetxController {
   }
 
   bool validateInfoFields() {
-    return formKeyInfo.currentState?.validate() ?? false;
+    if (accountEditUser.value.isLoginChanged == false) return false;
+
+    return (formKeyInfo.currentState?.validate() ?? false);
   }
 
   bool validatePasswordFields() {
@@ -84,6 +85,7 @@ class AccountEditController extends GetxController {
 
         // ? info: update account view
         _ac.updateUserAccountInfoByFields(login: user.login!);
+        Get.focusScope?.unfocus();
       } else {
         Get.snackbar("Warning", "This login is already taken.");
       }
@@ -113,17 +115,18 @@ class AccountEditController extends GetxController {
       passwordRepeatTextController.clear();
 
       accountEditUser.refresh();
+
+      Get.focusScope?.unfocus();
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
+      print(e);
       Get.snackbar("Error", "Unknown error.");
     } finally {
       isPasswordUpdateLoad.value = false;
     }
   }
 
-  // TODO: changeProfilePhoto
-  // TODO: 1. generate imageName, 2. save image to bucket
   void changeProfilePhoto() async {
     try {
       isProfileImageUpdateLoad.value = true;
@@ -135,17 +138,21 @@ class AccountEditController extends GetxController {
       );
       if (pickedImage == null) return;
 
-      final newProfileImageUrl = await AccountEditApiService.updateAccountImage(
+      final newRawProfileImageUrl =
+          await AccountEditApiService.updateAccountImage(
         File(pickedImage.path),
         accountEditUser.value.id,
       );
 
-      accountEditUser.value.imageUrl = newProfileImageUrl;
+      // ? info: clear cache loaded image if imageUrl is exists
+      if (accountEditUser.value.imageUrl != null) {
+        final provider = NetworkImage(accountEditUser.value.imageUrl!);
+        await provider.evict();
+        _ac.updateUserAccountInfoByFields(imageUrl: newRawProfileImageUrl);
+      }
 
+      accountEditUser.value.imageUrl = newRawProfileImageUrl;
       accountEditUser.refresh();
-
-      // todo: update AccountController
-      // _ac.updateCurrentUser();
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
@@ -161,7 +168,6 @@ class AccountEditController extends GetxController {
 
   onChangedRetypePassword(String value) {
     accountEditUser.value.repeatPassword = value;
-    // passwordRepeatTextController.text = value;
 
     passwordRepeatTextController.value = TextEditingValue(
       text: value,

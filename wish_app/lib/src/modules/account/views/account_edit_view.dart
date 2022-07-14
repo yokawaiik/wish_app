@@ -11,7 +11,6 @@ import '../../../widgets/account_user_avatar.dart';
 import '../utils/account_edit_validators.dart' as account_edit_validators;
 import '../../../widgets/skeleton.dart';
 
-// todo: implement AccountEditView
 class AccountEditView extends GetView<AccountEditController> {
   static const routeName = '/account/edit';
   const AccountEditView({Key? key}) : super(key: key);
@@ -23,7 +22,7 @@ class AccountEditView extends GetView<AccountEditController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit account"),
+        title: const Text("Edit account info"),
       ),
       body: SingleChildScrollView(
         child: Obx(
@@ -34,8 +33,6 @@ class AccountEditView extends GetView<AccountEditController> {
             final isPasswordUpdateLoad = controller.isPasswordUpdateLoad.value;
             final isProfileImageUpdateLoad =
                 controller.isProfileImageUpdateLoad.value;
-
-            // print(isInfoUpdateLoad || !accountEditUser.isLoginChanged);
 
             return Column(
               children: [
@@ -48,32 +45,22 @@ class AccountEditView extends GetView<AccountEditController> {
                     children: [
                       Column(
                         children: [
-                          _imageProfileBuild()
-                          // ? AccountUserAvatar(
-                          //     defaultColor: colorScheme.primary,
-                          //     userHexColor: accountEditUser.userColor,
-                          //     imageUrl: accountEditUser.imageUrl,
-                          //     radius: 50,
-                          //   )
-                          // : Skeleton.round(radius: 50),
-                          ,
-                          SizedBox(
+                          _imageProfileBuild(),
+                          const SizedBox(
                             height: global_constants.defaultIndentFields,
                           ),
                           TextButton(
                             onPressed: isProfileImageUpdateLoad
                                 ? null
                                 : controller.changeProfilePhoto,
-                            child: Text("Change profile photo"),
+                            child: const Text("Change profile photo"),
                           ),
                         ],
                       ),
                     ],
                   ),
                 ),
-
-                Divider(),
-                // todo: change login
+                const Divider(),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: global_constants.defaultPadding,
@@ -84,9 +71,7 @@ class AccountEditView extends GetView<AccountEditController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        // todo: change photo profile
-
-                        SizedBox(
+                        const SizedBox(
                           height: global_constants.defaultIndentFields,
                         ),
                         DefaultTextField(
@@ -95,18 +80,18 @@ class AccountEditView extends GetView<AccountEditController> {
                           validator: auth_validators.checkLogin,
                           onChanged: controller.onChangedLogin,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: global_constants.defaultIndentFields,
                         ),
 
                         ElevatedButton(
-                          onPressed: (isInfoUpdateLoad ||
-                                  !accountEditUser.isLoginChanged ||
-                                  !controller.validateInfoFields())
-                              ? null
-                              : controller.editUserInfo,
+                          onPressed:
+                              (controller.validateInfoFields() == false ||
+                                      isInfoUpdateLoad == true)
+                                  ? null
+                                  : controller.editUserInfo,
                           child: isInfoUpdateLoad
-                              ? SizedBox(
+                              ? const SizedBox(
                                   height: global_constants
                                       .progressIndicatorHeightInButton,
                                   width: global_constants
@@ -114,7 +99,7 @@ class AccountEditView extends GetView<AccountEditController> {
                                   child: CircularProgressIndicator(),
                                 )
                               : Text(
-                                  "Edit",
+                                  "Set new info",
                                   style: TextStyle(
                                     fontSize: textTheme.bodyText1!.fontSize,
                                   ),
@@ -126,16 +111,13 @@ class AccountEditView extends GetView<AccountEditController> {
                     ),
                   ),
                 ),
-
-                // todo: change password
-                SizedBox(
+                const SizedBox(
                   height: global_constants.defaultIndentFields,
                 ),
-                Divider(),
-                SizedBox(
+                const Divider(),
+                const SizedBox(
                   height: global_constants.defaultIndentFields,
                 ),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: global_constants.defaultPadding,
@@ -155,7 +137,7 @@ class AccountEditView extends GetView<AccountEditController> {
                           // },
                           onChanged: controller.onChangedPassword,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: global_constants.defaultIndentFields,
                         ),
                         PasswordTextField(
@@ -170,7 +152,7 @@ class AccountEditView extends GetView<AccountEditController> {
                           ),
                           onChanged: controller.onChangedRetypePassword,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: global_constants.defaultIndentFields,
                         ),
                         ElevatedButton(
@@ -180,7 +162,7 @@ class AccountEditView extends GetView<AccountEditController> {
                               ? null
                               : controller.saveNewPassword,
                           child: isPasswordUpdateLoad
-                              ? SizedBox(
+                              ? const SizedBox(
                                   // height: 16,!!
                                   height: global_constants
                                       .progressIndicatorHeightInButton,
@@ -198,7 +180,7 @@ class AccountEditView extends GetView<AccountEditController> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: global_constants.defaultIndentFields,
                 ),
               ],
@@ -219,6 +201,8 @@ class AccountEditView extends GetView<AccountEditController> {
       onTap: isProfileImageUpdateLoad ? null : controller.changeProfilePhoto,
       child: (accountEditUser.hasImage && !isProfileImageUpdateLoad)
           ? AccountUserAvatar(
+              key: ValueKey(
+                  accountEditUser.imageUrl), // ? info: to update widget image
               defaultColor: colorScheme.primary,
               userHexColor: accountEditUser.userColor,
               imageUrl: accountEditUser.imageUrl,

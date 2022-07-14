@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wish_app/src/api_services/user_api_service.dart';
 import 'package:wish_app/src/models/supabase_exception.dart';
 import 'package:wish_app/src/models/user_account.dart';
 import 'package:wish_app/src/modules/account/api_services/account_api_service.dart';
@@ -8,7 +7,6 @@ import 'package:wish_app/src/modules/account/models/account_arguments.dart';
 import 'package:wish_app/src/modules/account/views/account_edit_view.dart';
 import 'package:wish_app/src/modules/auth/views/auth_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
-import 'package:wish_app/src/modules/home/controllers/home_main_controller.dart';
 import 'package:wish_app/src/modules/navigator/controllers/navigator_controller.dart';
 import 'package:wish_app/src/api_services/add_wish_api_service.dart';
 import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
@@ -20,7 +18,6 @@ import 'package:wish_app/src/utils/generate_wish_image_path.dart';
 import '../../../models/wish.dart';
 import "../../../utils/router_utils.dart" as router_utils;
 
-// import '../../../constants/account_constants.dart' show itemCountLimit, loadOffset;
 import '../../../constants/account_constants.dart' as account_constants;
 import '../../home/constants/router_constants.dart' as home_router_constants;
 import '../views/account_view.dart';
@@ -31,12 +28,14 @@ class AccountController extends GetxController {
   final _homeController = Get.find<HomeController>();
 
   var userAccount = Rxn<UserAccount>();
+
+  late RxnString imageUrl;
+
   var isLoading = Rx<bool>(false);
   var wishList = RxList<Wish>([]);
 
   var _offset = 0;
   final _limit = account_constants.itemCountLimit;
-  // final _limit = 2;
   late final ScrollController wishGridController;
 
   RxBool get isUserAuthenticated => _userService.isUserAuthenticated;
@@ -50,6 +49,8 @@ class AccountController extends GetxController {
   void onInit() async {
     wishGridController = ScrollController();
     wishGridController.addListener(wishListScrollListener);
+
+    imageUrl = RxnString(userAccount.value?.imageUrl);
 
     await initLoading();
     super.onInit();
@@ -87,7 +88,7 @@ class AccountController extends GetxController {
     try {
       print('AccountController - initLoading - _args : ${_args}');
 
-      // an unknown user visits someone's account
+      // ? info: an unknown user visits someone's account
       if (_args != null && _args!.tag != null) {
         final gotTheUser = await AccountApiService.getUser(
           _args!.tag!,
@@ -96,14 +97,12 @@ class AccountController extends GetxController {
 
         userAccount.value = gotTheUser;
       } else if (_userService.isUserAuthenticated.value) {
-        // final gotTheUser = (await _userService.getCurrentUserDetail);
         final gotTheUser = await AccountApiService.getUser(
           _userService.currentUser!.id,
           _userService.currentUser!.id,
         );
 
         userAccount.value = gotTheUser;
-        // userAccount.refresh();
       } else {
         throw SupabaseException("Error", "It isn't an user.");
       }
@@ -246,8 +245,8 @@ class AccountController extends GetxController {
     wishList.refresh();
   }
 
-  void editProfile() {
-    Get.toNamed(AccountEditView.routeName);
+  void editProfile() async {
+    await Get.toNamed(AccountEditView.routeName);
   }
 
   void goToMyAccountPage() {
@@ -283,11 +282,20 @@ class AccountController extends GetxController {
     }
   }
 
-  void updateUserAccountInfoByFields({String? login}) {
+  void updateUserAccountInfoByFields({String? login, String? imageUrl}) {
     if (login != null) {
       userAccount.value!.login = login;
     }
 
+    if (imageUrl != null) {
+      userAccount.value!.imageUrl = imageUrl;
+      // todo: bug - doesnt refresh
+
+      // refreshAccountData();
+      // refresh();
+    }
+
+    // userAccount.refresh();
     userAccount.refresh();
   }
 }

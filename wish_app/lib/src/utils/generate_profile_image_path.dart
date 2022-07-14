@@ -1,10 +1,11 @@
 String generateProfileImagePath({
   required String rawFilePath,
   required String id,
-  String folderName = 'users',
+  String inFileName = 'avatar',
+  String inFolderName = 'users/uuid',
 }) {
   final fileExt = rawFilePath.split('.').last;
-  final fileName = '${id}.$fileExt'.replaceAll(" ", "");
-  final imagePath = "$folderName/$fileName";
+  final fileName = '${inFileName}.$fileExt'.replaceAll(" ", "");
+  final imagePath = "$inFolderName/$fileName";
   return imagePath;
 }

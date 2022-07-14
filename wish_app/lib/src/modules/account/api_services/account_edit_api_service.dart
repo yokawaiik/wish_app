@@ -123,6 +123,7 @@ class AccountEditApiService {
       final imagePath = generateProfileImagePath(
         rawFilePath: file.path,
         id: id,
+        inFolderName: 'users/$id',
       );
 
       final uploadResponse =

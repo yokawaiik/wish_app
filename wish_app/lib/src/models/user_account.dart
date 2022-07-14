@@ -12,6 +12,8 @@ class UserAccount {
   bool hasSubscribe = false;
   bool hasSubscription = false;
 
+  bool get hasImage => imageUrl == null ? true : false;
+
   UserAccount({
     required this.id,
     required this.login,

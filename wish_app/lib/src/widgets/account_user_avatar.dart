@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:wish_app/src/widgets/skeleton.dart';
 
 import '../extensions/wish_color.dart';
 
@@ -10,7 +7,6 @@ class AccountUserAvatar extends StatelessWidget {
   final String? userHexColor;
   final String? imageUrl;
   final double? radius;
-  final Widget? skeleton;
   final bool isLoading;
 
   const AccountUserAvatar({
@@ -18,27 +14,30 @@ class AccountUserAvatar extends StatelessWidget {
     required this.defaultColor,
     required this.userHexColor,
     required this.imageUrl,
-    this.radius,
-    this.skeleton,
+    this.radius = 60,
     this.isLoading = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading == false && skeleton != null) {
-      return skeleton!;
-    }
-
-    return CircleAvatar(
-      radius: radius,
-      backgroundColor: userHexColor != null
-          ? WishColor.fromHex(userHexColor!)
-          : defaultColor,
-      backgroundImage: imageUrl != null
-          ? NetworkImage(
-              imageUrl!,
-            )
-          : null,
+    return ClipOval(
+      child: Container(
+        width: radius! * 2,
+        height: radius! * 2,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius!),
+          color: userHexColor != null
+              ? WishColor.fromHex(userHexColor!)
+              : defaultColor,
+        ),
+        child: imageUrl == null
+            ? null
+            : Image.network(
+                imageUrl!, // ? info: reuired if needs to update widget image
+                key: key,
+                fit: BoxFit.cover,
+              ),
+      ),
     );
   }
 }
