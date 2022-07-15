@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../global/api_services/user_api_service.dart';
 import '../../global/models/supabase_exception.dart';
@@ -12,7 +13,9 @@ class AccountApiService {
       final theUser = await UserApiService.getUser(id, currentUserId);
 
       if (theUser == null) {
-        throw SupabaseException("Error", "Such an user didn't find.");
+        // throw SupabaseException("Error", "Such an user didn't find.");
+        throw SupabaseException(
+            "error_title".tr, "account_aas_es_such_an_user_did_not_find".tr);
       }
 
       final gotUserInfo = await getUserInfo(id);
@@ -55,7 +58,8 @@ class AccountApiService {
           .execute();
 
       if (gotTheWishes.hasError) {
-        throw SupabaseException("Error", gotTheWishes.error!.message);
+        // throw SupabaseException("Error", gotTheWishes.error!.message);
+        throw SupabaseException("error_title".tr, gotTheWishes.error!.message);
       }
 
       final theWishes = (gotTheWishes.data as List<dynamic>)
@@ -109,8 +113,11 @@ class AccountApiService {
           )
           .execute();
 
-      if (gotSubscriptionInfo.hasError)
-        throw SupabaseException("Error", "Error when get subscription info.");
+      if (gotSubscriptionInfo.hasError) {
+        // throw SupabaseException("error_title".tr, "Error when get subscription info.");
+        throw SupabaseException("error_title".tr,
+            "account_aas_es_error_when_get_subscription_info".tr);
+      }
 
       return gotSubscriptionInfo.data as Map<String, dynamic>?;
     } on SupabaseException catch (e) {
@@ -141,8 +148,13 @@ class AccountApiService {
           )
           .execute();
 
-      if (gotSubscriptionInfo.hasError)
-        throw SupabaseException("Error", gotSubscriptionInfo.error.toString());
+      if (gotSubscriptionInfo.hasError) {
+        // throw SupabaseException("Error", gotSubscriptionInfo.error.toString());
+        throw SupabaseException(
+          "error_title".tr,
+          gotSubscriptionInfo.error.toString(),
+        );
+      }
 
       return gotSubscriptionInfo.data;
     } on SupabaseException catch (e) {

@@ -1,9 +1,6 @@
 class AccountEditUser {
   late String id;
 
-  // late String previousName;
-  // String? name;
-
   late String previousLogin;
   String? login;
 
@@ -14,7 +11,6 @@ class AccountEditUser {
   String? imagePath;
   String? userColor;
 
-  // bool get isNameChanged => previousName != name;
   bool get isLoginChanged => login == null ? false : previousLogin != login;
 
   bool get isUserInfoChanged => isLoginChanged == true;
@@ -25,8 +21,6 @@ class AccountEditUser {
 
   AccountEditUser({
     required this.id,
-    // required this.previousName,
-    // this.name,
     required this.previousLogin,
     this.login,
     this.password,
@@ -36,7 +30,6 @@ class AccountEditUser {
 
   AccountEditUser.fromMap(Map<String, dynamic> data) {
     id = data['id'];
-    // previousName = data[''];
     previousLogin = data['login'];
     imageUrl = data['imageUrl'];
   }
@@ -48,8 +41,4 @@ class AccountEditUser {
       "imageUrl": imageUrl,
     };
   }
-
-  // void update() {
-
-  // }
 }

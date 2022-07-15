@@ -3,7 +3,7 @@
 - [x] Settings;
 - [x] Wish;
 <!-- todo: Translate modules -->
-- [ ] Account;
+- [x] Account;
 - [ ] Auth;
 - [ ] Favorites;
 - [ ] Global;

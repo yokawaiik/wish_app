@@ -54,7 +54,9 @@ class AccountView extends GetView<AccountController> {
                   if (controller.isCurrentUser.value) ...[
                     ListTile(
                       leading: const Icon(Icons.create),
-                      title: const Text("Create new wish"),
+                      // title: const Text("Create new wish"),
+                      title: Text(
+                          "account_view_list_tile_text_create_new_wish".tr),
                       onTap: controller.createWish,
                     ),
                     // ListTile(
@@ -67,15 +69,19 @@ class AccountView extends GetView<AccountController> {
                       !controller.isCurrentUser.value)
                     ListTile(
                       leading: const Icon(Icons.person),
-                      title: const Text("My Account"),
+                      title: Text("account_view_list_tile_text_my_account".tr),
                       onTap: controller.goToMyAccountPage,
                     ),
 
                   ListTile(
                     leading: const Icon(Icons.person),
                     title: Text(userService.isUserAuthenticated.value
-                        ? "Sign Out"
-                        : "Log In"),
+                        // ? "Sign Out"
+                        // : "Log In"),
+                        ? "account_view_list_tile_text_is_user_authenticated_true"
+                            .tr
+                        : "account_view_list_tile_text_is_user_authenticated_false"
+                            .tr),
                     onTap: () => (controller.isCurrentUser.value
                         ? controller.signOut()
                         : controller.goToLoginPage()),
@@ -91,7 +97,6 @@ class AccountView extends GetView<AccountController> {
 
   @override
   Widget build(BuildContext context) {
-    // final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
     return Obx(
@@ -100,8 +105,6 @@ class AccountView extends GetView<AccountController> {
         final wishList = controller.wishList;
         final isLoading = controller.isLoading.value;
         final isSubscribing = controller.isSubscribing.value;
-
-        // print("userAccount?.imageUrl : ${userAccount?.imageUrl}");
 
         return Scaffold(
           appBar: AppBar(
@@ -159,7 +162,10 @@ class AccountView extends GetView<AccountController> {
                                 children: [
                                   ButtonCounterTitle(
                                     onPressed: null,
-                                    title: "Wishes",
+                                    // title: "Wishes",
+                                    title:
+                                        "account_view_button_counter_title_wishes"
+                                            .tr,
                                     counter: isLoading
                                         ? null
                                         : userAccount?.countOfWishes.toString(),
@@ -174,7 +180,10 @@ class AccountView extends GetView<AccountController> {
                                   ButtonCounterTitle(
                                     key: const Key("Followers"),
                                     onPressed: null,
-                                    title: "Followers",
+                                    // title: "Followers",
+                                    title:
+                                        "account_view_button_counter_title_followers"
+                                            .tr,
                                     counter: isLoading
                                         ? null
                                         : userAccount?.countOfsubscribers
@@ -190,7 +199,10 @@ class AccountView extends GetView<AccountController> {
                                   ButtonCounterTitle(
                                     key: const Key("Following"),
                                     onPressed: null,
-                                    title: "Following",
+                                    // title: "Following",
+                                    title:
+                                        "account_view_button_counter_title_following"
+                                            .tr,
                                     counter: isLoading
                                         ? null
                                         : userAccount?.countOfSubscribing
@@ -217,8 +229,10 @@ class AccountView extends GetView<AccountController> {
                                   if (userAccount!.isCurrentUser)
                                     ElevatedButton(
                                       onPressed: controller.editProfile,
-                                      child: const Text(
-                                        "Edit profile",
+                                      child: Text(
+                                        // "Edit profile",
+                                        "account_view_elevated_button_text_edit_profile"
+                                            .tr,
                                       ),
                                     )
                                   else
@@ -234,8 +248,12 @@ class AccountView extends GetView<AccountController> {
                                                   CircularProgressIndicator())
                                           : Text(
                                               userAccount.hasSubscribe
-                                                  ? "Unfollow"
-                                                  : "Follow",
+                                                  // // ? "Unfollow"
+                                                  // : "Follow",
+                                                  ? "account_view_elevated_button_text_has_subscribe_true"
+                                                      .tr
+                                                  : "account_view_elevated_button_text_has_subscribe_false"
+                                                      .tr,
                                             ),
                                     ),
                                 ]
@@ -275,11 +293,9 @@ class AccountView extends GetView<AccountController> {
     int? countOfWishes,
     required RxList<Wish> wishList,
     required bool isLoading,
-    // required BuildContext context,
     required ScrollController controller,
     required Function onTap,
   }) {
-    // final colorScheme = Theme.of(context).colorScheme;
     final colorScheme = Get.theme.colorScheme;
 
     var sliverGridDelegateWithFixedCrossAxisCount =
@@ -287,14 +303,12 @@ class AccountView extends GetView<AccountController> {
       crossAxisCount: GetPlatform.isMobile ? 1 : 2,
       mainAxisSpacing: 1,
       crossAxisSpacing: 1,
-      childAspectRatio: 3 / 1, // for height
+      childAspectRatio: 3 / 1, //? info: for height
     );
 
     if (isLoading) {
       return Expanded(
         child: GridView.builder(
-          // physics: const AlwaysScrollableScrollPhysics(),
-          // physics: NeverScrollableScrollPhysics(),
           physics: const ClampingScrollPhysics(),
           gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
           itemCount: skeletonItemCount,
@@ -316,13 +330,11 @@ class AccountView extends GetView<AccountController> {
     } else {
       return Expanded(
         child: GridView.builder(
-            // physics: NeverScrollableScrollPhysics(),
             gridDelegate: sliverGridDelegateWithFixedCrossAxisCount,
             itemCount: countOfWishes,
             itemBuilder: (ctx, i) {
               if (i < wishList.length) {
                 final wish = wishList[i];
-
                 return WishCard(
                   wish,
                   onTap: () => onTap(wish.id),
@@ -339,7 +351,7 @@ class AccountView extends GetView<AccountController> {
 
   Offset? _tapPosition;
 
-  /// Pass this method to an onTapDown parameter to record the tap position.
+  // ? info: Pass this method to an onTapDown parameter to record the tap position.
   void _storePosition(TapDownDetails details) =>
       _tapPosition = details.globalPosition;
 
@@ -360,9 +372,9 @@ class AccountView extends GetView<AccountController> {
       items: [
         PopupMenuItem(
           onTap: () => controller.removeWish(id),
-          child: const ListTile(
+          child: ListTile(
             leading: const Icon(Icons.work),
-            title: const Text('Delete wish'),
+            title: Text('account_view_popup_menu_item_title_delete_wish'.tr),
           ),
         )
       ],

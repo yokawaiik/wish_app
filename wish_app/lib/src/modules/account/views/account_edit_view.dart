@@ -17,11 +17,11 @@ class AccountEditView extends GetView<AccountEditController> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Get.textTheme;
-    final colorScheme = Get.theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit account info"),
+        // title: const Text("Edit account info"),
+        title: Text("account_edit_view_appbar_title".tr),
       ),
       body: SingleChildScrollView(
         child: Obx(
@@ -52,7 +52,8 @@ class AccountEditView extends GetView<AccountEditController> {
                             onPressed: isProfileImageUpdateLoad
                                 ? null
                                 : controller.changeProfilePhoto,
-                            child: const Text("Change profile photo"),
+                            // child: Text("Change profile photo"),
+                            child: Text("account_edit_view_text_button".tr),
                           ),
                         ],
                       ),
@@ -75,7 +76,8 @@ class AccountEditView extends GetView<AccountEditController> {
                         ),
                         DefaultTextField(
                           controller: controller.loginTextController,
-                          labelText: "Login",
+                          labelText:
+                              "account_edit_view_default_text_field_label".tr,
                           validator: auth_validators.checkLogin,
                           onChanged: controller.onChangedLogin,
                         ),
@@ -98,7 +100,8 @@ class AccountEditView extends GetView<AccountEditController> {
                                   child: CircularProgressIndicator(),
                                 )
                               : Text(
-                                  "Set new info",
+                                  "account_edit_view_elevated_button_text_set_new_info"
+                                      .tr,
                                   style: TextStyle(
                                     fontSize: textTheme.bodyText1!.fontSize,
                                   ),
@@ -128,24 +131,27 @@ class AccountEditView extends GetView<AccountEditController> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         PasswordTextField(
-                          labelText: "New password",
+                          labelText:
+                              "account_edit_view_password_text_field_label_new_password"
+                                  .tr,
                           controller: controller.passwordTextController,
                           validator: account_edit_validators.checkPassword,
-                          // onChanged: (value) {
-                          //   accountEditUser.password = value;
-                          // },
                           onChanged: controller.onChangedPassword,
                         ),
                         const SizedBox(
                           height: global_constants.defaultIndentFields,
                         ),
                         PasswordTextField(
-                          labelText: "Retype new password",
+                          labelText:
+                              "account_edit_view_password_text_field_label_retype_new_password"
+                                  .tr,
                           controller: controller.passwordRepeatTextController,
                           validator: (value) =>
                               account_edit_validators.checkPassword(
                             value,
-                            fieldName: "Retype new password",
+                            fieldName:
+                                "account_edit_view_password_text_field_label_retype_new_password"
+                                    .tr,
                             isRetypePassword: true,
                             originalField: accountEditUser.password,
                           ),
@@ -162,7 +168,6 @@ class AccountEditView extends GetView<AccountEditController> {
                               : controller.saveNewPassword,
                           child: isPasswordUpdateLoad
                               ? const SizedBox(
-                                  // height: 16,!!
                                   height: global_constants
                                       .progressIndicatorHeightInButton,
                                   width: global_constants
@@ -170,7 +175,9 @@ class AccountEditView extends GetView<AccountEditController> {
                                   child: CircularProgressIndicator(),
                                 )
                               : Text(
-                                  "Set new password",
+                                  // "Set new password",
+                                  "account_edit_view_elevated_button_text_set_new_password"
+                                      .tr,
                                   style: TextStyle(
                                       fontSize: textTheme.bodyText1!.fontSize),
                                 ),

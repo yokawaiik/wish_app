@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/modules/account/models/account_edit_user.dart';
 import '../../auth/api_services/auth_api_service.dart';
@@ -18,9 +19,14 @@ class AccountEditApiService {
       );
 
       if (response.error != null) {
+        // throw SupabaseException(
+        //   "Error",
+        //   "Error when update password.",
+        //   KindOfException.auth,
+        // );
         throw SupabaseException(
-          "Error",
-          "Error when update password.",
+          "error_title".tr,
+          "account_aeas_es_error_updating_password".tr,
           KindOfException.auth,
         );
       }
@@ -43,9 +49,14 @@ class AccountEditApiService {
           .execute();
 
       if (response.error != null) {
+        // throw SupabaseException(
+        //   "Error",
+        //   "Error when update password.",
+        //   KindOfException.auth,
+        // );
         throw SupabaseException(
-          "Error",
-          "Error when update password.",
+          "error_title".tr,
+          "account_aeas_es_error_updating_login".tr,
           KindOfException.auth,
         );
       }
@@ -94,9 +105,14 @@ class AccountEditApiService {
           .execute();
 
       if (response.hasError) {
+        // throw SupabaseException(
+        //   "Error",
+        //   "Error when update user info.",
+        //   KindOfException.auth,
+        // );
         throw SupabaseException(
-          "Error",
-          "Error when update user info.",
+          "error_title".tr,
+          "account_aeas_es_error_updating_user_info".tr,
           KindOfException.auth,
         );
       }
@@ -121,25 +137,14 @@ class AccountEditApiService {
         inFolderName: 'users/$id',
       );
 
-      final uploadResponse =
-          await _supabase.storage.from("wish.app.bucket").upload(
-                imagePath,
-                file,
-                fileOptions: const FileOptions(
-                  upsert: true,
-                  cacheControl: '0',
-                ),
-              );
-
-      // final uploadResponse =
-      //     await _supabase.storage.from("wish.app.bucket").updateBinary(
-      //           imagePath,
-      //           await file.readAsBytes(),
-      //           fileOptions: const FileOptions(
-      //             upsert: true,
-      //             cacheControl: '0',
-      //           ),
-      //         );
+      await _supabase.storage.from("wish.app.bucket").upload(
+            imagePath,
+            file,
+            fileOptions: const FileOptions(
+              upsert: true,
+              cacheControl: '0',
+            ),
+          );
 
       final imageUrl = _supabase.storage
           .from("wish.app.bucket")
@@ -153,9 +158,14 @@ class AccountEditApiService {
           .execute();
 
       if (response.hasError) {
+        // throw SupabaseException(
+        //   "Error",
+        //   "Error when update user info.",
+        //   KindOfException.auth,
+        // );
         throw SupabaseException(
-          "Error",
-          "Error when update user info.",
+          "error_title".tr,
+          "account_aeas_es_error_updating_user_avatar".tr,
           KindOfException.auth,
         );
       }

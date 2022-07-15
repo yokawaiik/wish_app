@@ -82,9 +82,9 @@ class AccountController extends GetxController {
   }
 
   Future<void> getUser() async {
-    print("AccountController - getUser()");
+    // print("AccountController - getUser()");
     try {
-      print('AccountController - initLoading - _args : ${_args}');
+      // print('AccountController - initLoading - _args : ${_args}');
 
       // ? info: an unknown user visits someone's account
       if (_args != null && _args!.tag != null) {
@@ -102,17 +102,20 @@ class AccountController extends GetxController {
 
         userAccount.value = gotTheUser;
       } else {
-        throw SupabaseException("Error", "It isn't an user.");
+        // throw SupabaseException("Error", "It isn't an user.");
+        throw SupabaseException(
+            "error_title".tr, "account_ac_es_it_is_not_an_user".tr);
       }
     } on SupabaseException catch (e) {
-      print("AccountController - getUser - SupabaseException - e: $e");
+      // print("AccountController - getUser - SupabaseException - e: $e");
       await router_utils.toBackOrMainPage();
       Get.snackbar(e.title, e.msg);
       return;
     } catch (e) {
-      print("AccountController - getUser - e: $e");
+      // print("AccountController - getUser - e: $e");
       await router_utils.toBackOrMainPage();
-      Get.snackbar("Error", "Unknown error...");
+      // Get.snackbar("Error", "Unknown error...");
+      Get.snackbar("error_title".tr, "account_ac_e_unknown_error".tr);
       return;
     } finally {
       userAccount.refresh();
@@ -129,25 +132,25 @@ class AccountController extends GetxController {
         currentUserId: _userService.currentUser?.id,
       );
 
-      // print("loadWishList - wishList.value?.length : ${gotThePartOfWishList}");
-
       if (gotThePartOfWishList == null || gotThePartOfWishList.isEmpty) return;
       wishList.addAll(gotThePartOfWishList);
       _offset += gotThePartOfWishList.length;
       wishList.refresh();
     } on SupabaseException catch (e) {
-      print("AccountController - loadWishList() - SupabaseException - e : $e");
+      // print("AccountController - loadWishList() - SupabaseException - e : $e");
+      Get.snackbar(e.title, e.msg);
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      print("AccountController - loadWishList() - e : $e");
-      Get.snackbar("Error", "Unknown error...");
+      // print("AccountController - loadWishList() - e : $e");
+      // Get.snackbar("Error", "Unknown error...");
+      Get.snackbar("error_title".tr, 'account_ac_e_unknown_error'.tr);
     } finally {
       isWishListLoad = false;
     }
   }
 
   Future<void> refreshAccountData() async {
-    print("refreshAccountData");
+    // print("refreshAccountData");
     isLoading.value = true;
     await getUser();
     _offset = 0;
@@ -171,7 +174,7 @@ class AccountController extends GetxController {
     await _navigatorController.signOut();
   }
 
-  // ? shows only for unauth user who sees profile belongs to another users
+  // ? info: shows only for unauth user who sees profile belongs to another users
   void goToLoginPage() async {
     closeModalBottomSheet();
     await Get.toNamed(AuthView.routeName);
@@ -218,10 +221,12 @@ class AccountController extends GetxController {
             userAccount.value!.countOfsubscribers! - 1;
       }
     } on SupabaseException catch (e) {
-      Get.snackbar("Error", "Error when subscribe.");
+      // Get.snackbar("Error", "Error when subscribe.");
+      Get.snackbar("error_title".tr, "account_ac_e_error_subscribing".tr);
       return;
     } catch (e) {
-      Get.snackbar("Error", "Unknown error...");
+      // Get.snackbar("Error", "Unknown error...");
+      Get.snackbar("error_title".tr, "account_ac_e_unknown_error".tr);
       return;
     } finally {
       isSubscribing.value = false;
@@ -274,9 +279,9 @@ class AccountController extends GetxController {
 
       deleteWish(id);
     } on SupabaseException catch (e) {
-      Get.snackbar("Error", "Error when subscribe.");
+      Get.snackbar("error_title".tr, "account_ac_e_error_subscribing".tr);
     } catch (e) {
-      Get.snackbar("Error", "Unknown error...");
+      Get.snackbar("error_title".tr, "account_ac_e_unknown_error".tr);
     }
   }
 
