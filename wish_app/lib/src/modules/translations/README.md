@@ -8,5 +8,5 @@
 - [x] Favorites;
 - [ ] Global;
 - [x] Home;
-- [ ] Navigator;
+- [x] Navigator;
 - [x] Splash.

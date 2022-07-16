@@ -156,11 +156,23 @@ class EnLanguage {
         // // ? info: home main controller
         // ? info: home main controller > error
         "hm_hmc_e_load_wish_list": "Error loading a last wish list",
-        // ? info: home api service
-        // "hm_has_": "",
-        // ? info: home api service > error
-        "hm_has_e_": "",
-        //
+        // // ? info: home api service
+        // // ? info: home api service > error
+        // ?
+        // ? info: navigator module
+        // ? info: navigator view
+        "nm_nv_pmb_pmi_sign_out": "Sign Out",
+        "nm_nv_pmb_pmi_sign_in": "Sign In",
+        "nm_nv_nb_nd_favorites": "Favorites",
+        "nm_nv_nb_nd_home": "Home",
+        "nm_nv_nb_nd_account": "Account",
+        // // ? info: navigator controller
+        // ? info: navigator utils
+        "nm_u_show_exit_popup_title": "Leave app",
+        "nm_u_show_exit_popup_content": "Do you want to leave?",
+        "nm_u_show_exit_popup_confirm": "Yes",
+        "nm_u_show_exit_popup_cancel": "No",
+
         //
         //
         //

@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
 import 'package:wish_app/src/modules/favorites/controllers/favorites_controllers.dart';
@@ -14,7 +13,6 @@ import '../../home/controllers/home_controller.dart';
 import '../utils/show_exit_app.dart';
 
 class NavigatorController extends GetxController {
-  final _supabase = Supabase.instance;
   final userService = Get.find<UserService>();
 
   RxBool get isUserAuthenticated => userService.isUserAuthenticated;
@@ -29,8 +27,8 @@ class NavigatorController extends GetxController {
   @override
   void onInit() {
     views = [
-      KeepAliveWrapper(child: FavoritesView()),
-      KeepAliveWrapper(child: HomeView()),
+      const KeepAliveWrapper(child: FavoritesView()),
+      const KeepAliveWrapper(child: HomeView()),
       KeepAliveWrapper(child: _createAccountView()),
     ];
 
@@ -69,8 +67,9 @@ class NavigatorController extends GetxController {
 
       updateAccountView();
     } catch (e) {
-      print('NavigatorController - e : $e');
-      Get.snackbar("Error", "Something went wrong.");
+      // print('NavigatorController - e : $e');
+      // Get.snackbar("Error", "Something went wrong.");
+      Get.snackbar("error_title".tr, "error_m_something_went_wrong".tr);
     }
   }
 
