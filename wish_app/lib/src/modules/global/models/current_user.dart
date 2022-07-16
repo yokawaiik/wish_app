@@ -7,8 +7,6 @@ class CurrentUser {
   String? phone;
   String createdAt;
 
-  // String login;
-
   CurrentUser({
     required this.id,
     required this.appMetadata,
@@ -17,8 +15,6 @@ class CurrentUser {
     this.email,
     required this.phone,
     required this.createdAt,
-    //
-    // required this.login,
   });
 
   Map<String, dynamic> toMap() {

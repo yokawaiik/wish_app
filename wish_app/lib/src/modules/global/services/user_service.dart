@@ -78,16 +78,13 @@ class UserService extends GetxService {
         );
       }
       _startTimer();
-      // await _updateApp();
     } on SupabaseException catch (e) {
       print('UserService - _recoverSession - SupabaseException - e : $e');
 
       await _destroySession();
-      // await _updateApp();
     } catch (e) {
       print('UserService - _recoverSession - e : $e');
       await _destroySession();
-      // await _updateApp();
     } finally {
       await _updateApp();
     }

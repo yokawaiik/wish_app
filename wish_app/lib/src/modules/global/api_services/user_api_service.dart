@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../models/supabase_exception.dart';
@@ -17,14 +18,17 @@ class UserApiService {
       final theUser = UserAccount.fromJson(theGotUser.data, currentUserId);
 
       if (theGotUser.hasError) {
-        throw SupabaseException("Error", theGotUser.error!.message);
+        // throw SupabaseException("Error", theGotUser.error!.message);
+        throw SupabaseException(
+            "error_db_unknown_title".tr, 'gm_uas_es_error_getting_user'.tr);
       }
 
       return theUser;
     } on SupabaseException catch (e) {
       print("UserApiService - getUser() - SupabaseException - e: $e");
 
-      throw SupabaseException("Error", "Something went wrong.");
+      // throw SupabaseException("Error", "Something went wrong.");
+      rethrow;
     } catch (e) {
       print("UserApiService - getUser() - e : $e");
       rethrow;
@@ -41,7 +45,9 @@ class UserApiService {
       ).execute();
 
       if (gotUserInfo.hasError) {
-        throw SupabaseException("Error", gotUserInfo.error!.message);
+        // throw SupabaseException("Error", gotUserInfo.error!.message);
+        throw SupabaseException("error_db_unknown_title".tr,
+            "gm_uas_es_error_getting_user_info".tr);
       }
 
       final userInfo = gotUserInfo.data as Map<String, dynamic>;

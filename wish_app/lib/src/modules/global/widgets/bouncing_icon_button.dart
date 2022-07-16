@@ -23,7 +23,7 @@ class _BouncingIconButtonState extends State<BouncingIconButton>
   void initState() {
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(
+      duration: const Duration(
         milliseconds: 500,
       ),
       lowerBound: 0.0,
@@ -50,7 +50,7 @@ class _BouncingIconButtonState extends State<BouncingIconButton>
       onTapUp: _tapUp,
       child: Transform.scale(
         scale: _scale,
-        child: Icon(Icons.more_horiz),
+        child: const Icon(Icons.more_horiz),
       ),
       onTapCancel: () {
         if (_controller.status == AnimationStatus.forward ||

@@ -52,7 +52,6 @@ class _PasswordTextField extends State<PasswordTextField> {
 
   @override
   Widget build(BuildContext context) {
-    // return TextFormField(
     return DefaultTextField(
       obscureText: !_isPasswordShow,
       autofillHints: widget.autofillHints,

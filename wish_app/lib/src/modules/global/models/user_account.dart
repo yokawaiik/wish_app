@@ -56,7 +56,6 @@ class UserAccount {
   }
 
   void setSubscriptionInfoFromMap(Map<String, dynamic> data) {
-    // print("setSubscriptionInfoFromMap - data: $data");
     hasSubscribe = data["has_subscribe"] ?? false;
     hasSubscription = data["has_subscription"] ?? false;
   }

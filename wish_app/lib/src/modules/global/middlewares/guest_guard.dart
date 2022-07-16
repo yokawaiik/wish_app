@@ -11,6 +11,6 @@ class GuestGuard extends GetMiddleware {
     // return !authService.isAuthenticated
     return !authService.isUserAuthenticated.value
         ? null
-        : RouteSettings(name: NavigatorView.routeName);
+        : const RouteSettings(name: NavigatorView.routeName);
   }
 }

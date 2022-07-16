@@ -13,8 +13,6 @@ extension WishColor on Color {
   static Color generateColor() {
     final random = Random();
 
-    /* ....... */
-    // Using Color.fromARGB
     final randomColor = Color.fromARGB(
       random.nextInt(256),
       random.nextInt(256),

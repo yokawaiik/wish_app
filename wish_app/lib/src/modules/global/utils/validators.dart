@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 String? baseFieldCheck(
   String fieldName,
   String? value, {
@@ -8,9 +10,23 @@ String? baseFieldCheck(
   int maxLength = 100,
   String? maxLengthMessage,
 }) {
-  minLengthMessage ??= "$fieldName must be more then $minLength.";
-  maxLengthMessage ??= "$fieldName must be less then $maxLength.";
-  emptyLengthMessage ??= "$fieldName is required.";
+  // minLengthMessage ??= "$fieldName must be more then $minLength.";
+  // maxLengthMessage ??= "$fieldName must be less then $maxLength.";
+  // emptyLengthMessage ??= "$fieldName is required.";
+  minLengthMessage ??=
+      "gm_u_base_field_check_default_min_length_message".trParams({
+    "fieldName": fieldName,
+    "minLength": minLength.toString(),
+  });
+  maxLengthMessage ??=
+      "gm_u_base_field_check_default_max_length_message".trParams({
+    "fieldName": fieldName,
+    "maxLength": maxLength.toString(),
+  });
+  emptyLengthMessage ??=
+      "gm_u_base_field_check_default_empty_length_message".trParams({
+    "fieldName": fieldName,
+  });
 
   if (isRequired) {
     if (value == null || value.isEmpty) {
@@ -51,7 +67,10 @@ String? onlyNumbersAndLettersCheck(
     isRequired: isRequired,
   );
   if (baseCheck == null) {
-    message ??= "'$fieldName' must contain only letters and numbers.";
+    // message ??= "'$fieldName' must contain only letters and numbers.";
+    message ??= "gm_u_only_numbers_and_letters_check_message".trParams({
+      "fieldName": fieldName,
+    });
 
     if (validateByRegExp) {
       bool isValid = RegExp(r"[\w.-]{0,19}[0-9a-zA-Z]$").hasMatch(value!);

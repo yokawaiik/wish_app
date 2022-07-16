@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+
 import 'validators.dart' as validators;
 
 String? checkEmail(
@@ -11,7 +13,8 @@ String? checkEmail(
   String? emailMessage,
 }) {
   var baseCheck = validators.baseFieldCheck(
-    "Email",
+    // "Email",
+    "gm_u_check_email_field_name".tr,
     value,
     minLength: minLength,
     emptyLengthMessage: emptyLengthMessage,
@@ -19,7 +22,8 @@ String? checkEmail(
     maxLengthMessage: maxLengthMessage,
   );
   if (baseCheck == null) {
-    emailMessage ??= "Email is wrong.";
+    // emailMessage ??= "Email is wrong.";
+    emailMessage ??= "gm_u_check_email_email_message".tr;
 
     if (validateByRegExp) {
       bool emailValid = RegExp(
@@ -41,7 +45,8 @@ String? checkPassword(
   String? maxLengthMessage,
 }) {
   var baseCheck = validators.baseFieldCheck(
-    "Password",
+    "gm_u_check_password_field_name".tr,
+    // "Password",
     value,
     minLength: minLength,
     emptyLengthMessage: emptyLengthMessage,
@@ -66,7 +71,7 @@ String? checkLogin(
 }) {
   var baseCheck = validators.onlyNumbersAndLettersCheck(
     value,
-    "Login",
+    "gm_u_check_login_field_name".tr,
     minLength: minLength,
     emptyLengthMessage: emptyLengthMessage,
     maxLength: maxLength,

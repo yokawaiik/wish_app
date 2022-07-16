@@ -1,4 +1,4 @@
-// the model for field "created by" in Wish model
+// ? info: the model for field "created by" in Wish model
 class WishUser {
   String id;
   String login;

@@ -18,8 +18,6 @@ class IconTitleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return SizedBox.fromSize(
-    //   size: Size(width, height), // button width and height
     return SizedBox(
       width: width,
       height: height,
@@ -30,8 +28,8 @@ class IconTitleButton extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                icon, // icon
-                title, // text
+                icon,
+                title,
               ],
             ),
           ),

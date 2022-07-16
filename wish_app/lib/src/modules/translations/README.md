@@ -2,11 +2,10 @@
 
 - [x] Settings;
 - [x] Wish;
-<!-- todo: Translate modules -->
 - [x] Account;
 - [x] Auth;
 - [x] Favorites;
-- [ ] Global;
+- [x] Global;
 - [x] Home;
 - [x] Navigator;
 - [x] Splash.

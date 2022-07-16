@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:wish_app/src/modules/wish/models/wish_form.dart';
@@ -10,7 +11,6 @@ import '../utils/generate_wish_image_path.dart';
 class AddWishApiService {
   static final _supabase = Supabase.instance.client;
 
-  // Todo: error
   static Future<Wish?> addWish(WishForm wishForm) async {
     try {
       final result = await _supabase
@@ -19,7 +19,8 @@ class AddWishApiService {
           .execute();
 
       if (result.error != null) {
-        throw SupabaseException("Error", result.error.toString());
+        // throw SupabaseException("Error", result.error.toString());
+        throw SupabaseException("error_title".tr, result.error.toString());
       }
 
       wishForm.id = result.data[0]["id"];
@@ -48,12 +49,14 @@ class AddWishApiService {
 
       final wish = Wish.fromJson(addedWish, wishForm.createdBy);
 
-      print(wish);
+      // print(wish);
 
       return wish;
     } catch (e) {
       print('AddWishService - addWish: ${e}');
-      throw SupabaseException("Error", "Error when add new wish");
+      // throw SupabaseException("Error", "Error when add new wish");
+      throw SupabaseException(
+          "error_title".tr, "gm_awas_es_error_adding_wish".tr);
     }
   }
 
@@ -75,15 +78,15 @@ class AddWishApiService {
   ) async {
     try {
       if (wishForm.wasImageUpdate) {
-        print(wishForm.imageUrl);
-        print(wishForm.image!.path);
+        // print(wishForm.imageUrl);
+        // print(wishForm.image!.path);
 
         final imagePath = generateWishImagePath(
           wishForm.imageUrl ?? wishForm.image!.path,
           wishForm.id.toString(),
         );
 
-        print(imagePath);
+        // print(imagePath);
 
         // await removeImage(imagePath);
 
@@ -103,9 +106,13 @@ class AddWishApiService {
           .execute();
 
       if (updatedTheWish.hasError)
+        // throw SupabaseException(
+        //   "Database error",
+        //   "Such the wish was deleted or another error.",
+        // );
         throw SupabaseException(
-          "Database error",
-          "Such the wish was deleted or another error.",
+          "error_db_unknown_title".tr,
+          "gm_awas_es_error_updating".tr,
         );
 
       getWish(wishForm.id!, currentUserId);
@@ -142,9 +149,13 @@ class AddWishApiService {
           await _supabase.storage.from("wish.app.bucket").remove([path]);
 
       if (removedResponse.error != null) {
+        // throw SupabaseException(
+        //   "Error when removed image",
+        //   removedResponse.error.toString(),
+        // );
         throw SupabaseException(
-          "Error when removed image",
-          removedResponse.error.toString(),
+          "error_db_unknown_title".tr,
+          'gm_awas_es_error_removing_image'.tr,
         );
       }
       print("removedResponse.data : ${removedResponse.data}");
@@ -169,9 +180,13 @@ class AddWishApiService {
                 ),
               );
       if (uploadResponse.error != null) {
+        // throw SupabaseException(
+        //   "Error when upload image",
+        //   uploadResponse.error.toString(),
+        // );
         throw SupabaseException(
-          "Error when upload image",
-          uploadResponse.error.toString(),
+          "error_db_unknown_title".tr,
+          "gm_awas_es_error_uploading_image".tr,
         );
       }
 
@@ -183,13 +198,12 @@ class AddWishApiService {
       return response.data;
     } catch (e) {
       print('AddWishService - uploadImage: ${e}');
+      rethrow;
     }
   }
 
   static Future<Wish?> getWish(int id, String currentUserId) async {
     try {
-      // final gotTheWish =
-      //     await _supabase.from("wish").select().eq("id", id).single().execute();
       final gotTheWish = await _supabase
           .from("wishes_view")
           .select()
@@ -207,6 +221,7 @@ class AddWishApiService {
       return theWish;
     } catch (e) {
       print('AddWishService - getWish: ${e}');
+      rethrow;
     }
   }
 }

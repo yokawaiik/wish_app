@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class DefaultTextField extends StatelessWidget {
   String? labelText;
@@ -53,7 +52,7 @@ class DefaultTextField extends StatelessWidget {
       maxLength: maxLength,
       autofillHints: autofillHints,
       decoration: InputDecoration(
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
           labelText: labelText,
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon),

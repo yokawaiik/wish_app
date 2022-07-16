@@ -10,7 +10,6 @@ Future<void> toBackOrMainPage() async {
   ].contains(Get.previousRoute)) {
     Get.back();
   } else {
-    // await Get.offAndToNamed(NavigatorView.routeName);
     await Get.offNamedUntil(NavigatorView.routeName, (route) => false);
   }
 }

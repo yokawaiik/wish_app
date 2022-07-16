@@ -9,7 +9,6 @@ class Wish {
   late String? imageUrl;
   late DateTime createdAt;
   late WishUser createdBy;
-  // late bool isCurrentUser;
   late bool isFavorite;
 
   bool get hasImage => imageUrl != null ? true : false;
