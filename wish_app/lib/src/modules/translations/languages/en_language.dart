@@ -17,6 +17,7 @@ class EnLanguage {
         "error_unknown": "Unknown error.",
         "error_db_unknown_title": "Database error.",
         "error_db_unknown_message": "Unknown error in database.",
+        "error_m_something_went_wrong": "Something went wrong.",
         // ? info: other
         "warning_title": "Warning",
         // ?
@@ -139,8 +140,26 @@ class EnLanguage {
         "fm_fas_es_find_an_added_favorite":
             "Error find an added favorite wish.",
         "fm_fas_es_delete_favorite": "Error deleting the favorite wish.",
-        // "":"",
-
+        // ?
+        // ? info: splash module
+        // ? info: splash view
+        "s_sv_text_on_screen": "Hi, wait a second...",
+        // ?
+        // ? info: home module
+        // ? info: home main view
+        "fm_hmv_appbar_title": "Home",
+        "fm_hmv_bs_lv_add_to_favorites": "Add to favorites",
+        "fm_hmv_bs_lv_delete": "Add to favorites",
+        "fm_hmv_bs_lv_see_profile": "See profile",
+        // // ? info: home controller
+        // // ? info: home controller > error
+        // // ? info: home main controller
+        // ? info: home main controller > error
+        "hm_hmc_e_load_wish_list": "Error loading a last wish list",
+        // ? info: home api service
+        // "hm_has_": "",
+        // ? info: home api service > error
+        "hm_has_e_": "",
         //
         //
         //
