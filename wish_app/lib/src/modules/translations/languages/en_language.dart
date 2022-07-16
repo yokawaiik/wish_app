@@ -179,18 +179,14 @@ class EnLanguage {
         "gm_u_check_email_email_message": "Email is wrong.",
         "gm_u_check_password_field_name": "Password",
         "gm_u_check_login_field_name": "Login",
-        //
         "gm_u_base_field_check_default_min_length_message":
             "@fieldName must be more then @minLength.",
         "gm_u_base_field_check_default_max_length_message":
             "@fieldName must be less then @maxLength.",
         "gm_u_base_field_check_default_empty_length_message":
             "@fieldName is required.",
-
         "gm_u_only_numbers_and_letters_check_message":
             "@fieldName must contain only letters and numbers.",
-
-        //
         // ? info: global api services
         // ? info: add wish api service > errors
         "gm_awas_es_error_adding_wish": "Error when add new wish.",
