@@ -15,7 +15,7 @@ class EnLanguage {
         "error_when_delete_the_wish": "Error when delete the wish. Try later.",
         "error_in_api": "Error in Api.",
         "error_unknown": "Unknown error.",
-        "error_db_unknown_title": "Database error.",
+        "error_db_unknown_title": "Database error",
         "error_db_unknown_message": "Unknown error in database.",
         "error_m_something_went_wrong": "Something went wrong.",
         // ? info: other
@@ -172,26 +172,34 @@ class EnLanguage {
         "nm_u_show_exit_popup_content": "Do you want to leave?",
         "nm_u_show_exit_popup_confirm": "Yes",
         "nm_u_show_exit_popup_cancel": "No",
+        // ?
+        // ? info: global module
+        // ? info: global utils
+        "gm_u_check_email_field_name": "Email",
+        "gm_u_check_email_email_message": "Email is wrong.",
+        "gm_u_check_password_field_name": "Password",
+        "gm_u_check_login_field_name": "Login",
+        //
+        "gm_u_base_field_check_default_min_length_message":
+            "@fieldName must be more then @minLength.",
+        "gm_u_base_field_check_default_max_length_message":
+            "@fieldName must be less then @maxLength.",
+        "gm_u_base_field_check_default_empty_length_message":
+            "@fieldName is required.",
+
+        "gm_u_only_numbers_and_letters_check_message":
+            "@fieldName must contain only letters and numbers.",
 
         //
-        //
-        //
-        // // ?
-        // // ? info: favorites module
-        // // ? info: favorites view
-        // "fm_fv_": "",
-        // //
-        // // ? info: favorites controller
-        // // "fm_fc_": "",
-        // //
-        // // ? info: favorites controller > error
-        // "fm_fc_e_": "",
-        // //
-        // // ? info: favorites api service
-        // // "fm_fas_": "",
-        // //
-        // // ? info: favorites api service > error
-        // "fm_fas_e_": "",
-        // // "":"",
+        // ? info: global api services
+        // ? info: add wish api service > errors
+        "gm_awas_es_error_adding_wish": "Error when add new wish.",
+        "gm_awas_es_error_updating":
+            "Such the wish was deleted or another error.",
+        "gm_awas_es_error_removing_image": "Error removing image.",
+        "gm_awas_es_error_uploading_image": "Error uploading image.",
+        // ? info: user api service > errors
+        "gm_uas_es_error_getting_user": "Error getting user.",
+        "gm_uas_es_error_getting_user_info": "Error getting user info.",
       };
 }
