@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/modules/auth/models/auth_user_form.dart';
 
@@ -13,10 +14,16 @@ class AuthApiService {
         email: authUserForm.email!,
         password: authUserForm.password!,
       );
-      if (result.error != null)
-        throw SupabaseException("Supabase error", result.error!.message);
-      if (result.user == null)
-        throw SupabaseException("Supabase error", "Error Sign In.");
+      if (result.error != null) {
+        // throw SupabaseException("Supabase error", result.error!.message);
+        throw SupabaseException(
+            "error_db_unknown_title".tr, result.error!.message);
+      }
+      if (result.user == null) {
+        // throw SupabaseException("Supabase error", "Error Sign In.");
+        throw SupabaseException(
+            "error_db_unknown_title".tr, "auth_aas_es_m_error_sign_in".tr);
+      }
     } catch (e) {
       print(e);
       rethrow;
@@ -35,10 +42,12 @@ class AuthApiService {
         List<String> message = [];
 
         if (isUserExists["result_login"]) {
-          message.add("Such login already exist.");
+          // message.add("Such login already exist.");
+          message.add("auth_aas_es_such_login_already_exist".tr);
         }
         if (isUserExists["result_email"]) {
-          message.add("Such email already exist.");
+          // message.add("Such email already exist.");
+          message.add("auth_aas_es_such_email_already_exist".tr);
         }
         throw SupabaseException(
           "Sign Up error",
@@ -50,14 +59,24 @@ class AuthApiService {
       final result = await _supabase.client.auth
           .signUp(authUserForm.email!, authUserForm.password!);
 
-      if (result.error != null)
-        throw SupabaseException("Supabase error", result.error!.message);
-      if (result.user == null)
-        throw SupabaseException("Supabase error", "Error Sign Up.");
+      if (result.error != null) {
+        // throw SupabaseException("Supabase error", result.error!.message);
+        throw SupabaseException(
+          "error_db_unknown_title".tr,
+          result.error!.message,
+        );
+      }
+      if (result.user == null) {
+        // throw SupabaseException("Supabase error", "Error Sign Up.");
+        throw SupabaseException(
+          "error_db_unknown_title".tr,
+          "auth_aas_es_m_error_sign_up".tr,
+        );
+      }
 
       final createdUser = _supabase.client.auth.currentUser;
 
-      final recordedUser = await _supabase.client
+      await _supabase.client
           .from("users")
           .insert(authUserForm.toJson()
             ..addAll({
@@ -66,8 +85,7 @@ class AuthApiService {
             }))
           .execute();
 
-      final recordedSunbscription =
-          await _supabase.client.from("subscriptions").insert({
+      await _supabase.client.from("subscriptions").insert({
         "id": createdUser?.id,
         "subscriptionTo": createdUser?.id,
       }).execute();

@@ -15,7 +15,6 @@ class ConnectionManagerService extends GetxController {
 
   @override
   void onInit() {
-    print("ConnectionManagerService onInit");
     super.onInit();
     getConnectivityType();
     _streamSubscription =
@@ -36,17 +35,15 @@ class ConnectionManagerService extends GetxController {
 
   _updateState(ConnectivityResult result) {
     switch (result) {
-      case ConnectivityResult.wifi:
-        connectionType.value = 1;
-        break;
       case ConnectivityResult.mobile:
         connectionType.value = 2;
         break;
       case ConnectivityResult.none:
         connectionType.value = 0;
         break;
+      case ConnectivityResult.wifi:
       default:
-        Get.snackbar('Error', 'Failed to get connection type');
+        connectionType.value = 1;
         break;
     }
   }

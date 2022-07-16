@@ -40,7 +40,7 @@ class RequireConnectionWidget extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              const Text('Please, check your internet connection...')
+              const Text('cm_w_text_check_your_connection')
             ],
           ),
         ),

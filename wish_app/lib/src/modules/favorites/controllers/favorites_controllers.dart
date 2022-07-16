@@ -6,7 +6,6 @@ import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/navigator/controllers/navigator_controller.dart';
 import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
-
 import '../../account/models/account_arguments.dart';
 import '../../global/models/supabase_exception.dart';
 import '../../global/models/wish.dart';
@@ -32,7 +31,6 @@ class FavoritesController extends GetxController {
   var isWishListLoad = false;
   var _offset = 0;
   final _limit = favorites_constants.itemCountLimit;
-  // final _limit = 3;
 
   @override
   void onInit() async {
@@ -55,21 +53,13 @@ class FavoritesController extends GetxController {
     favoritesWishList.refresh();
   }
 
-  // ScrollPosition _scrollOffsetPosition = ScrollPosition.;
-
   void favoritesWishListScrollListener() async {
-    // _scrollOffsetPosition = favoriteWishGridController.positions.last;
-
-    // favoriteWishGridController.attach(_scrollOffsetPosition);
-
     if (isWishListLoad == true) return;
     if (countOfFavorites.value == 0) return;
 
     if (_offset >= countOfFavorites.value) {
       return;
     }
-
-    // initialScrollOffset: widget.getOffsetMethod()
 
     final itemRatio = _offset / countOfFavorites.value;
     final scrollPosition = favoriteWishGridController.position.pixels /
@@ -120,7 +110,8 @@ class FavoritesController extends GetxController {
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      Get.snackbar("Error", "Unknown error...");
+      // Get.snackbar("Error", "Unknown error...");
+      Get.snackbar("error_title".tr, "error_unknown".tr);
     } finally {
       isWishListLoad = false;
     }
@@ -136,7 +127,7 @@ class FavoritesController extends GetxController {
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      Get.snackbar("Error", "Unknown error...");
+      Get.snackbar("error_title".tr, "error_unknown".tr);
     } finally {
       isWishListLoad = false;
     }
@@ -160,7 +151,7 @@ class FavoritesController extends GetxController {
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      Get.snackbar("Error", "Unknown error...");
+      Get.snackbar("error_title".tr, "error_unknown".tr);
     }
   }
 

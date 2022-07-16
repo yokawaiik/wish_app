@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class RoundedButton extends StatelessWidget {
-  double height;
+  final double height;
 
-  double width;
+  final double width;
 
-  void Function()? onPressed;
+  final void Function()? onPressed;
 
-  Widget child;
+  final Widget child;
 
-  RoundedButton({
+  const RoundedButton({
     Key? key,
     this.height = 50.0,
     this.width = double.infinity,
@@ -27,17 +27,16 @@ class RoundedButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          padding: EdgeInsets.all(0.0),
+          padding: const EdgeInsets.all(0.0),
         ),
         child: Ink(
           decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
               borderRadius: BorderRadius.circular(10.0)),
           child: Container(
-            constraints: BoxConstraints(maxWidth: width, minHeight: height),
-            alignment: Alignment.center,
-            child: child
-          ),
+              constraints: BoxConstraints(maxWidth: width, minHeight: height),
+              alignment: Alignment.center,
+              child: child),
         ),
       ),
     );

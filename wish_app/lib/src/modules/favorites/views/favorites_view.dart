@@ -40,36 +40,36 @@ class FavoritesView extends GetView<FavoritesController> {
           child: RefreshIndicator(
             onRefresh: controller.refreshFavorites,
             child: GridView.builder(
-                controller: controller.favoriteWishGridController,
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: maxCrossAxisExtent,
-                  mainAxisExtent: mainAxisExtent,
-                ),
-                itemCount: countOfFavorites,
-                itemBuilder: (ctx, i) {
-                  if (i < favoritesWishList.length) {
-                    final wish = favoritesWishList[i];
-                    return WishMediumCard(
-                      key: ValueKey(i),
-                      wish: wish,
-                      imageHeight: imageHeight,
-                      hasActions: true,
-                      onCardTap: () => controller.onCardTap(wish.id),
-                      toggleFavorite: () => controller.toggleFavorite(wish.id),
-                      // tapOnMore: () => _tapOnMore(wish),
-                      tapOnMore: () => _snowModalBottomSheetMenu(ctx, wish),
-                      onLongPress: () => _snowModalBottomSheetMenu(ctx, wish),
-                    );
-                  } else {
-                    return WishMediumCardSkeleton(
-                      key: ValueKey(i),
-                      imageHeight: imageHeight,
-                      hasActions: true,
-                    );
-                  }
-                }),
+              controller: controller.favoriteWishGridController,
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: maxCrossAxisExtent,
+                mainAxisExtent: mainAxisExtent,
+              ),
+              itemCount: countOfFavorites,
+              itemBuilder: (ctx, i) {
+                if (i < favoritesWishList.length) {
+                  final wish = favoritesWishList[i];
+                  return WishMediumCard(
+                    key: ValueKey(i),
+                    wish: wish,
+                    imageHeight: imageHeight,
+                    hasActions: true,
+                    onCardTap: () => controller.onCardTap(wish.id),
+                    toggleFavorite: () => controller.toggleFavorite(wish.id),
+                    tapOnMore: () => _snowModalBottomSheetMenu(ctx, wish),
+                    onLongPress: () => _snowModalBottomSheetMenu(ctx, wish),
+                  );
+                } else {
+                  return WishMediumCardSkeleton(
+                    key: ValueKey(i),
+                    imageHeight: imageHeight,
+                    hasActions: true,
+                  );
+                }
+              },
+            ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -106,7 +106,7 @@ class FavoritesView extends GetView<FavoritesController> {
                       height: 20,
                     ),
                     Text(
-                      "You can save founded wishes here...",
+                      "fm_fv_text_on_empty_screen".tr,
                       style: TextStyle(
                           fontSize: Get.theme.textTheme.headline5!.fontSize),
                     ),
@@ -166,12 +166,14 @@ class FavoritesView extends GetView<FavoritesController> {
                   // ),
                   ListTile(
                     leading: Icon(Icons.favorite),
-                    title: Text("Remove from favorites"),
+                    // title: Text("Remove from favorites"),
+                    title: Text("fm_fv_lt_text_remove_from_favorites".tr),
                     onTap: () => controller.removeFromFavorite(wish.id),
                   ),
                   ListTile(
                     leading: Icon(Icons.person),
-                    title: Text("See profile"),
+                    // title: Text("See profile"),
+                    title: Text("fm_fv_lt_text_see_profile".tr),
                     onTap: () => controller.seeProfile(wish),
                   ),
                 ],

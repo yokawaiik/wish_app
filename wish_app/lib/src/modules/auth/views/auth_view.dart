@@ -41,7 +41,7 @@ class AuthView extends GetView<AuthController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Sign in',
+                  'auth_av_form_title'.tr,
                   style: TextStyle(
                     fontSize: 30.0,
                     fontWeight: FontWeight.bold,
@@ -57,7 +57,7 @@ class AuthView extends GetView<AuthController> {
                                 height: 20,
                               ),
                               DefaultTextField(
-                                labelText: "Login",
+                                labelText: "auth_av_dtf_label_login".tr,
                                 autofillHints: [AutofillHints.nickname],
                                 validator: auth_validators.checkLogin,
                                 prefixIcon: Icon(
@@ -77,7 +77,7 @@ class AuthView extends GetView<AuthController> {
                   height: 20,
                 ),
                 DefaultTextField(
-                  labelText: "Email",
+                  labelText: "auth_av_dtf_label_email".tr,
                   autofillHints: [AutofillHints.email],
                   prefixIcon: Icon(
                     Icons.alternate_email,
@@ -92,7 +92,7 @@ class AuthView extends GetView<AuthController> {
                   height: 20,
                 ),
                 PasswordTextField(
-                  labelText: "Password",
+                  labelText: "auth_av_ptf_label_password".tr,
                   validator: auth_validators.checkPassword,
                   autofillHints: [AutofillHints.email],
                   prefixIcon: Icon(
@@ -115,8 +115,8 @@ class AuthView extends GetView<AuthController> {
                 TextButton(
                   onPressed: () => controller.changeAuthMode(),
                   child: Text(controller.isSignIn.value
-                      ? "You already have an account?"
-                      : 'Don\'t have an account?'),
+                      ? "auth_av_tb_text_is_sign_in_true".tr
+                      : 'auth_av_tb_text_is_sign_in_false'.tr),
                 )
               ],
             ),
@@ -142,7 +142,9 @@ class AuthView extends GetView<AuthController> {
               ),
             )
           : Text(
-              (controller.isSignIn.value ? "Register now" : 'Login')
+              (controller.isSignIn.value
+                      ? "auth_av_rb_text_is_sign_in_true".tr
+                      : 'auth_av_rb_text_is_sign_in_false'.tr)
                   .toUpperCase(),
               textAlign: TextAlign.center,
               style: TextStyle(

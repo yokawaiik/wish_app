@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../global/models/supabase_exception.dart';
@@ -45,8 +46,10 @@ class FavoritesApiService {
 
       if (addedFavoriteWish.hasError) {
         throw SupabaseException(
-          "Exception",
-          "Exception when find an added favorite wish.",
+          // "Exception",
+          // "Exception when find an added favorite wish.",
+          "error_title".tr,
+          "fm_fas_es_get_count_of_favorites".tr,
         );
       }
 
@@ -101,8 +104,10 @@ class FavoritesApiService {
 
       if (addedFavoriteWish.hasError) {
         throw SupabaseException(
-          "Exception",
-          "Exception when find an added favorite wish.",
+          // "Exception",
+          // "Exception when find an added favorite wish.",
+          "error_title".tr,
+          "fm_fas_es_find_an_added_favorite".tr,
         );
       }
 
@@ -129,9 +134,13 @@ class FavoritesApiService {
           .eq("wishId", id)
           .execute();
       if (deletedWish.hasError) {
+        // throw SupabaseException(
+        //   "Exception",
+        //   "Exception when delete favorite wish.",
+        // );
         throw SupabaseException(
-          "Exception",
-          "Exception when delete favorite wish.",
+          "error_title".tr,
+          "fm_fas_es_delete_favorite".tr,
         );
       }
       return true;
@@ -144,15 +153,6 @@ class FavoritesApiService {
       return false;
     }
   }
-
-  // static Future<List<Wish>?> loadFavoriteWishList(
-  //   id, {
-  //   required limit,
-  //   required offset,
-  //   required currentUserId,
-  // }) async {
-
-  // }
 
   static Future<List<Wish>?> loadFavoriteWishList({
     int limit = 10,
@@ -175,11 +175,9 @@ class FavoritesApiService {
           )
           .execute();
 
-      // print(
-      //     'FavoritesApiService - loadFavoriteWishList() - gotWishList.data : ${gotWishList.data}');
-
       if (gotWishList.hasError) {
-        throw SupabaseException("Error", gotWishList.error!.message);
+        // throw SupabaseException("Error", gotWishList.error!.message);
+        throw SupabaseException("error_title".tr, gotWishList.error!.message);
       }
 
       final theWishes = (gotWishList.data as List<dynamic>)

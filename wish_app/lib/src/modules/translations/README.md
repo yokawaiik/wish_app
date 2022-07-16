@@ -4,8 +4,8 @@
 - [x] Wish;
 <!-- todo: Translate modules -->
 - [x] Account;
-- [ ] Auth;
-- [ ] Favorites;
+- [x] Auth;
+- [x] Favorites;
 - [ ] Global;
 - [ ] Home;
 - [ ] Navigator;

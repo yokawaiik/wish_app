@@ -48,9 +48,10 @@ class AuthController extends GetxController {
 
       _updateApp();
     } on SupabaseException catch (e) {
-      Get.snackbar("Error login", e.msg);
+      Get.snackbar("auth_ac_es_error_login".tr, e.msg);
     } catch (e) {
-      Get.snackbar("Error login", "It happened unknown error.");
+      // Get.snackbar("Error login", "It happened unknown error.");
+      Get.snackbar("error_title".tr, "error_unknown".tr);
     } finally {
       isLoading.value = false;
     }
@@ -74,15 +75,13 @@ class AuthController extends GetxController {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
       print(e);
-      Get.snackbar("Error register now", "It happened unknown error.");
+      Get.snackbar("error_title".tr, "error_unknown".tr);
     } finally {
       isLoading.value = false;
     }
   }
 
   Future<void> _updateApp() async {
-    // await Get.forceAppUpdate();
-    // _userService.signUp();
     _navigatorController.updateAccountView();
     final hmc = Get.find<HomeMainController>();
     await hmc.refreshWishList();
