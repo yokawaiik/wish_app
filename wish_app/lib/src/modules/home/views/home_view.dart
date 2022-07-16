@@ -27,7 +27,7 @@ class HomeView extends GetView<HomeController> {
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
             case router_constants.homeAccountRouteName:
-              var args = settings.arguments as AccountArguments;
+              final args = settings.arguments as AccountArguments;
 
               return GetPageRoute(
                 routeName: router_constants.homeAccountRouteName,
@@ -39,7 +39,7 @@ class HomeView extends GetView<HomeController> {
               return GetPageRoute(
                 routeName: router_constants.homeMainRouteName,
                 settings: settings,
-                page: () => HomeMainView(),
+                page: () => const HomeMainView(),
                 binding: HomeMainBindings(),
               );
           }

@@ -7,6 +7,6 @@
 - [x] Auth;
 - [x] Favorites;
 - [ ] Global;
-- [ ] Home;
+- [x] Home;
 - [ ] Navigator;
-- [ ] Splash.
+- [x] Splash.

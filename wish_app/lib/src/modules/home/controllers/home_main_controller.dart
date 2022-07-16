@@ -16,14 +16,12 @@ import '../../wish/views/wish_info_view.dart';
 import '../constants/router_constants.dart' as router_constants;
 
 class HomeMainController extends GetxController {
-  final _supabase = Supabase.instance;
-  final _userService = Get.find<UserService>();
-  final _homeController = Get.find<HomeController>();
+  final _us = Get.find<UserService>();
+  final _hc = Get.find<HomeController>();
 
   late final ScrollController scrollController;
 
-  RxBool get isUserAuthenticated => _userService.isUserAuthenticated;
-  // bool get isUserAuthenticated2 => userService.isUserAuthenticated.value;
+  RxBool get isUserAuthenticated => _us.isUserAuthenticated;
 
   @override
   void onInit() {
@@ -32,34 +30,22 @@ class HomeMainController extends GetxController {
     refreshWishList();
   }
 
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  //   refreshWishList();
-  // }
-
   RxBool isLoading = RxBool(false);
   RxBool isDeleting = RxBool(false);
 
   int countWish = 0;
   int limit = 10;
-  // int limit = 2;
   RxList<Wish> homeWishList = RxList();
   int get countLoadedWish => homeWishList.length;
 
   void _scrollListener() {
     if (countLoadedWish == countWish) return;
 
-    // var position = scrollController.offset;
     var position = scrollController.positions.last.pixels;
     var maxScrollExtent = scrollController.positions.last.maxScrollExtent;
     var outOfRange = scrollController.positions.last.outOfRange;
 
-    if (position >= maxScrollExtent &&
-        // if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !outOfRange) {
-      // print("comes to bottom $isLoading");
-      // print("RUNNING LOAD MORE");
+    if (position >= maxScrollExtent && !outOfRange) {
       loadWishList(countLoadedWish);
     }
   }
@@ -78,12 +64,12 @@ class HomeMainController extends GetxController {
 
   Future<void> loadCountOfWishInSubscriptions() async {
     try {
-      print("loadCountOfWishInSubscriptions");
+      // print("loadCountOfWishInSubscriptions");
       final loadedCountOfWish = await HomeService.countOfWishInSubscriptions(
-        currentUserId: _userService.currentUser?.id,
+        currentUserId: _us.currentUser?.id,
       );
 
-      print(loadedCountOfWish);
+      // print(loadedCountOfWish);
 
       if (loadedCountOfWish == null) return;
 
@@ -96,7 +82,7 @@ class HomeMainController extends GetxController {
 
   Future<void> loadWishList([int offset = 0, bool isRefresh = false]) async {
     try {
-      print(offset);
+      // print(offset);
 
       isLoading.value = true;
       List<Wish>? loadedWishList;
@@ -105,7 +91,7 @@ class HomeMainController extends GetxController {
         loadedWishList = await HomeService.loadWishList(
           limit: limit,
           offset: countLoadedWish,
-          currentUserId: _userService.currentUser!.id,
+          currentUserId: _us.currentUser!.id,
         );
       } else {
         // for guest
@@ -124,8 +110,11 @@ class HomeMainController extends GetxController {
       homeWishList.addAll(loadedWishList);
       homeWishList.refresh();
     } catch (e) {
-      Get.snackbar(
-          "Error loading a last wish list", "Something happened to server.");
+      // Get.snackbar(
+      //   "Error loading a last wish list",
+      //   "Something happened to server.",
+      // );
+      Get.snackbar("error_title".tr, "Error loading a last wish list".tr);
     } finally {
       isLoading.value = false;
     }
@@ -149,7 +138,6 @@ class HomeMainController extends GetxController {
 
     await Get.toNamed(
       WishInfoView.routeName,
-      // arguments: {"id": id, "routeName": HomeView.routeName},
       arguments: WishInfoArguments(
         wishId: id,
         previousRouteName: router_constants.homeMainRouteName,
@@ -164,15 +152,15 @@ class HomeMainController extends GetxController {
     try {
       final foundWish = homeWishList.firstWhere((wish) => wish.id == id);
 
-      await FavoritesApiService.toggleFavorite(
-          id, _userService.currentUser!.id);
+      await FavoritesApiService.toggleFavorite(id, _us.currentUser!.id);
 
       foundWish.isFavorite = !foundWish.isFavorite;
       homeWishList.refresh();
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      Get.snackbar("Unexpected error", "Something went wrong.");
+      // Get.snackbar("Unexpected error", "Something went wrong.");
+      Get.snackbar("error_title".tr, "error_m_something_went_wrong".tr);
     }
   }
 
@@ -183,14 +171,19 @@ class HomeMainController extends GetxController {
 
   void actionDeleteWish(Wish wish) async {
     try {
-      Get.back(closeOverlays: true); // close modalBottomSheet
+      Get.back(closeOverlays: true); // ? info: close modalBottomSheet
       isDeleting.value = true;
       await AddWishApiService.deleteWish(wish.id, wish.imagePath);
       deleteWish(wish.id);
     } catch (e) {
-      print(e);
+      // Get.snackbar(
+      //   "Error loading a last wish list",
+      //   "Something happened to server.",
+      // );
       Get.snackbar(
-          "Error loading a last wish list", "Something happened to server.");
+        "error_title".tr,
+        "error_m_something_went_wrong".tr,
+      );
     } finally {
       isDeleting.value = false;
     }
@@ -207,7 +200,7 @@ class HomeMainController extends GetxController {
           wish.createdBy.id,
         ),
         preventDuplicates: false,
-        id: _homeController.nestedKey,
+        id: _hc.nestedKey,
       );
     }
   }

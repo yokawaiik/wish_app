@@ -13,11 +13,11 @@ class SplashView extends GetView<SplashBindings> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Hi, wait a second..."),
-            SizedBox(
+            Text("s_sv_text_on_screen".tr),
+            const SizedBox(
               height: 20,
             ),
-            CircularProgressIndicator(),
+            const CircularProgressIndicator(),
           ],
         ),
       ),

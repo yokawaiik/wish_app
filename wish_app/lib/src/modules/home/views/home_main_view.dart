@@ -30,7 +30,7 @@ class HomeMainView extends GetView<HomeMainController> {
               children: [
                 IconButton(
                   onPressed: () => Get.back(closeOverlays: true),
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.close,
                     size: 36,
                   ),
@@ -42,27 +42,27 @@ class HomeMainView extends GetView<HomeMainController> {
               children: [
                 if (!wish.createdBy.isCurrentUser)
                   ListTile(
-                    leading: Icon(
+                    leading: const Icon(
                       Icons.favorite,
                       color: theme_wish_app.favoriteColor,
                     ),
-                    title: Text("Add to favorites"),
+                    title: Text("fm_hmv_bs_lv_add_to_favorites".tr),
                     onTap: () => controller.addToFavorites(wish.id),
                   ),
-                ListTile(
-                  leading: Icon(Icons.send),
-                  title: Text("Share"),
-                  onTap: controller.shareWish,
-                ),
+                // ListTile(
+                //   leading: const Icon(Icons.send),
+                //   title: const Text("Share"),
+                //   onTap: controller.shareWish,
+                // ),
                 if (wish.createdBy.isCurrentUser)
                   ListTile(
-                    leading: Icon(Icons.delete),
-                    title: Text("Delete"),
+                    leading: const Icon(Icons.delete),
+                    title: Text("fm_hmv_bs_lv_delete".tr),
                     onTap: () => controller.actionDeleteWish(wish),
                   ),
                 ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text("See profile"),
+                  leading: const Icon(Icons.person),
+                  title: Text("fm_hmv_bs_lv_see_profile".tr),
                   onTap: () => controller.seeProfile(wish),
                 ),
               ],
@@ -80,7 +80,7 @@ class HomeMainView extends GetView<HomeMainController> {
       onWillPop: Get.find<HomeController>().onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Home"),
+          title: Text("fm_hmv_appbar_title".tr),
         ),
         body: RefreshIndicator(
           onRefresh: () async {
@@ -99,7 +99,7 @@ class HomeMainView extends GetView<HomeMainController> {
                         ),
                       ),
                 if (controller.isDeleting.value) ...[
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     height: double.infinity,
                     child: BackdropFilter(
@@ -144,7 +144,7 @@ class HomeMainView extends GetView<HomeMainController> {
     // todo, optional: implement grid to desktop
 
     return MasonryGridView.builder(
-      padding: EdgeInsets.all(global_constants.paddingInsideGridView),
+      padding: const EdgeInsets.all(global_constants.paddingInsideGridView),
       gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
       ),

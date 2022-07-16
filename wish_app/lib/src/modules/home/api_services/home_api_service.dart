@@ -1,7 +1,6 @@
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../global/models/supabase_exception.dart';
-import '../../global/models/unknown_exception.dart';
 import '../../global/models/wish.dart';
 
 class HomeService {
@@ -30,7 +29,9 @@ class HomeService {
           .execute();
 
       if (selectedQuery.hasError) {
-        throw SupabaseException("Supabase Error", selectedQuery.error!.message);
+        // throw SupabaseException("Supabase Error", selectedQuery.error!.message);
+        throw SupabaseException(
+            "error_db_unknown_title".tr, selectedQuery.error!.message);
       }
 
       final lastWishList = (selectedQuery.data as List<dynamic>)
@@ -44,7 +45,8 @@ class HomeService {
       rethrow;
     } catch (e) {
       print("HomeService - loadWishList - SupabaseException - $e");
-      throw UnknownException("Unknown error");
+      // throw UnknownException("Unknown error");
+      rethrow;
     }
   }
 
@@ -66,7 +68,9 @@ class HomeService {
           .execute();
 
       if (countWish.hasError) {
-        throw SupabaseException("Supabase Error", countWish.error!.message);
+        // throw SupabaseException("Supabase Error", countWish.error!.message);
+        throw SupabaseException(
+            "error_db_unknown_title".tr, countWish.error!.message);
       }
 
       print(countWish.data);
@@ -76,7 +80,8 @@ class HomeService {
       rethrow;
     } catch (e) {
       print("HomeService - loadCountOfWishInSubscriptions - $e");
-      throw UnknownException("Unknown error");
+      // throw UnknownException("Unknown error");
+      rethrow;
     }
   }
 }
