@@ -121,8 +121,46 @@ class EnLanguage {
         "auth_aas_es_such_login_already_exist": "Such login already exist.",
         "auth_aas_es_such_email_already_exist": "Such email already exist.",
         // ?
-        // ? info: auth module
-        // ? info: auth view
+        // ? info: connection manager module
+        // ? info: connection manager widgets
+        "cm_w_text_check_your_connection":
+            "Please, check your internet connection...",
+        // ?
+        // ? info: favorites module
+        // ? info: favorites view
+        "fm_fv_text_on_empty_screen": "You can save founded wishes here...",
+        "fm_fv_lt_text_remove_from_favorites": "Remove from favorites",
+        "fm_fv_lt_text_see_profile": "See profile",
+        // // ? info: favorites controller
+        // // ? info: favorites controller > error
+        // // ? info: favorites api service
+        // ? info: favorites api service > error
+        "fm_fas_es_get_count_of_favorites": "Error getting count of favoites.",
+        "fm_fas_es_find_an_added_favorite":
+            "Error find an added favorite wish.",
+        "fm_fas_es_delete_favorite": "Error deleting the favorite wish.",
         // "":"",
+
+        //
+        //
+        //
+        //
+        // // ?
+        // // ? info: favorites module
+        // // ? info: favorites view
+        // "fm_fv_": "",
+        // //
+        // // ? info: favorites controller
+        // // "fm_fc_": "",
+        // //
+        // // ? info: favorites controller > error
+        // "fm_fc_e_": "",
+        // //
+        // // ? info: favorites api service
+        // // "fm_fas_": "",
+        // //
+        // // ? info: favorites api service > error
+        // "fm_fas_e_": "",
+        // // "":"",
       };
 }
