@@ -36,6 +36,9 @@ class SettingView extends GetView<SettingsController> {
                 .toList(),
             onChanged: controller.onChangedLanguageDropdown,
           ),
+          const SizedBox(
+            height: global_constants.defaultPadding,
+          ),
           DropdownButton<int>(
             value: controller.selectedValueThemeDropdown.value,
             isExpanded: true,
