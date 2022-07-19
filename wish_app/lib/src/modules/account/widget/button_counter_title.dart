@@ -7,12 +7,16 @@ class ButtonCounterTitle extends StatelessWidget {
   final double height;
   final double width;
   final Widget? skeleton;
+  final double fontSizeTitle;
+  final double fontSizeCounter;
 
   const ButtonCounterTitle({
     Key? key,
     required this.onPressed,
     required this.title,
     required this.counter,
+    this.fontSizeTitle = 11,
+    this.fontSizeCounter = 16,
     this.height = 70,
     this.width = 70,
     this.skeleton,
@@ -20,29 +24,28 @@ class ButtonCounterTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     if (counter == null && skeleton != null) {
       return skeleton!;
     }
 
     return SizedBox.fromSize(
-      size: Size(width, height), // button width and height
+      size: Size(width, height),
       child: InkWell(
         onTap: onPressed,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // counter, // icon
-            // title,
             Text(
               counter ?? "Nothing",
               style: TextStyle(
-                fontSize: textTheme.headline6!.fontSize,
+                fontSize: fontSizeCounter,
               ),
             ),
             Text(
               title,
+              style: TextStyle(
+                fontSize: fontSizeTitle,
+              ),
             )
           ],
         ),

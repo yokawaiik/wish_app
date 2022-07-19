@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ThemeItem {
-  ThemeMode mode;
-  int value;
-  String title;
-  Icon icon;
+  final ThemeMode mode;
+  final int value;
+  final String title;
+  final Icon icon;
 
   ThemeItem({
     required this.value,

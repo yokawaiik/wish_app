@@ -59,11 +59,12 @@ class AccountView extends GetView<AccountController> {
                           "account_view_list_tile_text_create_new_wish".tr),
                       onTap: controller.createWish,
                     ),
-                    // ListTile(
-                    //   leading: Icon(Icons.person),
-                    //   title: Text("Exit"),
-                    //   onTap: controller.exit,
-                    // )
+                    ListTile(
+                      leading: const Icon(Icons.settings),
+                      // title: const Text("Create new wish"),
+                      title: Text("am_av_lt_settings".tr),
+                      onTap: controller.goToSettings,
+                    ),
                   ],
                   if (userService.isUserAuthenticated.value &&
                       !controller.isCurrentUser.value)

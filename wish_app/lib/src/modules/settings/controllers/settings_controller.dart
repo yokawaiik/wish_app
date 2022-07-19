@@ -1,15 +1,13 @@
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:wish_app/src/modules/settings/models/language_item.dart';
 import 'package:wish_app/src/modules/settings/models/theme_item.dart';
 
-import '../constants/settings_constants.dart' as settings_constants;
 import '../constants/settings_option_lists_constants.dart'
     as settings_option_lists_constants;
 
-class SettingsController extends GetxController {
-  final _settingsBox = GetStorage(settings_constants.settingsBox);
+import '../utils/settings_utils.dart' as settings_utils;
 
+class SettingsController extends GetxController {
   late RxInt selectedValueLanguageDropdown;
   List<LanguageItem> languageDropdownList =
       settings_option_lists_constants.languageDropdownList;
@@ -18,42 +16,20 @@ class SettingsController extends GetxController {
   List<ThemeItem> themeDropdownList =
       settings_option_lists_constants.themeDropdownList;
 
-  // @override
-  // void onInit() {
-  //   // _setInitialSettings();
-  //   super.onInit();
-  // }
+  @override
+  void onInit() {
+    _setInitialSettings();
+
+    super.onInit();
+  }
 
   // ? info: set all settings
-  // void setInitialSettings() {
-  //   final selectedTheme =
-  //       _settingsBox.read(settings_constants.selectedTheme) as int?;
-  //   late ThemeItem selectedThemeItem;
-  //   if (selectedTheme == null) {
-  //     // ? info : default value
-  //     selectedThemeItem = themeDropdownList.first;
-  //   } else {
-  //     selectedThemeItem =
-  //         themeDropdownList.firstWhere((item) => item.value == selectedTheme);
-  //   }
+  void _setInitialSettings() {
+    selectedValueLanguageDropdown =
+        RxInt(settings_utils.getCurrentLocale().value);
 
-  //   _setTheme(selectedThemeItem);
-  //   selectedValueThemeDropdown.value = selectedThemeItem.value;
-
-  //   final selectedLanguage =
-  //       _settingsBox.read(settings_constants.selectedLanguage) as int?;
-  //   late LanguageItem selectedanguageItem;
-  //   if (selectedLanguage == null) {
-  //     // ? info : default value
-  //     selectedanguageItem = languageDropdownList.first;
-  //   } else {
-  //     selectedanguageItem = languageDropdownList
-  //         .firstWhere((item) => item.value == selectedLanguage);
-  //   }
-
-  //   _setLanguage(selectedanguageItem);
-  //   selectedValueLanguageDropdown.value = selectedanguageItem.value;
-  // }
+    selectedValueThemeDropdown = RxInt(settings_utils.getCurrentTheme().value);
+  }
 
   void onChangedLanguageDropdown(int? value) {
     if (value == null) return;
@@ -62,11 +38,8 @@ class SettingsController extends GetxController {
   }
 
   void _setLanguage(LanguageItem languageItem) {
-    // // todo: _setLanguage
-    _settingsBox.write(settings_constants.selectedLanguage, languageItem.value);
-
-    final locale = languageItem.locale;
-    Get.updateLocale(locale);
+    settings_utils.saveLocale(languageItem);
+    Get.updateLocale(languageItem.locale);
   }
 
   void onChangedThemeDropdown(int? value) {
@@ -76,8 +49,8 @@ class SettingsController extends GetxController {
   }
 
   void _setTheme(ThemeItem selectedTheme) {
-    // // todo: save to storage
-    _settingsBox.write(settings_constants.selectedTheme, selectedTheme.value);
+    settings_utils.saveTheme(selectedTheme);
+
     Get.changeThemeMode(selectedTheme.mode);
   }
 }

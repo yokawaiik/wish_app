@@ -6,6 +6,7 @@ import 'package:wish_app/src/modules/account/views/account_edit_view.dart';
 import 'package:wish_app/src/modules/auth/views/auth_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/navigator/controllers/navigator_controller.dart';
+import 'package:wish_app/src/modules/settings/views/setting_view.dart';
 import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
@@ -294,5 +295,9 @@ class AccountController extends GetxController {
       userAccount.value!.imageUrl = imageUrl;
     }
     userAccount.refresh();
+  }
+
+  void goToSettings() {
+    Get.toNamed(SettingView.routeName);
   }
 }

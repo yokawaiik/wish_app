@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 
 class LanguageItem {
-  int value;
-  String title;
-  Locale locale;
+  final int value;
+  final String title;
+  final Locale locale;
 
   LanguageItem({
     required this.value,

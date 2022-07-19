@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import 'package:wish_app/src/modules/settings/controllers/settings_controller.dart';
 
 import '../../global/constants/global_constants.dart' as global_constants;
-
-import '../../translations/constants/translations_constants.dart' show settings;
 
 class SettingView extends GetView<SettingsController> {
   static const routeName = '/settings';
@@ -23,10 +20,6 @@ class SettingView extends GetView<SettingsController> {
         padding: const EdgeInsets.all(global_constants.defaultPadding),
         shrinkWrap: true,
         children: [
-          // ListTile(
-          //   leading: Icon(Icons.language),
-          // ),
-          // TODO: DropdownButton with language change
           DropdownButton<int>(
             value: controller.selectedValueLanguageDropdown.value,
             isExpanded: true,
@@ -36,7 +29,8 @@ class SettingView extends GetView<SettingsController> {
                     value: item.value,
                     child: ListTile(
                       title: Text(
-                        item.title,
+                        // item.title,
+                        item.title.tr,
                       ),
                     ),
                   ),
@@ -53,20 +47,14 @@ class SettingView extends GetView<SettingsController> {
                     value: item.value,
                     child: ListTile(
                       leading: item.icon,
-                      title: Text(item.title),
+                      // title: Text(item.title),
+                      title: Text(item.title.tr),
                     ),
                   ),
                 )
                 .toList(),
             onChanged: controller.onChangedThemeDropdown,
           ),
-          // TODO: theme change
-          // const ListTile(
-          //   leading: const Icon(
-          //     // Icons.brightness_4,
-          //     Icons.brightness_4_outlined,
-          //   ),
-          // ),
         ],
       ),
     );

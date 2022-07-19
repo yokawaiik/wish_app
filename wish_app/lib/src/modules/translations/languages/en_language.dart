@@ -68,6 +68,7 @@ class EnLanguage {
         "account_view_elevated_button_text_has_subscribe_true": "Unfollow",
         "account_view_elevated_button_text_has_subscribe_false": "Follow",
         "account_view_popup_menu_item_title_delete_wish": "Delete wish",
+        "am_av_lt_settings": "Settings",
         // ? info: errors in account controller
         "account_ac_es_it_is_not_an_user": "It isn\"t an user.",
         "account_ac_e_unknown_error": "Unknown error...",
