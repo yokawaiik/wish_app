@@ -49,11 +49,6 @@ class AccountEditApiService {
           .execute();
 
       if (response.error != null) {
-        // throw SupabaseException(
-        //   "Error",
-        //   "Error when update password.",
-        //   KindOfException.auth,
-        // );
         throw SupabaseException(
           "error_title".tr,
           "account_aeas_es_error_updating_login".tr,
@@ -81,8 +76,6 @@ class AccountEditApiService {
 
       final response = await AuthApiService.checkIfUserExists(params);
 
-      // print(response);
-
       return response['result_login'] as bool;
     } on SupabaseException catch (e) {
       print(
@@ -94,10 +87,8 @@ class AccountEditApiService {
     }
   }
 
-  // todo: updateUserInfo
   static Future<void> updateUserInfo(AccountEditUser userData) async {
     try {
-      // _supabase.auth.api.resetPasswordForEmail(email);
       final response = await _supabase
           .from('users')
           .update(userData.toMap())
@@ -105,11 +96,6 @@ class AccountEditApiService {
           .execute();
 
       if (response.hasError) {
-        // throw SupabaseException(
-        //   "Error",
-        //   "Error when update user info.",
-        //   KindOfException.auth,
-        // );
         throw SupabaseException(
           "error_title".tr,
           "account_aeas_es_error_updating_user_info".tr,
@@ -126,11 +112,8 @@ class AccountEditApiService {
     }
   }
 
-  // TODO: updateAccountImage
   static Future<String?> updateAccountImage(File file, String id) async {
     try {
-      // _supabase.auth.api.resetPasswordForEmail(email);
-
       final imagePath = generateProfileImagePath(
         rawFilePath: file.path,
         id: id,

@@ -64,13 +64,9 @@ class HomeMainController extends GetxController {
 
   Future<void> loadCountOfWishInSubscriptions() async {
     try {
-      // print("loadCountOfWishInSubscriptions");
       final loadedCountOfWish = await HomeService.countOfWishInSubscriptions(
         currentUserId: _us.currentUser?.id,
       );
-
-      // print(loadedCountOfWish);
-
       if (loadedCountOfWish == null) return;
 
       countWish = loadedCountOfWish;

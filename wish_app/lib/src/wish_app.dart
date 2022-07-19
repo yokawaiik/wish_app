@@ -16,12 +16,10 @@ class WishApp extends StatelessWidget {
     return GetMaterialApp(
       theme: theme_wish_app.theme,
       darkTheme: theme_wish_app.darkTheme,
-      // TODO: BUG: setup after loading
       themeMode: setInitialTheme(),
       getPages: router.getPages,
       initialRoute: router.initialRoute,
       unknownRoute: router.unknownRoute,
-      // TODO: BUG: setup after loading
       locale: setInitialLocale(),
       translations: WishAppTranslations(),
     );

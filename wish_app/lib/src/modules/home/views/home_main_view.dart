@@ -11,6 +11,8 @@ import '../controllers/home_main_controller.dart';
 
 import '../../global/constants/global_constants.dart' as global_constants;
 import '../../global/theme/theme_wish_app.dart' as theme_wish_app;
+import '../controllers/wishes_and_users_search_controller.dart';
+import '../widgets/wishes_and_users_search_delegate.dart';
 
 class HomeMainView extends GetView<HomeMainController> {
   static const String routeName = "/home/main";
@@ -80,7 +82,13 @@ class HomeMainView extends GetView<HomeMainController> {
       onWillPop: Get.find<HomeController>().onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("fm_hmv_appbar_title".tr),
+          // title: Text("fm_hmv_appbar_title".tr),
+          actions: [
+            IconButton(
+              onPressed: _showSearch,
+              icon: const Icon(Icons.search),
+            ),
+          ],
         ),
         body: RefreshIndicator(
           onRefresh: () async {
@@ -160,6 +168,14 @@ class HomeMainView extends GetView<HomeMainController> {
           onLongPress: () => _showModalBottomSheet(wish),
         );
       },
+    );
+  }
+
+  void _showSearch() {
+    // Get.context;
+    showSearch(
+      context: Get.context!,
+      delegate: WishesAndUsersSearchDelegate(),
     );
   }
 }
