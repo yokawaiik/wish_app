@@ -13,7 +13,6 @@ class SettingView extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // title: const Text("Settings"),
         title: Text("settings_appbar_title".tr),
       ),
       body: ListView(
@@ -29,7 +28,6 @@ class SettingView extends GetView<SettingsController> {
                     value: item.value,
                     child: ListTile(
                       title: Text(
-                        // item.title,
                         item.title.tr,
                       ),
                     ),
@@ -47,7 +45,6 @@ class SettingView extends GetView<SettingsController> {
                     value: item.value,
                     child: ListTile(
                       leading: item.icon,
-                      // title: Text(item.title),
                       title: Text(item.title.tr),
                     ),
                   ),
