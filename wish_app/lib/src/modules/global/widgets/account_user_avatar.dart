@@ -4,18 +4,21 @@ import '../extensions/wish_color.dart';
 
 class AccountUserAvatar extends StatelessWidget {
   final Color defaultColor;
-  final String? userHexColor;
+  // final String? userHexColor;
+  final Color? userColor;
   final String? imageUrl;
   final double? radius;
   final bool isLoading;
+  final Icon? iconChild;
 
   const AccountUserAvatar({
     Key? key,
     required this.defaultColor,
-    required this.userHexColor,
+    this.userColor,
     required this.imageUrl,
     this.radius = 60,
     this.isLoading = true,
+    this.iconChild,
   }) : super(key: key);
 
   @override
@@ -26,12 +29,10 @@ class AccountUserAvatar extends StatelessWidget {
         height: radius! * 2,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius!),
-          color: userHexColor != null
-              ? WishColor.fromHex(userHexColor!)
-              : defaultColor,
+          color: userColor ?? defaultColor,
         ),
         child: imageUrl == null
-            ? null
+            ? iconChild
             : Image.network(
                 imageUrl!, // ? info: reuired if needs to update widget image
                 key: key,

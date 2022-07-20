@@ -6,6 +6,9 @@ const Color seedColorDarkTheme = Colors.purple;
 const favoriteColor = Colors.purple;
 const unFavoriteColor = Colors.grey;
 
+const removeItemColor = Colors.grey;
+const addToFavoriteItemColor = Colors.purple;
+
 final ThemeData theme = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme.fromSeed(

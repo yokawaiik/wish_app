@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wish_app/src/modules/account/controllers/account_edit_controller.dart';
+import 'package:wish_app/src/modules/global/extensions/wish_color.dart';
 
 import '../../global/constants/global_constants.dart' as global_constants;
 import '../../global/utils/auth_validators.dart' as auth_validators;
@@ -210,7 +211,9 @@ class AccountEditView extends GetView<AccountEditController> {
               key: ValueKey(
                   accountEditUser.imageUrl), // ? info: to update widget image
               defaultColor: colorScheme.primary,
-              userHexColor: accountEditUser.userColor,
+              userColor: accountEditUser.userColor == null
+                  ? null
+                  : WishColor.fromHex(accountEditUser.userColor!),
               imageUrl: accountEditUser.imageUrl,
               radius: 50,
             )

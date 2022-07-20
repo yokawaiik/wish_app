@@ -4,6 +4,7 @@ import 'package:wish_app/src/modules/account/controllers/account_controller.dart
 import 'package:wish_app/src/modules/account/widget/button_counter_title.dart';
 import '../../global/constants/global_constants.dart' show defaultPadding;
 import '../../global/constants/account_constants.dart' show skeletonItemCount;
+import '../../global/extensions/wish_color.dart';
 import '../../global/models/wish.dart';
 import '../../global/services/user_service.dart';
 import '../../global/widgets/account_user_avatar.dart';
@@ -155,7 +156,11 @@ class AccountView extends GetView<AccountController> {
                                           .imageUrl), // ? info: to update widget image
 
                                       defaultColor: colorScheme.primary,
-                                      userHexColor: userAccount.userColor,
+                                      userColor: userAccount.userColor == null
+                                          ? null
+                                          : WishColor.fromHex(
+                                              userAccount.userColor!),
+
                                       imageUrl: userAccount.imageUrl,
                                       radius: 50,
                                     ),

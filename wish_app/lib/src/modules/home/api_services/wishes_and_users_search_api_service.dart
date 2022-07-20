@@ -13,7 +13,10 @@ class WishesAndUsersSearchApiService {
       final params = {
         "in_query": query,
         // "in_limit": ,
+        "in_limit": null,
       };
+
+      // print(params);
 
       final gotLightWishList = await _supabase.client
           .rpc('search_light_wish_list', params: params)
@@ -21,10 +24,12 @@ class WishesAndUsersSearchApiService {
 
       if (gotLightWishList.hasError) throw gotLightWishList.error!;
 
-      final ligthUserList =
-          (gotLightWishList.data as List<Map<String, dynamic>>)
-              .map((data) => LightWish.fromMap(data))
-              .toList();
+      // print(
+      //     'getSearchWishList() - gotLightWishList.data : ${gotLightWishList.data}');
+
+      final ligthUserList = (gotLightWishList.data as List)
+          .map((data) => LightWish.fromMap(data as Map<String, dynamic>))
+          .toList();
 
       return ligthUserList;
     } catch (e) {
@@ -43,18 +48,23 @@ class WishesAndUsersSearchApiService {
         "in_query": query,
         "in_user_id": currentUserId,
         // "in_limit": ,
+        "in_limit": null,
       };
 
+      // print(params);
+
       final gotLightUserList = await _supabase.client
-          .rpc('search_ligth_wish_list', params: params)
+          .rpc('search_light_user_list', params: params)
           .execute();
 
       if (gotLightUserList.hasError) throw gotLightUserList.error!;
 
-      final ligthWishList =
-          (gotLightUserList.data as List<Map<String, dynamic>>)
-              .map((data) => LightUser.fromMap(data))
-              .toList();
+      // print(
+      //     'getSearchUserList() - gotLightUserList.data : ${gotLightUserList.data}');
+
+      final ligthWishList = (gotLightUserList.data as List)
+          .map((data) => LightUser.fromMap(data as Map<String, dynamic>))
+          .toList();
 
       return ligthWishList;
     } catch (e) {
