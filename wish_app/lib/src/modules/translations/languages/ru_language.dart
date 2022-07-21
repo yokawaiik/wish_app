@@ -165,6 +165,13 @@ class RuLanguage {
         "hm_hmc_e_load_wish_list": "Ошибка загрузки последнего списка желаний",
         // // ? info: home api service
         // // ? info: home api service > error
+        // ? info: wishes and users search delegate
+        "hm_wausd_br_query_empty_center_text": "Твой поиск пуст...",
+        "hm_wausd_error_center_text": "Что-то пошло не так...",
+        "hm_wausd_br_list_empty_center_text": "Такой информации не найдено...",
+        "hm_wausd_result_category_users": "Пользователи",
+        "hm_wausd_result_category_wishes": "Желания",
+        "hm_wausd_bs_suggestions_lists_empty": "У тебя нет предложений...",
         // ?
         // ? info: navigator module
         // ? info: navigator view

@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:get/get.dart';
-
-import '../../global/extensions/wish_color.dart';
-import '../../global/models/light_wish.dart';
-import '../../global/widgets/account_user_avatar.dart';
 import '../../global/theme/theme_wish_app.dart' as theme_wish_app;
 
 class SearchListTile extends StatelessWidget {

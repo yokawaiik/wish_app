@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:wish_app/src/modules/account/models/account_arguments.dart';
 import 'package:wish_app/src/modules/home/api_services/wishes_and_users_search_api_service.dart';
 import 'package:wish_app/src/modules/home/database/suggestions_storage_helper.dart';
+import 'package:wish_app/src/modules/home/views/home_view.dart';
+import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
 
 import '../../global/models/light_user.dart';
 import '../../global/models/light_wish.dart';
@@ -13,20 +17,16 @@ class WishesAndUsersSearchController extends GetxController {
 
   late final SuggestionsStorageHelper _ssh;
 
-  String selectedResult = "";
-
   WishesAndUsersSearchController() {
     _ssh = SuggestionsStorageHelper.instance;
   }
 
-  bool get isLastListsEmpty =>
-      suggestionsSearchUserList.isEmpty && suggestionsSearchWishList.isEmpty;
+  bool get isListsEmpty => searchUserList.isEmpty && searchWishList.isEmpty;
 
   List<LightUser> searchUserList = [];
-  // List<LightUser> suggestionsSearchUserList =
-  //     []; // ? info: items that have been opened
-  RxList<LightUser> suggestionsSearchUserList =
-      RxList<LightUser>([]); // ? info: items that have been opened
+
+  List<LightUser> suggestionsSearchUserList =
+      []; // ? info: items that have been opened
 
   Future<void> getSearchUserList() async {
     try {
@@ -42,42 +42,35 @@ class WishesAndUsersSearchController extends GetxController {
     }
   }
 
-  void tapOnSearchUser(String id) async {
-    // // TODO:tapOnSearchUser
-    // print(id);
-
-    // // TODO: add selectedWish to list and save it in storage but not more then 10
+  Future<AccountArguments> tapOnSearchUser(String id) async {
     if (searchUserList.length >= 10) {
       searchUserList.removeLast();
     }
 
-    if (suggestionsSearchUserList.any((user) => user.id == id)) return;
+    if (!suggestionsSearchUserList.any((user) => user.id == id)) {
+      final selectedUser = searchUserList.firstWhere((user) => user.id == id);
+      suggestionsSearchUserList.insert(0, selectedUser);
 
-    final selectedUser = searchUserList.firstWhere((user) => user.id == id);
-    suggestionsSearchUserList.insert(0, selectedUser);
+      await _saveUserInSuggestionsStorage(selectedUser);
+    }
 
-    await _saveUserInSuggestionsStorage(selectedUser);
+    return AccountArguments(id);
   }
 
   Future<void> _saveUserInSuggestionsStorage(LightUser selectedUser) async {
-    // // TODO: _saveUserInSuggestionsStorage
-    // throw UnimplementedError();
-
     await _ssh.addUser(selectedUser);
   }
 
   Future<void> removeFromSuggestionsSearchUserList(String id) async {
-    await _ssh.removeUser(id);
     suggestionsSearchUserList.removeWhere((user) => user.id == id);
-    suggestionsSearchUserList.refresh();
+
+    await _ssh.removeUser(id);
   }
 
   List<LightWish> searchWishList = [];
-  // List<LightWish> suggestionsSearchWishList =
-  //     []; // ? info: items that have been opened
 
-  RxList<LightWish> suggestionsSearchWishList =
-      RxList<LightWish>([]); // ? info: items that have been opened
+  List<LightWish> suggestionsSearchWishList =
+      []; // ? info: items that have been opened
 
   Future<void> getSearchWishList() async {
     try {
@@ -90,21 +83,22 @@ class WishesAndUsersSearchController extends GetxController {
     }
   }
 
-  void tapOnSearchWish(int id) async {
-    //print(id);
-    // // TODO:tapOnSearchWish
-
-    // // TODO: add selectedWish to list and save it in storage but not more then 10
+  Future<WishInfoArguments> tapOnSearchWish(int id) async {
     if (suggestionsSearchWishList.length >= 10) {
       suggestionsSearchWishList.removeLast();
     }
 
-    if (suggestionsSearchWishList.any((wish) => wish.id == id)) return;
+    if (!suggestionsSearchWishList.any((wish) => wish.id == id)) {
+      final selectedWish = searchWishList.firstWhere((wish) => wish.id == id);
+      suggestionsSearchWishList.insert(0, selectedWish);
 
-    final selectedWish = searchWishList.firstWhere((wish) => wish.id == id);
-    suggestionsSearchWishList.insert(0, selectedWish);
+      await _saveWishInSuggestionsStorage(selectedWish);
+    }
 
-    await _saveWishInSuggestionsStorage(selectedWish);
+    return WishInfoArguments(
+      wishId: id,
+      previousRouteName: HomeView.routeName,
+    );
   }
 
   String query = "";
@@ -117,25 +111,12 @@ class WishesAndUsersSearchController extends GetxController {
         getSearchWishList(),
       ]);
     } catch (e) {
-      Get.snackbar("Error", "Something went wrong.");
+      Get.snackbar("error_title".tr, "error_m_something_went_wrong".tr);
     }
-    // // todo: remove it
-    // await Future.delayed(Duration(seconds: 2));
   }
-
-  RxBool isSuggestionsLoad = RxBool(false);
-
-  // RxList<LightWish> get suggestionsWishList =>
-  //     RxList<LightWish>(suggestionsSearchWishList);
-  // RxList<LightUser> get suggestionsUserList =>
-  //     RxList<LightUser>(suggestionsSearchUserList);
 
   Future<void> setSuggestions() async {
     try {
-      print("setSuggestions()");
-      isSuggestionsLoad.value = true;
-      // final gotSuggestionWishList = await _ssh.getWishList();
-      // final gotSuggestionUserList = await _ssh.getUserList();
       _clearSuggestions();
 
       final gotSuggestions =
@@ -144,11 +125,9 @@ class WishesAndUsersSearchController extends GetxController {
       suggestionsSearchWishList.addAll(gotSuggestions[0] as List<LightWish>);
       suggestionsSearchUserList.addAll(gotSuggestions[1] as List<LightUser>);
     } catch (e) {
-      print('setSuggestions() - e : $e');
-    } finally {
-      isSuggestionsLoad.value = false;
-      suggestionsSearchWishList.refresh();
-      suggestionsSearchUserList.refresh();
+      if (kDebugMode) {
+        print('setSuggestions() - e : $e');
+      }
     }
   }
 
@@ -163,15 +142,12 @@ class WishesAndUsersSearchController extends GetxController {
   }
 
   Future<void> removeFromSuggestionsSearchWishList(int id) async {
-    await _ssh.removeWish(id);
     suggestionsSearchWishList.removeWhere((wish) => wish.id == id);
-    suggestionsSearchWishList.refresh();
+
+    await _ssh.removeWish(id);
   }
 
   Future<void> _saveWishInSuggestionsStorage(LightWish selectedWish) async {
-    // // TODO: _saveWishInSuggestionsStorage
-    // throw UnimplementedError();
-
     await _ssh.addWish(selectedWish);
   }
 }

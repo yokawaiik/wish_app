@@ -159,6 +159,15 @@ class EnLanguage {
         "hm_hmc_e_load_wish_list": "Error loading a last wish list",
         // // ? info: home api service
         // // ? info: home api service > error
+        // TODO
+        // ? info: wishes and users search delegate
+        "hm_wausd_br_query_empty_center_text": "Your query is empty...",
+        "hm_wausd_error_center_text": "Something went wrong...",
+        "hm_wausd_br_list_empty_center_text": "No such data found...",
+        "hm_wausd_result_category_users": "Users",
+        "hm_wausd_result_category_wishes": "Wishes",
+        "hm_wausd_bs_suggestions_lists_empty":
+            "You don't have any suggestions...",
         // ?
         // ? info: navigator module
         // ? info: navigator view

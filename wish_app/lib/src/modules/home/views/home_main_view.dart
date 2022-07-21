@@ -3,16 +3,20 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import 'package:wish_app/src/modules/account/models/account_arguments.dart';
+import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
 
 import '../../global/models/wish.dart';
 import '../../global/widgets/wish_grid_item.dart';
+import '../../wish/views/wish_info_view.dart';
 import '../controllers/home_controller.dart';
 import '../controllers/home_main_controller.dart';
 
 import '../../global/constants/global_constants.dart' as global_constants;
 import '../../global/theme/theme_wish_app.dart' as theme_wish_app;
-import '../controllers/wishes_and_users_search_controller.dart';
 import '../widgets/wishes_and_users_search_delegate.dart';
+
+import '../constants/router_constants.dart' as router_constants;
 
 class HomeMainView extends GetView<HomeMainController> {
   static const String routeName = "/home/main";
@@ -171,11 +175,25 @@ class HomeMainView extends GetView<HomeMainController> {
     );
   }
 
-  void _showSearch() {
-    // Get.context;
-    showSearch(
+  void _showSearch() async {
+    final searchResult = await showSearch(
       context: Get.context!,
       delegate: WishesAndUsersSearchDelegate(),
     );
+
+    if (searchResult is AccountArguments) {
+      final hc = Get.find<HomeController>();
+
+      Get.toNamed(
+        router_constants.homeAccountRouteName,
+        id: hc.nestedKey,
+        arguments: searchResult,
+      );
+    } else if (searchResult is WishInfoArguments) {
+      await Get.toNamed(
+        WishInfoView.routeName,
+        arguments: searchResult,
+      );
+    }
   }
 }

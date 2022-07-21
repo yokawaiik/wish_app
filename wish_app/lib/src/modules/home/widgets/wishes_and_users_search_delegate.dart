@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:wish_app/src/modules/global/models/light_user.dart';
 import 'package:wish_app/src/modules/global/models/light_wish.dart';
@@ -30,30 +29,22 @@ class WishesAndUsersSearchDelegate extends SearchDelegate {
     super.showResults(context);
   }
 
-  // ? info: build when query is empty
-  Widget _buildEmptyResults(BuildContext context) {
-    return const Center(
-      child: Text("Your query is empty..."),
-    );
-  }
-
-  // ? info: build when user opened search
-  Widget _buildEmptySuggestions(BuildContext context) {
-    return const Center(
-      child: Text("You dont have any suggestions..."),
-    );
-  }
-
   @override
   List<Widget>? buildActions(BuildContext context) {
-    // TODO: implement buildActions
     return <Widget>[
-      IconButton(
-        icon: const Icon(Icons.close),
-        onPressed: () {
-          query = "";
-        },
-      ),
+      query.isEmpty
+          ? IconButton(
+              icon: const Icon(Icons.clear),
+              onPressed: () {
+                close(context, null);
+              },
+            )
+          : IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                query = "";
+              },
+            ),
     ];
   }
 
@@ -70,7 +61,9 @@ class WishesAndUsersSearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     if (query.isEmpty) {
-      return _buildEmptyResults(context);
+      return Center(
+        child: Text("hm_wausd_br_query_empty_center_text".tr),
+      );
     }
 
     return FutureBuilder(
@@ -82,13 +75,19 @@ class WishesAndUsersSearchDelegate extends SearchDelegate {
             );
           }
           if (snapshot.hasError) {
-            return const Center(
-              child: Text("Something went wrong..."),
+            return Center(
+              child: Text("hm_wausd_error_center_text".tr),
             );
           }
 
           final searchUserList = _waus.searchUserList;
           final searchWishList = _waus.searchWishList;
+
+          if (_waus.isListsEmpty) {
+            return Center(
+              child: Text("hm_wausd_br_list_empty_center_text".tr),
+            );
+          }
 
           return SingleChildScrollView(
             child: Column(
@@ -97,20 +96,26 @@ class WishesAndUsersSearchDelegate extends SearchDelegate {
                   height: global_constants.defaultHeight,
                 ),
                 if (searchUserList.isNotEmpty) ...[
-                  const Center(
-                    child: Text("Users"),
+                  Center(
+                    child: Text("hm_wausd_result_category_users".tr),
                   ),
-                  _userListViewBuilder(searchUserList, slidableEnabled: false),
+                  _userListViewBuilder(
+                    searchUserList,
+                    slidableEnabled: false,
+                  ),
+                  const Divider(),
                 ],
                 if (searchWishList.isNotEmpty) ...[
-                  const Divider(),
-                  const Center(
-                    child: Text("Wishes"),
+                  Center(
+                    child: Text("hm_wausd_result_category_wishes".tr),
                   ),
                   const SizedBox(
                     height: global_constants.defaultHeight,
                   ),
-                  _wishListViewBuilder(searchWishList, slidableEnabled: false),
+                  _wishListViewBuilder(
+                    searchWishList,
+                    slidableEnabled: false,
+                  ),
                 ],
               ],
             ),
@@ -121,6 +126,7 @@ class WishesAndUsersSearchDelegate extends SearchDelegate {
   ListView _wishListViewBuilder(
     List<LightWish> searchWishList, {
     bool slidableEnabled = true,
+    void Function(BuildContext, int id)? slidableRemoveMethod,
   }) {
     final colorScheme = Get.theme.colorScheme;
 
@@ -131,16 +137,15 @@ class WishesAndUsersSearchDelegate extends SearchDelegate {
       itemBuilder: (context, index) {
         final wish = searchWishList[index];
 
-        // TODO: extract to widget
-        // // TODO: onTap with adding to last List
-        // // TODO: dismissible - https://pub.dev/packages/flutter_slidable
-
         return SearchListTile(
           enabled: slidableEnabled,
           key: ValueKey(wish.id),
           onTap: () => _tapOnSearchWish(wish.id),
-          slideActionOnPressedDelete: (_) =>
-              _removeFromLastSearchWishList(wish.id),
+          slideActionOnPressedDelete: (context) {
+            if (slidableRemoveMethod != null) {
+              slidableRemoveMethod(context, wish.id);
+            }
+          },
           leading: AccountUserAvatar(
             defaultColor: colorScheme.background,
             userColor: wish.userColor == null
@@ -165,6 +170,7 @@ class WishesAndUsersSearchDelegate extends SearchDelegate {
   ListView _userListViewBuilder(
     List<LightUser> searchUserList, {
     bool slidableEnabled = true,
+    void Function(BuildContext, String id)? slidableRemoveMethod,
   }) {
     final colorScheme = Get.theme.colorScheme;
 
@@ -179,8 +185,11 @@ class WishesAndUsersSearchDelegate extends SearchDelegate {
           enabled: slidableEnabled,
           key: ValueKey(user.id),
           onTap: () => _tapOnSearchUser(user.id),
-          slideActionOnPressedDelete: (_) =>
-              _removeFromLastSearchUserList(user.id),
+          slideActionOnPressedDelete: (context) {
+            if (slidableRemoveMethod != null) {
+              slidableRemoveMethod(context, user.id);
+            }
+          },
           leading: AccountUserAvatar(
             defaultColor: colorScheme.background,
             userColor: user.userColor == null
@@ -202,182 +211,98 @@ class WishesAndUsersSearchDelegate extends SearchDelegate {
     );
   }
 
-  // @override
-  // Widget buildSuggestions(BuildContext context) {
-  //   return FutureBuilder(
-  //       future: _waus.setSuggestions(),
-  //       builder: (context, snapshot) {
-  //         if (snapshot.connectionState == ConnectionState.waiting) {
-  //           return const Center(
-  //             child: CircularProgressIndicator(),
-  //           );
-  //         }
-  //         if (snapshot.hasError) {
-  //           return const Center(
-  //             child: Text("Something went wrong..."),
-  //           );
-  //         }
-
-  //         final lastSearchUserList = _waus.suggestionsSearchUserList;
-  //         final lastSearchWishList = _waus.suggestionsSearchWishList;
-
-  //         print("buildSuggestions - lastSearchUserList : $lastSearchUserList");
-  //         print("buildSuggestions - lastSearchWishList : $lastSearchWishList");
-  //         if (_waus.isLastListsEmpty) {
-  //           _buildEmptyResults(context);
-  //         }
-
-  //         return SingleChildScrollView(
-  //           child: Column(
-  //             children: [
-  //               const SizedBox(
-  //                 height: global_constants.defaultHeight,
-  //               ),
-  //               if (lastSearchWishList.isNotEmpty) ...[
-  //                 const Center(
-  //                   child: Text("Users"),
-  //                 ),
-  //                 _userListViewBuilder(lastSearchUserList),
-  //               ],
-  //               if (lastSearchWishList.isNotEmpty) ...[
-  //                 const Divider(),
-  //                 const Center(
-  //                   child: Text("Wishes"),
-  //                 ),
-  //                 const SizedBox(
-  //                   height: global_constants.defaultHeight,
-  //                 ),
-  //                 _wishListViewBuilder(lastSearchWishList),
-  //               ],
-  //             ],
-  //           ),
-  //         );
-  //       });
-  // }
   @override
   Widget buildSuggestions(BuildContext context) {
-    // return GetBuilder<WishesAndUsersSearchController>(
-    //     // future: _waus.setSuggestions(
-    //     builder: (controller) {
-    //   if (controller.isSuggestionsLoad.value) {
-    //     return const Center(
-    //       child: CircularProgressIndicator(),
-    //     );
-    //   }
-    //   // if (controller) {
-    //   //   return const Center(
-    //   //     child: Text("Something went wrong..."),
-    //   //   );
-    //   // }
+    return FutureBuilder(
+        future: _waus.setSuggestions(),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasError) {
+            return Center(
+              child: Text("hm_wausd_error_center_text".tr),
+            );
+          }
 
-    //   // final lastSearchUserList = controller.suggestionsSearchUserList;
-    //   // final lastSearchWishList = controller.suggestionsSearchWishList;
-    //   final lastSearchUserList = controller.suggestionsUserList;
-    //   final lastSearchWishList = controller.suggestionsWishList;
+          final lastSearchUserList = _waus.suggestionsSearchUserList;
+          final lastSearchWishList = _waus.suggestionsSearchWishList;
 
-    //   print("buildSuggestions - lastSearchUserList : $lastSearchUserList");
-    //   print("buildSuggestions - lastSearchWishList : $lastSearchWishList");
-    //   if (controller.isLastListsEmpty) {
-    //     _buildEmptyResults(context);
-    //   }
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            if (lastSearchUserList.isEmpty && lastSearchWishList.isEmpty) {
+              return Center(
+                child: Text("hm_wausd_bs_suggestions_lists_empty".tr),
+              );
+            }
 
-    //   return SingleChildScrollView(
-    //     child: Column(
-    //       children: [
-    //         const SizedBox(
-    //           height: global_constants.defaultHeight,
-    //         ),
-    //         if (lastSearchWishList.isNotEmpty) ...[
-    //           const Center(
-    //             child: Text("Users"),
-    //           ),
-    //           _userListViewBuilder(lastSearchUserList),
-    //         ],
-    //         if (lastSearchWishList.isNotEmpty) ...[
-    //           const Divider(),
-    //           const Center(
-    //             child: Text("Wishes"),
-    //           ),
-    //           const SizedBox(
-    //             height: global_constants.defaultHeight,
-    //           ),
-    //           _wishListViewBuilder(lastSearchWishList),
-    //         ],
-    //       ],
-    //     ),
-    //   );
-    // });
-
-    _waus.setSuggestions();
-
-    return Obx(() {
-      if (_waus.isSuggestionsLoad.value) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-
-      // if (controller) {
-      //   return const Center(
-      //     child: Text("Something went wrong..."),
-      //   );
-      // }
-
-      final lastSearchUserList = _waus.suggestionsSearchUserList;
-      final lastSearchWishList = _waus.suggestionsSearchWishList;
-      // final lastSearchUserList = _waus.suggestionsUserList;
-      // final lastSearchWishList = _waus.suggestionsWishList;
-
-      print("buildSuggestions - lastSearchUserList : $lastSearchUserList");
-      print("buildSuggestions - lastSearchWishList : $lastSearchWishList");
-      if (_waus.isLastListsEmpty) {
-        _buildEmptySuggestions(context);
-      }
-
-      return SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: global_constants.defaultHeight,
-            ),
-            if (lastSearchWishList.isNotEmpty) ...[
-              const Center(
-                child: Text("Users"),
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: global_constants.defaultHeight,
+                  ),
+                  if (lastSearchUserList.isNotEmpty) ...[
+                    Center(
+                      child: Text("hm_wausd_result_category_users".tr),
+                    ),
+                    _userListViewBuilder(
+                      lastSearchUserList,
+                      slidableRemoveMethod: (_, id) {
+                        setState(
+                          () {
+                            _removeFromLastSearchUserList(id);
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                  if (lastSearchUserList.isNotEmpty &&
+                      lastSearchWishList.isNotEmpty) ...[
+                    const Divider(),
+                  ],
+                  if (lastSearchWishList.isNotEmpty) ...[
+                    Center(
+                      child: Text("hm_wausd_result_category_wishes".tr),
+                    ),
+                    const SizedBox(
+                      height: global_constants.defaultHeight,
+                    ),
+                    _wishListViewBuilder(
+                      lastSearchWishList,
+                      slidableRemoveMethod: (_, id) {
+                        setState(
+                          () {
+                            _removeFromLastSearchWishList(id);
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ],
               ),
-              _userListViewBuilder(lastSearchUserList),
-            ],
-            if (lastSearchWishList.isNotEmpty) ...[
-              const Divider(),
-              const Center(
-                child: Text("Wishes"),
-              ),
-              const SizedBox(
-                height: global_constants.defaultHeight,
-              ),
-              _wishListViewBuilder(lastSearchWishList),
-            ],
-          ],
-        ),
-      );
-    });
+            );
+          });
+        });
   }
 
   void _tapOnSearchWish(int id) {
-    _waus.tapOnSearchWish(id);
-    close(Get.context!, null);
+    final wishInfoArguments = _waus.tapOnSearchWish(id);
+    close(Get.context!, wishInfoArguments);
   }
 
-  void _removeFromLastSearchWishList(int id) {
+  void _removeFromLastSearchWishList(int id) async {
     _waus.removeFromSuggestionsSearchWishList(id);
-    // TODO: BUG - NOT UPDATING UI
   }
 
-  _tapOnSearchUser(String id) {
-    _waus.tapOnSearchUser(id);
+  void _tapOnSearchUser(String id) async {
+    final accountArguments = _waus.tapOnSearchUser(id);
+    close(Get.context!, accountArguments);
   }
 
-  _removeFromLastSearchUserList(String id) {
+  void _removeFromLastSearchUserList(String id) async {
     _waus.removeFromSuggestionsSearchUserList(id);
-    // TODO: BUG - NOT UPDATING UI
   }
 }

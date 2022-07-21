@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+import '../constants/database_constants.dart' as database_constants;
 
 part 'user_collection.g.dart';
 
@@ -6,7 +7,11 @@ part 'user_collection.g.dart';
 class UserCollection {
   final Id key = Isar.autoIncrement;
 
-  @Index(name: "id", type: IndexType.value, unique: true)
+  @Index(
+    name: database_constants.idIndexName,
+    type: IndexType.value,
+    unique: true,
+  )
   late final String id;
   late String login;
   late String? imageUrl;

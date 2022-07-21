@@ -5,7 +5,9 @@ import 'package:wish_app/src/modules/home/database/collections/wish_collection.d
 
 import '../../global/models/light_user.dart';
 
-import '../constants/home_constants.dart' as home_constants;
+import './constants/database_constants.dart' as database_constants;
+
+const String suggestionsDatabase = "SuggestionsDatabase";
 
 class SuggestionsStorageHelper {
   // Make a singleton class
@@ -31,12 +33,11 @@ class SuggestionsStorageHelper {
         WishCollectionSchema,
         UserCollectionSchema,
       ],
-      name: home_constants.suggestionsDatabase,
+      name: database_constants.suggestionsDatabase,
     );
     return isar;
   }
 
-// // TODO: getUserListSuggestion
   Future<List<LightUser>> getUserList() async {
     final isar = await _database;
 
@@ -54,7 +55,6 @@ class SuggestionsStorageHelper {
     return gotTheUserList;
   }
 
-// // TODO: addUserToSuggestion
   Future<void> addUser(LightUser lightUser) async {
     final isar = await _database;
 
@@ -70,17 +70,15 @@ class SuggestionsStorageHelper {
     });
   }
 
-// // TODO: removeUser
   Future<void> removeUser(String id) async {
     final isar = await _database;
 
     await isar.writeTxn(() async {
-      // await isar.userCollections.where().filter().idEqualTo(id).deleteFirst();
-      await isar.userCollections.deleteByIndex("id", [id]);
+      await isar.userCollections
+          .deleteByIndex(database_constants.idIndexName, [id]);
     });
   }
 
-// // TODO: getUserListSuggestion
   Future<List<LightWish>> getWishList() async {
     final isar = await _database;
 
@@ -98,7 +96,6 @@ class SuggestionsStorageHelper {
     return gotTheWishList;
   }
 
-// // TODO: addWishToSuggestion
   Future<void> addWish(LightWish lightWish) async {
     final isar = await _database;
 
@@ -114,13 +111,12 @@ class SuggestionsStorageHelper {
     });
   }
 
-// // TODO: removeWish
   Future<void> removeWish(int id) async {
     final isar = await _database;
 
     await isar.writeTxn(() async {
-      // await isar.userCollections.where().filter().idEqualTo(id).deleteFirst();
-      await isar.wishCollections.deleteByIndex("id", [id]);
+      await isar.wishCollections
+          .deleteByIndex(database_constants.idIndexName, [id]);
     });
   }
 }
