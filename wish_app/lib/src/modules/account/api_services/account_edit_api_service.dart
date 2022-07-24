@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/modules/account/models/account_edit_user.dart';
@@ -19,11 +20,6 @@ class AccountEditApiService {
       );
 
       if (response.error != null) {
-        // throw SupabaseException(
-        //   "Error",
-        //   "Error when update password.",
-        //   KindOfException.auth,
-        // );
         throw SupabaseException(
           "error_title".tr,
           "account_aeas_es_error_updating_password".tr,
@@ -31,11 +27,15 @@ class AccountEditApiService {
         );
       }
     } on SupabaseException catch (e) {
-      print(
-          'AccountEditApiService - updatePassword - SupabaseException- e : $e');
+      if (kDebugMode) {
+        print(
+            'AccountEditApiService - updatePassword - SupabaseException- e : $e');
+      }
       rethrow;
     } catch (e) {
-      print('AccountEditApiService - updatePassword - e : $e');
+      if (kDebugMode) {
+        print('AccountEditApiService - updatePassword - e : $e');
+      }
       rethrow;
     }
   }
@@ -56,19 +56,21 @@ class AccountEditApiService {
         );
       }
     } on SupabaseException catch (e) {
-      print(
-          'AccountEditApiService - updateLogin - SupabaseException- e : ${e}');
+      if (kDebugMode) {
+        print(
+            'AccountEditApiService - updateLogin - SupabaseException- e : $e');
+      }
       rethrow;
     } catch (e) {
-      print('AccountEditApiService - updateLogin - e : $e');
+      if (kDebugMode) {
+        print('AccountEditApiService - updateLogin - e : $e');
+      }
       rethrow;
     }
   }
 
   static Future<bool?> checkIfLoginExists(String newLogin) async {
     try {
-      print(newLogin);
-
       final params = {
         "in_login": newLogin,
         "in_email": null,
@@ -78,11 +80,15 @@ class AccountEditApiService {
 
       return response['result_login'] as bool;
     } on SupabaseException catch (e) {
-      print(
-          'AccountEditApiService - updateLogin - SupabaseException- e : ${e}');
+      if (kDebugMode) {
+        print(
+            'AccountEditApiService - updateLogin - SupabaseException- e : $e');
+      }
       rethrow;
     } catch (e) {
-      print('AccountEditApiService - updateLogin - e : $e');
+      if (kDebugMode) {
+        print('AccountEditApiService - updateLogin - e : $e');
+      }
       rethrow;
     }
   }
@@ -103,11 +109,15 @@ class AccountEditApiService {
         );
       }
     } on SupabaseException catch (e) {
-      print(
-          'AccountEditApiService - updateUserInfo - SupabaseException- e : $e');
+      if (kDebugMode) {
+        print(
+            'AccountEditApiService - updateUserInfo - SupabaseException- e : $e');
+      }
       rethrow;
     } catch (e) {
-      print('AccountEditApiService - updateUserInfo - e : $e');
+      if (kDebugMode) {
+        print('AccountEditApiService - updateUserInfo - e : $e');
+      }
       rethrow;
     }
   }
@@ -141,11 +151,6 @@ class AccountEditApiService {
           .execute();
 
       if (response.hasError) {
-        // throw SupabaseException(
-        //   "Error",
-        //   "Error when update user info.",
-        //   KindOfException.auth,
-        // );
         throw SupabaseException(
           "error_title".tr,
           "account_aeas_es_error_updating_user_avatar".tr,
@@ -154,11 +159,15 @@ class AccountEditApiService {
       }
       return imageUrl;
     } on SupabaseException catch (e) {
-      print(
-          'AccountEditApiService - updateUserInfo - SupabaseException- e : $e');
+      if (kDebugMode) {
+        print(
+            'AccountEditApiService - updateUserInfo - SupabaseException- e : $e');
+      }
       rethrow;
     } catch (e) {
-      print('AccountEditApiService - updateUserInfo - e : $e');
+      if (kDebugMode) {
+        print('AccountEditApiService - updateUserInfo - e : $e');
+      }
       rethrow;
     }
   }

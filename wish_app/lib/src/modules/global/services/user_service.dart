@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -79,11 +80,15 @@ class UserService extends GetxService {
       }
       _startTimer();
     } on SupabaseException catch (e) {
-      print('UserService - _recoverSession - SupabaseException - e : $e');
+      if (kDebugMode) {
+        print('UserService - _recoverSession - SupabaseException - e : $e');
+      }
 
       await _destroySession();
     } catch (e) {
-      print('UserService - _recoverSession - e : $e');
+      if (kDebugMode) {
+        print('UserService - _recoverSession - e : $e');
+      }
       await _destroySession();
     } finally {
       await _updateApp();
