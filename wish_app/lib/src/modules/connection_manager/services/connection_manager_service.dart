@@ -13,12 +13,14 @@ class ConnectionManagerService extends GetxController {
 
   late StreamSubscription _streamSubscription;
 
+  Future<ConnectionManagerService> init() async => this;
+
   @override
-  void onInit() {
-    super.onInit();
-    getConnectivityType();
+  void onInit() async {
+    await getConnectivityType();
     _streamSubscription =
         _connectivity.onConnectivityChanged.listen(_updateState);
+    super.onInit();
   }
 
   Future<void> getConnectivityType() async {
@@ -33,7 +35,7 @@ class ConnectionManagerService extends GetxController {
     return _updateState(connectivityResult);
   }
 
-  _updateState(ConnectivityResult result) {
+  void _updateState(ConnectivityResult result) {
     switch (result) {
       case ConnectivityResult.mobile:
         connectionType.value = 2;
@@ -52,6 +54,4 @@ class ConnectionManagerService extends GetxController {
   void onClose() {
     _streamSubscription.cancel();
   }
-
-  Future<ConnectionManagerService> init() async => this;
 }

@@ -79,4 +79,5 @@ final unknownRoute = GetPage(
   binding: UnknownBindings(),
 );
 
-const initialRoute = NavigatorView.routeName;
+// const initialRoute = NavigatorView.routeName;
+const initialRoute = SplashView.routeName;
