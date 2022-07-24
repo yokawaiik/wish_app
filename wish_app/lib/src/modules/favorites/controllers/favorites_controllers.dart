@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/modules/favorites/api_services/favorites_api_service.dart';
 import 'package:wish_app/src/modules/favorites/views/favorites_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
+import 'package:wish_app/src/modules/home/controllers/home_main_controller.dart';
 import 'package:wish_app/src/modules/navigator/controllers/navigator_controller.dart';
 import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
@@ -36,9 +38,6 @@ class FavoritesController extends GetxController {
   void onInit() async {
     favoriteWishGridController = ScrollController();
     favoriteWishGridController.addListener(favoritesWishListScrollListener);
-    // ? info: socket listeners
-    FavoritesApiService.addFavorite(addFavoriteHandler, _us.currentUser!.id);
-    FavoritesApiService.deleteFavorite(deleteFavoriteHandler);
 
     await initLoading();
     super.onInit();
@@ -81,6 +80,7 @@ class FavoritesController extends GetxController {
   }
 
   void deleteFavoriteHandler(int deletedWishId) {
+    final _hmc = Get.find<HomeMainController>();
     bool _findWish(Wish wish) => wish.id == deletedWishId;
 
     // ? info: if favoritesWishList doesn't have exists row in cloud database
@@ -89,6 +89,9 @@ class FavoritesController extends GetxController {
       _offset -= 1;
       favoritesWishList.refresh();
     }
+
+    _hmc.toggleFavoriteIfExists(deletedWishId);
+
     countOfFavorites.value -= 1;
     countOfFavorites.refresh();
   }
@@ -110,7 +113,6 @@ class FavoritesController extends GetxController {
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      // Get.snackbar("Error", "Unknown error...");
       Get.snackbar("error_title".tr, "error_unknown".tr);
     } finally {
       isWishListLoad = false;
@@ -148,6 +150,8 @@ class FavoritesController extends GetxController {
     try {
       // todo, toggleFavorite: maybe add load animation while element deleting
       await FavoritesApiService.toggleFavorite(id, _us.currentUser!.id);
+
+      deleteFavoriteHandler(id);
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {

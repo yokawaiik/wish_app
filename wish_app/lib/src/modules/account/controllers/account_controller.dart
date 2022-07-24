@@ -4,12 +4,14 @@ import 'package:wish_app/src/modules/account/api_services/account_api_service.da
 import 'package:wish_app/src/modules/account/models/account_arguments.dart';
 import 'package:wish_app/src/modules/account/views/account_edit_view.dart';
 import 'package:wish_app/src/modules/auth/views/auth_view.dart';
+import 'package:wish_app/src/modules/favorites/controllers/favorites_controllers.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/navigator/controllers/navigator_controller.dart';
 import 'package:wish_app/src/modules/settings/views/setting_view.dart';
 import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
 import 'package:wish_app/src/modules/wish/views/add_wish_view.dart';
 import 'package:wish_app/src/modules/wish/views/wish_info_view.dart';
+import '../../favorites/api_services/favorites_api_service.dart';
 import '../../global/models/user_account.dart';
 import '../../global/services/user_service.dart';
 import "../../global/utils/router_utils.dart" as router_utils;
@@ -22,7 +24,7 @@ import '../../home/constants/router_constants.dart' as home_router_constants;
 import '../views/account_view.dart';
 
 class AccountController extends GetxController {
-  final _userService = Get.find<UserService>();
+  final _us = Get.find<UserService>();
   final _navigatorController = Get.find<NavigatorController>();
   final _homeController = Get.find<HomeController>();
 
@@ -37,7 +39,7 @@ class AccountController extends GetxController {
   final _limit = account_constants.itemCountLimit;
   late final ScrollController wishGridController;
 
-  RxBool get isUserAuthenticated => _userService.isUserAuthenticated;
+  RxBool get isUserAuthenticated => _us.isUserAuthenticated;
   RxBool get isCurrentUser => RxBool(userAccount.value?.isCurrentUser ?? false);
 
   bool isWishListLoad = false;
@@ -83,39 +85,32 @@ class AccountController extends GetxController {
   }
 
   Future<void> getUser() async {
-    // print("AccountController - getUser()");
     try {
-      // print('AccountController - initLoading - _args : ${_args}');
-
       // ? info: an unknown user visits someone's account
       if (_args != null && _args!.tag != null) {
         final gotTheUser = await AccountApiService.getUser(
           _args!.tag!,
-          _userService.currentUser?.id,
+          _us.currentUser?.id,
         );
 
         userAccount.value = gotTheUser;
-      } else if (_userService.isUserAuthenticated.value) {
+      } else if (_us.isUserAuthenticated.value) {
         final gotTheUser = await AccountApiService.getUser(
-          _userService.currentUser!.id,
-          _userService.currentUser!.id,
+          _us.currentUser!.id,
+          _us.currentUser!.id,
         );
 
         userAccount.value = gotTheUser;
       } else {
-        // throw SupabaseException("Error", "It isn't an user.");
         throw SupabaseException(
             "error_title".tr, "account_ac_es_it_is_not_an_user".tr);
       }
     } on SupabaseException catch (e) {
-      // print("AccountController - getUser - SupabaseException - e: $e");
       await router_utils.toBackOrMainPage();
       Get.snackbar(e.title, e.msg);
       return;
     } catch (e) {
-      // print("AccountController - getUser - e: $e");
       await router_utils.toBackOrMainPage();
-      // Get.snackbar("Error", "Unknown error...");
       Get.snackbar("error_title".tr, "account_ac_e_unknown_error".tr);
       return;
     } finally {
@@ -130,7 +125,7 @@ class AccountController extends GetxController {
         userAccount.value!.id,
         limit: _limit,
         offset: _offset,
-        currentUserId: _userService.currentUser?.id,
+        currentUserId: _us.currentUser?.id,
       );
 
       if (gotThePartOfWishList == null || gotThePartOfWishList.isEmpty) return;
@@ -138,12 +133,9 @@ class AccountController extends GetxController {
       _offset += gotThePartOfWishList.length;
       wishList.refresh();
     } on SupabaseException catch (e) {
-      // print("AccountController - loadWishList() - SupabaseException - e : $e");
       Get.snackbar(e.title, e.msg);
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      // print("AccountController - loadWishList() - e : $e");
-      // Get.snackbar("Error", "Unknown error...");
       Get.snackbar("error_title".tr, 'account_ac_e_unknown_error'.tr);
     } finally {
       isWishListLoad = false;
@@ -151,7 +143,6 @@ class AccountController extends GetxController {
   }
 
   Future<void> refreshAccountData() async {
-    // print("refreshAccountData");
     isLoading.value = true;
     await getUser();
     _offset = 0;
@@ -208,7 +199,7 @@ class AccountController extends GetxController {
     try {
       isSubscribing.value = true;
       await AccountApiService.subscribe(
-        _userService.currentUser!.id,
+        _us.currentUser!.id,
         userAccount.value!.id,
       );
 
@@ -222,11 +213,9 @@ class AccountController extends GetxController {
             userAccount.value!.countOfsubscribers! - 1;
       }
     } on SupabaseException catch (e) {
-      // Get.snackbar("Error", "Error when subscribe.");
       Get.snackbar("error_title".tr, "account_ac_e_error_subscribing".tr);
       return;
     } catch (e) {
-      // Get.snackbar("Error", "Unknown error...");
       Get.snackbar("error_title".tr, "account_ac_e_unknown_error".tr);
       return;
     } finally {
@@ -277,9 +266,11 @@ class AccountController extends GetxController {
       }
 
       await AddWishApiService.deleteWish(id, imagePath);
+      final fc = Get.find<FavoritesController>();
+      fc.deleteFavoriteHandler(id);
 
       deleteWish(id);
-    } on SupabaseException catch (e) {
+    } on SupabaseException {
       Get.snackbar("error_title".tr, "account_ac_e_error_subscribing".tr);
     } catch (e) {
       Get.snackbar("error_title".tr, "account_ac_e_unknown_error".tr);
@@ -299,5 +290,21 @@ class AccountController extends GetxController {
 
   void goToSettings() {
     Get.toNamed(SettingView.routeName);
+  }
+
+  void addToFavorites(int id) async {
+    try {
+      final foundWish = wishList.firstWhere((wish) => wish.id == id);
+      await FavoritesApiService.toggleFavorite(id, _us.currentUser!.id);
+
+      foundWish.isFavorite = !foundWish.isFavorite;
+      wishList.refresh();
+      final fc = Get.find<FavoritesController>();
+      fc.addFavoriteHandler(foundWish);
+    } on SupabaseException catch (e) {
+      Get.snackbar(e.title, e.msg);
+    } catch (e) {
+      Get.snackbar("error_title".tr, "error_m_something_went_wrong".tr);
+    }
   }
 }

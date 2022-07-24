@@ -68,6 +68,7 @@ class EnLanguage {
         "account_view_elevated_button_text_has_subscribe_true": "Unfollow",
         "account_view_elevated_button_text_has_subscribe_false": "Follow",
         "account_view_popup_menu_item_title_delete_wish": "Delete wish",
+        "am_av_pmi_add_to_favorites": "Add to Favorites",
         "am_av_lt_settings": "Settings",
         // ? info: errors in account controller
         "account_ac_es_it_is_not_an_user": "It isn\"t an user.",
@@ -150,7 +151,8 @@ class EnLanguage {
         // ? info: home main view
         "fm_hmv_appbar_title": "Home",
         "fm_hmv_bs_lv_add_to_favorites": "Add to favorites",
-        "fm_hmv_bs_lv_delete": "Add to favorites",
+        "fm_hmv_bs_lv_delete_from_favorites": "Delete from favorites",
+        "fm_hmv_bs_lv_delete": "Delete",
         "fm_hmv_bs_lv_see_profile": "See profile",
         // // ? info: home controller
         // // ? info: home controller > error

@@ -47,25 +47,36 @@ class HomeMainView extends GetView<HomeMainController> {
               shrinkWrap: true,
               children: [
                 if (!wish.createdBy.isCurrentUser)
-                  ListTile(
-                    leading: const Icon(
-                      Icons.favorite,
-                      color: theme_wish_app.favoriteColor,
-                    ),
-                    title: Text("fm_hmv_bs_lv_add_to_favorites".tr),
-                    onTap: () => controller.addToFavorites(wish.id),
-                  ),
+                  if (!wish.isFavorite)
+                    ListTile(
+                      leading: const Icon(
+                        Icons.favorite,
+                        color: theme_wish_app.favoriteColor,
+                      ),
+                      title: Text("fm_hmv_bs_lv_add_to_favorites".tr),
+                      onTap: () => controller.addToFavorites(wish.id),
+                    )
+                  else
+                    ListTile(
+                      leading: const Icon(
+                        Icons.favorite_outline,
+                        color: theme_wish_app.unFavoriteColor,
+                      ),
+                      title: Text("fm_hmv_bs_lv_delete_from_favorites".tr),
+                      onTap: () => controller.deleteFromFavorites(wish.id),
+                    )
                 // ListTile(
                 //   leading: const Icon(Icons.send),
                 //   title: const Text("Share"),
                 //   onTap: controller.shareWish,
                 // ),
-                if (wish.createdBy.isCurrentUser)
+                else ...[
                   ListTile(
                     leading: const Icon(Icons.delete),
                     title: Text("fm_hmv_bs_lv_delete".tr),
                     onTap: () => controller.actionDeleteWish(wish),
-                  ),
+                  )
+                ],
                 ListTile(
                   leading: const Icon(Icons.person),
                   title: Text("fm_hmv_bs_lv_see_profile".tr),

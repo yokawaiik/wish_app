@@ -51,18 +51,15 @@ class AccountView extends GetView<AccountController> {
               ListView(
                 shrinkWrap: true,
                 children: [
-                  // if (userService.isUserAuthenticated.value) ...[
                   if (controller.isCurrentUser.value) ...[
                     ListTile(
                       leading: const Icon(Icons.create),
-                      // title: const Text("Create new wish"),
                       title: Text(
                           "account_view_list_tile_text_create_new_wish".tr),
                       onTap: controller.createWish,
                     ),
                     ListTile(
                       leading: const Icon(Icons.settings),
-                      // title: const Text("Create new wish"),
                       title: Text("am_av_lt_settings".tr),
                       onTap: controller.goToSettings,
                     ),
@@ -74,12 +71,9 @@ class AccountView extends GetView<AccountController> {
                       title: Text("account_view_list_tile_text_my_account".tr),
                       onTap: controller.goToMyAccountPage,
                     ),
-
                   ListTile(
                     leading: const Icon(Icons.person),
                     title: Text(userService.isUserAuthenticated.value
-                        // ? "Sign Out"
-                        // : "Log In"),
                         ? "account_view_list_tile_text_is_user_authenticated_true"
                             .tr
                         : "account_view_list_tile_text_is_user_authenticated_false"
@@ -111,7 +105,6 @@ class AccountView extends GetView<AccountController> {
         return Scaffold(
           appBar: AppBar(
             title: isLoading
-                // title: true
                 ? Skeleton(
                     height: defaultPadding,
                     width: 200,
@@ -149,7 +142,6 @@ class AccountView extends GetView<AccountController> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               isLoading
-                                  // true
                                   ? Skeleton.round(radius: 50)
                                   : AccountUserAvatar(
                                       key: ValueKey(userAccount!
@@ -168,7 +160,6 @@ class AccountView extends GetView<AccountController> {
                                 children: [
                                   ButtonCounterTitle(
                                     onPressed: null,
-                                    // title: "Wishes",
                                     title:
                                         "account_view_button_counter_title_wishes"
                                             .tr,
@@ -186,7 +177,6 @@ class AccountView extends GetView<AccountController> {
                                   ButtonCounterTitle(
                                     key: const Key("Followers"),
                                     onPressed: null,
-                                    // title: "Followers",
                                     title:
                                         "account_view_button_counter_title_followers"
                                             .tr,
@@ -205,7 +195,6 @@ class AccountView extends GetView<AccountController> {
                                   ButtonCounterTitle(
                                     key: const Key("Following"),
                                     onPressed: null,
-                                    // title: "Following",
                                     title:
                                         "account_view_button_counter_title_following"
                                             .tr,
@@ -228,7 +217,6 @@ class AccountView extends GetView<AccountController> {
                           child: Row(
                             children: [
                               if (isLoading)
-                                // if (true)
                                 Skeleton.elevatedButton()
                               else ...[
                                 if (controller.isUserAuthenticated.value) ...[
@@ -236,7 +224,6 @@ class AccountView extends GetView<AccountController> {
                                     ElevatedButton(
                                       onPressed: controller.editProfile,
                                       child: Text(
-                                        // "Edit profile",
                                         "account_view_elevated_button_text_edit_profile"
                                             .tr,
                                       ),
@@ -254,8 +241,6 @@ class AccountView extends GetView<AccountController> {
                                                   CircularProgressIndicator())
                                           : Text(
                                               userAccount.hasSubscribe
-                                                  // // ? "Unfollow"
-                                                  // : "Follow",
                                                   ? "account_view_elevated_button_text_has_subscribe_true"
                                                       .tr
                                                   : "account_view_elevated_button_text_has_subscribe_false"
@@ -283,7 +268,6 @@ class AccountView extends GetView<AccountController> {
                       countOfWishes: userAccount?.countOfWishes,
                       isLoading: isLoading,
                       wishList: wishList,
-                      // context: context,
                       controller: controller.wishGridController,
                       onTap: controller.goToWishInfo,
                     ),
@@ -376,13 +360,22 @@ class AccountView extends GetView<AccountController> {
         overlay.size.height - _tapPosition!.dy,
       ),
       items: [
-        PopupMenuItem(
-          onTap: () => controller.removeWish(id),
-          child: ListTile(
-            leading: const Icon(Icons.work),
-            title: Text('account_view_popup_menu_item_title_delete_wish'.tr),
-          ),
-        )
+        if (controller.isCurrentUser.value)
+          PopupMenuItem(
+            onTap: () => controller.removeWish(id),
+            child: ListTile(
+              leading: const Icon(Icons.work),
+              title: Text('account_view_popup_menu_item_title_delete_wish'.tr),
+            ),
+          )
+        else
+          PopupMenuItem(
+            onTap: () => controller.addToFavorites(id),
+            child: ListTile(
+              leading: const Icon(Icons.work),
+              title: Text('am_av_pmi_add_to_favorites'.tr),
+            ),
+          )
       ],
       context: context,
     );

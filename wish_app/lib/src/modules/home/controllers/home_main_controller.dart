@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/modules/account/models/account_arguments.dart';
 import 'package:wish_app/src/modules/favorites/api_services/favorites_api_service.dart';
+import 'package:wish_app/src/modules/favorites/controllers/favorites_controllers.dart';
 import 'package:wish_app/src/modules/home/api_services/home_api_service.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';
 import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
@@ -18,6 +19,7 @@ import '../constants/router_constants.dart' as router_constants;
 class HomeMainController extends GetxController {
   final _us = Get.find<UserService>();
   final _hc = Get.find<HomeController>();
+  final _fc = Get.find<FavoritesController>();
 
   late final ScrollController scrollController;
 
@@ -72,14 +74,14 @@ class HomeMainController extends GetxController {
       countWish = loadedCountOfWish;
     } catch (e) {
       Get.snackbar(
-          "Error loading a last wish list", "Something happened to server.");
+        "Error loading a last wish list",
+        "Something happened to server.",
+      );
     }
   }
 
   Future<void> loadWishList([int offset = 0, bool isRefresh = false]) async {
     try {
-      // print(offset);
-
       isLoading.value = true;
       List<Wish>? loadedWishList;
 
@@ -90,7 +92,6 @@ class HomeMainController extends GetxController {
           currentUserId: _us.currentUser!.id,
         );
       } else {
-        // for guest
         loadedWishList = await HomeService.loadWishList(
           limit: limit,
           offset: countLoadedWish,
@@ -106,10 +107,6 @@ class HomeMainController extends GetxController {
       homeWishList.addAll(loadedWishList);
       homeWishList.refresh();
     } catch (e) {
-      // Get.snackbar(
-      //   "Error loading a last wish list",
-      //   "Something happened to server.",
-      // );
       Get.snackbar("error_title".tr, "Error loading a last wish list".tr);
     } finally {
       isLoading.value = false;
@@ -130,8 +127,6 @@ class HomeMainController extends GetxController {
   }
 
   Future<void> onClickWishItem(int id) async {
-    final homeController = Get.find<HomeController>();
-
     await Get.toNamed(
       WishInfoView.routeName,
       arguments: WishInfoArguments(
@@ -146,17 +141,21 @@ class HomeMainController extends GetxController {
 
   void addToFavorites(int id) async {
     try {
+      Get.back(closeOverlays: true);
       final foundWish = homeWishList.firstWhere((wish) => wish.id == id);
 
       await FavoritesApiService.toggleFavorite(id, _us.currentUser!.id);
 
       foundWish.isFavorite = !foundWish.isFavorite;
       homeWishList.refresh();
+
+      _fc.addFavoriteHandler(foundWish);
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      // Get.snackbar("Unexpected error", "Something went wrong.");
       Get.snackbar("error_title".tr, "error_m_something_went_wrong".tr);
+    } finally {
+      Get.back(closeOverlays: true);
     }
   }
 
@@ -167,15 +166,10 @@ class HomeMainController extends GetxController {
 
   void actionDeleteWish(Wish wish) async {
     try {
-      Get.back(closeOverlays: true); // ? info: close modalBottomSheet
       isDeleting.value = true;
       await AddWishApiService.deleteWish(wish.id, wish.imagePath);
       deleteWish(wish.id);
     } catch (e) {
-      // Get.snackbar(
-      //   "Error loading a last wish list",
-      //   "Something happened to server.",
-      // );
       Get.snackbar(
         "error_title".tr,
         "error_m_something_went_wrong".tr,
@@ -183,6 +177,7 @@ class HomeMainController extends GetxController {
     } finally {
       isDeleting.value = false;
     }
+    Get.back(closeOverlays: true); // ? info: close modalBottomSheet
   }
 
   void seeProfile(Wish wish) async {
@@ -203,5 +198,32 @@ class HomeMainController extends GetxController {
 
   Wish getWishById(int id) {
     return homeWishList.firstWhere((wish) => wish.id == id);
+  }
+
+  void deleteFromFavorites(int id) async {
+    try {
+      final foundWish = homeWishList.firstWhere((wish) => wish.id == id);
+
+      await FavoritesApiService.toggleFavorite(id, _us.currentUser!.id);
+
+      foundWish.isFavorite = !foundWish.isFavorite;
+      homeWishList.refresh();
+      _fc.deleteFavoriteHandler(id);
+    } on SupabaseException catch (e) {
+      Get.snackbar(e.title, e.msg);
+    } catch (e) {
+      Get.snackbar("error_title".tr, "error_m_something_went_wrong".tr);
+    } finally {
+      Get.back(closeOverlays: true);
+    }
+  }
+
+  void toggleFavoriteIfExists(int deletedWishId) {
+    final foundWish =
+        homeWishList.indexWhere((wish) => wish.id == deletedWishId);
+    if (foundWish == -1) return;
+
+    homeWishList[foundWish].isFavorite != homeWishList[foundWish].isFavorite;
+    homeWishList.refresh();
   }
 }

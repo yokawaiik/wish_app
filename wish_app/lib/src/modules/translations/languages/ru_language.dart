@@ -70,6 +70,8 @@ class RuLanguage {
         "account_view_elevated_button_text_has_subscribe_true": "Отписаться",
         "account_view_elevated_button_text_has_subscribe_false": "Подписаться",
         "account_view_popup_menu_item_title_delete_wish": "Удалить желание",
+        "am_av_pmi_add_to_favorites": "Добавить в любимые",
+
         "am_av_lt_settings": "Настройки",
         // ? info: errors in account controller
         "account_ac_es_it_is_not_an_user": "Это не пользователь.",
@@ -156,7 +158,9 @@ class RuLanguage {
         // ? info: home main view
         "fm_hmv_appbar_title": "Дом",
         "fm_hmv_bs_lv_add_to_favorites": "Добавить в избранное",
-        "fm_hmv_bs_lv_delete": "Добавить в избранное",
+        "fm_hmv_bs_lv_delete_from_favorites": "Удалить из избранного",
+
+        "fm_hmv_bs_lv_delete": "Удалить",
         "fm_hmv_bs_lv_see_profile": "Просмотреть профиль",
         // // ? info: home controller
         // // ? info: home controller > error

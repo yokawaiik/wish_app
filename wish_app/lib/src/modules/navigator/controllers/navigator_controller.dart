@@ -27,7 +27,7 @@ class NavigatorController extends GetxController {
   @override
   void onInit() {
     views = [
-      const KeepAliveWrapper(child: FavoritesView()),
+      _createFavoriteView(),
       const KeepAliveWrapper(child: HomeView()),
       KeepAliveWrapper(child: _createAccountView()),
     ];
@@ -37,16 +37,23 @@ class NavigatorController extends GetxController {
     super.onInit();
   }
 
-  AccountView _createAccountView() {
+  Widget _createAccountView() {
     if (isUserAuthenticated.value) {
       accountArguments = AccountArguments(userService.currentUser!.id);
+      return AccountView(
+        tag: accountArguments.tag,
+      );
     } else {
-      accountArguments = AccountArguments();
+      return const SizedBox();
     }
+  }
 
-    return AccountView(
-      tag: accountArguments.tag,
-    );
+  Widget _createFavoriteView() {
+    if (isUserAuthenticated.value) {
+      return const KeepAliveWrapper(child: FavoritesView());
+    } else {
+      return const SizedBox();
+    }
   }
 
   Future<void> signOut() async {
@@ -65,10 +72,8 @@ class NavigatorController extends GetxController {
         onItemTapped(selectedIndex.value);
       }
 
-      updateAccountView();
+      updateNavigator(tag: tag);
     } catch (e) {
-      // print('NavigatorController - e : $e');
-      // Get.snackbar("Error", "Something went wrong.");
       Get.snackbar("error_title".tr, "error_m_something_went_wrong".tr);
     }
   }
@@ -86,17 +91,6 @@ class NavigatorController extends GetxController {
           Get.toNamed(AuthView.routeName);
           selectedIndex.value = 1;
         } else {
-          Get.put(
-            AccountController(),
-            tag: accountArguments.tag,
-            permanent: true,
-          );
-
-          Get.put(
-            FavoritesController(),
-            permanent: true,
-          );
-
           selectedIndex.value = value;
         }
         break;
@@ -115,7 +109,28 @@ class NavigatorController extends GetxController {
     return (await showExitPopup());
   }
 
-  void updateAccountView() {
-    views.last = KeepAliveWrapper(child: _createAccountView());
+  void updateNavigator({String? tag}) {
+    if (!userService.isUserAuthenticated.value) {
+      Get.put(
+        AccountController(),
+        tag: accountArguments.tag,
+        permanent: true,
+      );
+
+      Get.put(
+        FavoritesController(),
+        permanent: true,
+      );
+
+      views.last = KeepAliveWrapper(child: _createAccountView());
+
+      views.first = KeepAliveWrapper(child: _createFavoriteView());
+    } else {
+      Get.delete<AccountController>(tag: tag);
+      Get.delete<FavoritesController>();
+      views.last = const SizedBox();
+      views.first = const SizedBox();
+    }
+    selectedIndex.refresh();
   }
 }

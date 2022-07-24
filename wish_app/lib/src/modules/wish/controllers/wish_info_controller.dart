@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:wish_app/src/modules/account/controllers/account_controller.dart';
 import 'package:wish_app/src/modules/account/views/account_view.dart';
@@ -21,8 +22,6 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
   final hmc = Get.find<HomeMainController>();
   final _us = Get.find<UserService>();
 
-  // Wish? currentWish;
-
   var currentWish = Rxn<Wish>();
 
   late final WishInfoArguments _args;
@@ -30,7 +29,6 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
 
   @override
   void onInit() async {
-    // change(null, status: RxStatus.loading());
     getTheWish();
     super.onInit();
   }
@@ -83,18 +81,18 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
 
         case router_constants.homeAccountRouteName:
         case FavoritesView.routeName:
+        default:
           final theFoundWish = await AddWishApiService.getWish(
             _args.wishId,
             _us.currentUser!.id,
           );
           currentWish.value = theFoundWish;
           break;
-        default:
-          // throw 'It\'s need to get from server';
-          throw 'It\'s need to get from server';
       }
 
-      print('сurrentWish.value : ${currentWish.value}');
+      if (kDebugMode) {
+        print('сurrentWish.value : ${currentWish.value}');
+      }
 
       if (currentWish.value == null) {
         change(currentWish.value, status: RxStatus.error());
@@ -112,7 +110,9 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
     } on UnknownException catch (e) {
       Get.snackbar(e.title!, e.msg!);
     } catch (e) {
-      print("WishInfoController - getTheWish - e: $e");
+      if (kDebugMode) {
+        print("WishInfoController - getTheWish - e: $e");
+      }
 
       // Get.snackbar("Error", "Something went wrong.");
       Get.snackbar("error_title".tr, "error_something_went_wrong".tr);
@@ -166,9 +166,10 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
         hmc.deleteWish(theWish.id);
       }
     } catch (e) {
-      print("WishInfoController - deleteTheWish - e: $e");
-      // Get.offNamedUntil(NavigatorView.routeName, (route) => false);
-      // Get.snackbar("Error", "Error when delete the wish. Try later.");
+      if (kDebugMode) {
+        print("WishInfoController - deleteTheWish - e: $e");
+      }
+
       Get.snackbar('error_title'.tr, "error_when_delete_the_wish".tr);
     }
   }

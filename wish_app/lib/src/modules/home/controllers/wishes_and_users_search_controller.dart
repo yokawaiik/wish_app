@@ -97,7 +97,6 @@ class WishesAndUsersSearchController extends GetxController {
 
     return WishInfoArguments(
       wishId: id,
-      previousRouteName: HomeView.routeName,
     );
   }
 

@@ -49,7 +49,7 @@ class Skeleton extends StatelessWidget {
     this.width = double.infinity,
   }) : super(key: key) {
     _constructorType = _ConstructorType.hardCorners;
-    radius = _defaultRadius;
+    radius = null;
     this.color = ((color ?? _defaultColor) as Color).withOpacity(0.05);
   }
 
@@ -92,9 +92,11 @@ class Skeleton extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: color ?? _defaultColor,
-            borderRadius: BorderRadius.all(
-              Radius.circular(radius!),
-            ),
+            borderRadius: radius == null
+                ? null
+                : BorderRadius.all(
+                    Radius.circular(radius!),
+                  ),
           ),
         );
     }

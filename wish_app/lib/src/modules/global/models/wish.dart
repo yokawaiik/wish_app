@@ -58,7 +58,7 @@ class Wish {
       userColor: data["createdBy"]["userColor"],
       isCurrentUser: data["createdBy"]["id"] == currentUserId,
     );
-    this.isFavorite = isFavorite;
+    this.isFavorite = data["isFavorite"] ?? isFavorite;
   }
 
   Map<String, dynamic> toJson() {

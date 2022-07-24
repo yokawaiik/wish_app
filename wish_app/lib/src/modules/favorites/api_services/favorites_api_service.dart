@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -21,17 +22,20 @@ class FavoritesApiService {
           )
           .execute();
     } on SupabaseException catch (e) {
-      print(
-          "FavoritesApiService - toggleFavorite - SupabaseException - e : ${e.toString()}");
+      if (kDebugMode) {
+        print(
+            "FavoritesApiService - toggleFavorite - SupabaseException - e : ${e.toString()}");
+      }
       rethrow;
     } catch (e) {
-      print("FavoritesApiService - toggleFavorite - e : $e");
+      if (kDebugMode) {
+        print("FavoritesApiService - toggleFavorite - e : $e");
+      }
       rethrow;
     }
   }
 
   static Future<int?> getCountOfFavorites(String currentUserId) async {
-    // count_of_favorites
     try {
       final params = {
         "in_user_id": currentUserId,
@@ -46,8 +50,6 @@ class FavoritesApiService {
 
       if (addedFavoriteWish.hasError) {
         throw SupabaseException(
-          // "Exception",
-          // "Exception when find an added favorite wish.",
           "error_title".tr,
           "fm_fas_es_get_count_of_favorites".tr,
         );
@@ -55,102 +57,16 @@ class FavoritesApiService {
 
       return addedFavoriteWish.data;
     } on SupabaseException catch (e) {
-      print(
-          "FavoritesApiService - _deleteFavoriteWish - SupabaseException - e : ${e.toString()}");
-      return null;
-    } catch (e) {
-      print("FavoritesApiService - _getAddedFavoriteWish - e : $e");
-      return null;
-    }
-  }
-
-  static void addFavorite(
-    void Function(Wish) callback,
-    String currentUserId,
-  ) {
-    _supabase.client
-        .from('favorites:userId=eq.${_supabase.client.auth.currentUser!.id}')
-        .on(SupabaseEventTypes.insert, (payload) async {
-      final wishId = payload.newRecord!['wishId'];
-      final gotWish = await _getAddedFavoriteWish(wishId, currentUserId);
-
-      if (gotWish == null) return;
-
-      callback(gotWish);
-    }).subscribe();
-  }
-
-  static void deleteFavorite(void Function(int) callback) {
-    _supabase.client
-        .from('favorites:userId=eq.${_supabase.client.auth.currentUser!.id}')
-        .on(SupabaseEventTypes.delete, (payload) {
-      callback(payload.oldRecord!["wishId"]);
-    }).subscribe();
-  }
-
-  static Future<Wish?> _getAddedFavoriteWish(
-    int wishId,
-    String currentUserId,
-  ) async {
-    try {
-      final params = {
-        "in_wish_id": wishId,
-        "in_user_id": currentUserId,
-      };
-
-      final addedFavoriteWish = await _supabase.client
-          .rpc("get_added_favorite_wish", params: params)
-          .execute();
-
-      if (addedFavoriteWish.hasError) {
-        throw SupabaseException(
-          // "Exception",
-          // "Exception when find an added favorite wish.",
-          "error_title".tr,
-          "fm_fas_es_find_an_added_favorite".tr,
-        );
+      if (kDebugMode) {
+        print(
+            "FavoritesApiService - _deleteFavoriteWish - SupabaseException - e : ${e.toString()}");
       }
-
-      return Wish.fromJson(
-        addedFavoriteWish.data,
-        currentUserId,
-        isFavorite: true,
-      );
-    } on SupabaseException catch (e) {
-      print(
-          "FavoritesApiService - _deleteFavoriteWish - SupabaseException - e : ${e.toString()}");
       return null;
     } catch (e) {
-      print("FavoritesApiService - _getAddedFavoriteWish - e : $e");
-      return null;
-    }
-  }
-
-  static Future<bool> deleteFavoriteWish(int id) async {
-    try {
-      final deletedWish = await _supabase.client
-          .from("favorites")
-          .delete()
-          .eq("wishId", id)
-          .execute();
-      if (deletedWish.hasError) {
-        // throw SupabaseException(
-        //   "Exception",
-        //   "Exception when delete favorite wish.",
-        // );
-        throw SupabaseException(
-          "error_title".tr,
-          "fm_fas_es_delete_favorite".tr,
-        );
+      if (kDebugMode) {
+        print("FavoritesApiService - _getAddedFavoriteWish - e : $e");
       }
-      return true;
-    } on SupabaseException catch (e) {
-      print(
-          "FavoritesApiService - _deleteFavoriteWish - SupabaseException - e : ${e.toString()}");
-      return false;
-    } catch (e) {
-      print("FavoritesApiService - _deleteFavoriteWish - e : $e");
-      return false;
+      return null;
     }
   }
 
@@ -166,8 +82,6 @@ class FavoritesApiService {
         "in_offset": offset,
       };
 
-      print(params);
-
       final gotWishList = await _supabase.client
           .rpc(
             "select_favorite_wish_list",
@@ -176,7 +90,6 @@ class FavoritesApiService {
           .execute();
 
       if (gotWishList.hasError) {
-        // throw SupabaseException("Error", gotWishList.error!.message);
         throw SupabaseException("error_title".tr, gotWishList.error!.message);
       }
 
@@ -190,11 +103,15 @@ class FavoritesApiService {
 
       return theWishes;
     } on SupabaseException catch (e) {
-      print(
-          "FavoritesApiService - loadFavoriteWishList() - SupabaseException - e : $e");
+      if (kDebugMode) {
+        print(
+            "FavoritesApiService - loadFavoriteWishList() - SupabaseException - e : $e");
+      }
       rethrow;
     } catch (e) {
-      print("FavoritesApiService - loadFavoriteWishList() - e : $e");
+      if (kDebugMode) {
+        print("FavoritesApiService - loadFavoriteWishList() - e : $e");
+      }
 
       rethrow;
     }

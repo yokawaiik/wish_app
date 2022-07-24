@@ -159,20 +159,13 @@ class FavoritesView extends GetView<FavoritesController> {
               ListView(
                 shrinkWrap: true,
                 children: [
-                  // ListTile(
-                  //   leading: Icon(Icons.send),
-                  //   title: Text("Share"),
-                  //   onTap: controller.shareWish,
-                  // ),
                   ListTile(
                     leading: Icon(Icons.favorite),
-                    // title: Text("Remove from favorites"),
                     title: Text("fm_fv_lt_text_remove_from_favorites".tr),
                     onTap: () => controller.removeFromFavorite(wish.id),
                   ),
                   ListTile(
                     leading: Icon(Icons.person),
-                    // title: Text("See profile"),
                     title: Text("fm_fv_lt_text_see_profile".tr),
                     onTap: () => controller.seeProfile(wish),
                   ),
