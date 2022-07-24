@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:wish_app/src/modules/account/models/account_arguments.dart';
 import 'package:wish_app/src/modules/home/api_services/wishes_and_users_search_api_service.dart';
 import 'package:wish_app/src/modules/home/database/suggestions_storage_helper.dart';
-import 'package:wish_app/src/modules/home/views/home_view.dart';
 import 'package:wish_app/src/modules/wish/models/wish_info_arguments.dart';
 
 import '../../global/models/light_user.dart';

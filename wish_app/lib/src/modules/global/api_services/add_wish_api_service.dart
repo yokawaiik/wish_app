@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -19,7 +20,6 @@ class AddWishApiService {
           .execute();
 
       if (result.error != null) {
-        // throw SupabaseException("Error", result.error.toString());
         throw SupabaseException("error_title".tr, result.error.toString());
       }
 
@@ -49,12 +49,11 @@ class AddWishApiService {
 
       final wish = Wish.fromJson(addedWish, wishForm.createdBy);
 
-      // print(wish);
-
       return wish;
     } catch (e) {
-      print('AddWishService - addWish: ${e}');
-      // throw SupabaseException("Error", "Error when add new wish");
+      if (kDebugMode) {
+        print('AddWishService - addWish: $e');
+      }
       throw SupabaseException(
           "error_title".tr, "gm_awas_es_error_adding_wish".tr);
     }
@@ -68,7 +67,9 @@ class AddWishApiService {
           .eq("id", wishForm.id)
           .execute();
     } catch (e) {
-      print('AddWishService - _updateWish: ${e}');
+      if (kDebugMode) {
+        print('AddWishService - _updateWish: $e');
+      }
     }
   }
 
@@ -78,17 +79,10 @@ class AddWishApiService {
   ) async {
     try {
       if (wishForm.wasImageUpdate) {
-        // print(wishForm.imageUrl);
-        // print(wishForm.image!.path);
-
         final imagePath = generateWishImagePath(
           wishForm.imageUrl ?? wishForm.image!.path,
           wishForm.id.toString(),
         );
-
-        // print(imagePath);
-
-        // await removeImage(imagePath);
 
         final uploadedImageUrl = await uploadImage(
           imagePath,
@@ -105,15 +99,12 @@ class AddWishApiService {
           .single()
           .execute();
 
-      if (updatedTheWish.hasError)
-        // throw SupabaseException(
-        //   "Database error",
-        //   "Such the wish was deleted or another error.",
-        // );
+      if (updatedTheWish.hasError) {
         throw SupabaseException(
           "error_db_unknown_title".tr,
           "gm_awas_es_error_updating".tr,
         );
+      }
 
       getWish(wishForm.id!, currentUserId);
 
@@ -121,10 +112,14 @@ class AddWishApiService {
 
       return theWish;
     } on SupabaseException catch (e) {
-      print('AddWishService - updateWish - SupabaseException: ${e}');
+      if (kDebugMode) {
+        print('AddWishService - updateWish - SupabaseException: $e');
+      }
       rethrow;
     } catch (e) {
-      print('AddWishService - updateWish - e: ${e}');
+      if (kDebugMode) {
+        print('AddWishService - updateWish - e: $e');
+      }
       rethrow;
     }
   }
@@ -137,33 +132,33 @@ class AddWishApiService {
         await removeImage(imagePath);
       }
     } catch (e) {
-      print('AddWishService - deleteWish - e: ${e}');
+      if (kDebugMode) {
+        print('AddWishService - deleteWish - e: $e');
+      }
       rethrow;
     }
   }
 
   static Future<void> removeImage(String path) async {
     try {
-      print('removeImage - path : $path');
       final removedResponse =
           await _supabase.storage.from("wish.app.bucket").remove([path]);
 
       if (removedResponse.error != null) {
-        // throw SupabaseException(
-        //   "Error when removed image",
-        //   removedResponse.error.toString(),
-        // );
         throw SupabaseException(
           "error_db_unknown_title".tr,
           'gm_awas_es_error_removing_image'.tr,
         );
       }
-      print("removedResponse.data : ${removedResponse.data}");
     } on SupabaseException catch (e) {
-      print('AddWishService - removeImage - SupabaseException : ${e}');
+      if (kDebugMode) {
+        print('AddWishService - removeImage - SupabaseException : $e');
+      }
       rethrow;
     } catch (e) {
-      print('AddWishService - removeImage: ${e}');
+      if (kDebugMode) {
+        print('AddWishService - removeImage: $e');
+      }
       rethrow;
     }
   }
@@ -180,10 +175,6 @@ class AddWishApiService {
                 ),
               );
       if (uploadResponse.error != null) {
-        // throw SupabaseException(
-        //   "Error when upload image",
-        //   uploadResponse.error.toString(),
-        // );
         throw SupabaseException(
           "error_db_unknown_title".tr,
           "gm_awas_es_error_uploading_image".tr,
@@ -193,11 +184,15 @@ class AddWishApiService {
       final response =
           _supabase.storage.from("wish.app.bucket").getPublicUrl(path);
 
-      print("uploadImage - response: ${response.data}");
+      if (kDebugMode) {
+        print("uploadImage - response: ${response.data}");
+      }
 
       return response.data;
     } catch (e) {
-      print('AddWishService - uploadImage: ${e}');
+      if (kDebugMode) {
+        print('AddWishService - uploadImage: $e');
+      }
       rethrow;
     }
   }
@@ -213,14 +208,14 @@ class AddWishApiService {
 
       if (gotTheWish.data == null) return null;
 
-      // print('AddWishService - getWish - gotTheWish.data : ${gotTheWish.data}');
-
       final theWish =
           Wish.fromJson(gotTheWish.data as Map<String, dynamic>, currentUserId);
 
       return theWish;
     } catch (e) {
-      print('AddWishService - getWish: ${e}');
+      if (kDebugMode) {
+        print('AddWishService - getWish: $e');
+      }
       rethrow;
     }
   }

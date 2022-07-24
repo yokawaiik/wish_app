@@ -21,7 +21,6 @@ class AccountEditView extends GetView<AccountEditController> {
 
     return Scaffold(
       appBar: AppBar(
-        // title: const Text("Edit account info"),
         title: Text("account_edit_view_appbar_title".tr),
       ),
       body: SingleChildScrollView(
@@ -53,7 +52,6 @@ class AccountEditView extends GetView<AccountEditController> {
                             onPressed: isProfileImageUpdateLoad
                                 ? null
                                 : controller.changeProfilePhoto,
-                            // child: Text("Change profile photo"),
                             child: Text("account_edit_view_text_button".tr),
                           ),
                         ],
@@ -85,7 +83,6 @@ class AccountEditView extends GetView<AccountEditController> {
                         const SizedBox(
                           height: global_constants.defaultIndentFields,
                         ),
-
                         ElevatedButton(
                           onPressed:
                               (controller.validateInfoFields() == false ||
@@ -108,8 +105,6 @@ class AccountEditView extends GetView<AccountEditController> {
                                   ),
                                 ),
                         ),
-                        // ],
-                        // ),
                       ],
                     ),
                   ),

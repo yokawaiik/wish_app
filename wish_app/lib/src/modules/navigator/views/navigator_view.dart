@@ -41,15 +41,12 @@ class NavigatorView extends GetView<NavigatorController> {
                           },
                           itemBuilder: (ctx) {
                             return [
-                              // controller.userService.isAuthenticated
                               controller.isUserAuthenticated.value
                                   ? PopupMenuItem(
-                                      // child: Text("Sign Out"),
                                       child: Text("nm_nv_pmb_pmi_sign_out".tr),
                                       value: 0,
                                     )
                                   : PopupMenuItem(
-                                      // child: Text("Sign In"),
                                       child: Text("nm_nv_pmb_pmi_sign_in".tr),
                                       value: 1,
                                     ),

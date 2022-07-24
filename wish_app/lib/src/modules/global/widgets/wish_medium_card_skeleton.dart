@@ -5,14 +5,12 @@ import 'skeleton.dart';
 
 class WishMediumCardSkeleton extends StatelessWidget {
   final double imageHeight;
-  // final void Function()? toggleFavorite;
 
   bool hasActions;
 
   WishMediumCardSkeleton({
     Key? key,
     this.hasActions = false,
-    // this.toggleFavorite,
     this.imageHeight = 200,
   }) : super(key: key);
 
@@ -43,13 +41,13 @@ class WishMediumCardSkeleton extends StatelessWidget {
                   if (hasActions) ...[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const IconButton(
+                      children: const [
+                        IconButton(
                           onPressed: null,
                           icon: Icon(Icons.favorite),
                           iconSize: 36,
                         ),
-                        const IconButton(
+                        IconButton(
                           onPressed: null,
                           icon: Icon(Icons.more_horiz),
                           iconSize: 36,

@@ -38,7 +38,6 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
       final rawArgs = Get.arguments;
       // ? info: for web
       if (rawArgs == null) {
-        // throw UnknownException("Error", "It isn't correct path...");
         throw UnknownException(
             "error_title".tr, "error_it_is_not_correct_path".tr);
       } else if (rawArgs is WishInfoArguments) {
@@ -97,8 +96,8 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
       if (currentWish.value == null) {
         change(currentWish.value, status: RxStatus.error());
         throw SupabaseException(
-          // "Error", "The wish was deleted.", KindOfException.notFound);
-          "error_title".tr, "error_the_wish_was_delete".tr,
+          "error_title".tr,
+          "error_the_wish_was_delete".tr,
           KindOfException.notFound,
         );
       }
@@ -113,12 +112,8 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
       if (kDebugMode) {
         print("WishInfoController - getTheWish - e: $e");
       }
-
-      // Get.snackbar("Error", "Something went wrong.");
       Get.snackbar("error_title".tr, "error_something_went_wrong".tr);
       await Get.offNamedUntil(NavigatorView.routeName, (route) => false);
-
-      // Get.back();
     }
   }
 
@@ -181,15 +176,7 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
   void shareTheWish() {}
 
   // todo: seeProfile
-  void seeProfile() {
-    // if (Get.previousRoute == AccountView.routeName)
-    //   Get.toNamed(
-    //     AccountView.routeName,
-    //     arguments: {
-    //       "id": currentWish.value!.createdBy.id,
-    //     },
-    //   );
-  }
+  void seeProfile() {}
 
   void updateWish(Wish wish) {
     currentWish.value = wish;

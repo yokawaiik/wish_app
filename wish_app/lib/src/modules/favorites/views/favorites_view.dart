@@ -149,7 +149,7 @@ class FavoritesView extends GetView<FavoritesController> {
                 children: [
                   IconButton(
                     onPressed: () => Get.back(),
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.close,
                       size: 36,
                     ),
@@ -160,12 +160,12 @@ class FavoritesView extends GetView<FavoritesController> {
                 shrinkWrap: true,
                 children: [
                   ListTile(
-                    leading: Icon(Icons.favorite),
+                    leading: const Icon(Icons.favorite),
                     title: Text("fm_fv_lt_text_remove_from_favorites".tr),
                     onTap: () => controller.removeFromFavorite(wish.id),
                   ),
                   ListTile(
-                    leading: Icon(Icons.person),
+                    leading: const Icon(Icons.person),
                     title: Text("fm_fv_lt_text_see_profile".tr),
                     onTap: () => controller.seeProfile(wish),
                   ),

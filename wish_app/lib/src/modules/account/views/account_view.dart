@@ -249,7 +249,6 @@ class AccountView extends GetView<AccountController> {
                                     ),
                                 ]
                               ]
-                              // followButton
                             ],
                           ),
                         ),

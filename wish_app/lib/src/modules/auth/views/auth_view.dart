@@ -31,7 +31,7 @@ class AuthView extends GetView<AuthController> {
       ),
       body: Center(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: 20,
             vertical: 40,
           ),
@@ -42,23 +42,23 @@ class AuthView extends GetView<AuthController> {
               children: [
                 Text(
                   'auth_av_form_title'.tr,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 30.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Obx(
                   () => AnimatedSize(
-                    duration: Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 200),
                     child: Column(
                       children: controller.isSignIn.value
                           ? [
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               DefaultTextField(
                                 labelText: "auth_av_dtf_label_login".tr,
-                                autofillHints: [AutofillHints.nickname],
+                                autofillHints: const [AutofillHints.nickname],
                                 validator: auth_validators.checkLogin,
                                 prefixIcon: Icon(
                                   Icons.person,
@@ -73,12 +73,12 @@ class AuthView extends GetView<AuthController> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 DefaultTextField(
                   labelText: "auth_av_dtf_label_email".tr,
-                  autofillHints: [AutofillHints.email],
+                  autofillHints: const [AutofillHints.email],
                   prefixIcon: Icon(
                     Icons.alternate_email,
                     color: Get.theme.colorScheme.secondary,
@@ -88,13 +88,13 @@ class AuthView extends GetView<AuthController> {
                     controller.authUserForm.email = v;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 PasswordTextField(
                   labelText: "auth_av_ptf_label_password".tr,
                   validator: auth_validators.checkPassword,
-                  autofillHints: [AutofillHints.email],
+                  autofillHints: const [AutofillHints.email],
                   prefixIcon: Icon(
                     Icons.password,
                     color: Get.theme.colorScheme.secondary,
@@ -103,13 +103,13 @@ class AuthView extends GetView<AuthController> {
                     controller.authUserForm.password = v;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 Obx(
                   () => _buildRoundedButton(),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 TextButton(
@@ -147,7 +147,7 @@ class AuthView extends GetView<AuthController> {
                       : 'auth_av_rb_text_is_sign_in_false'.tr)
                   .toUpperCase(),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 0.5,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wish_app/src/modules/favorites/api_services/favorites_api_service.dart';
 import 'package:wish_app/src/modules/favorites/views/favorites_view.dart';
 import 'package:wish_app/src/modules/home/controllers/home_controller.dart';

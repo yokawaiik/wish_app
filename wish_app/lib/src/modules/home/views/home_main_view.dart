@@ -65,11 +65,6 @@ class HomeMainView extends GetView<HomeMainController> {
                       title: Text("fm_hmv_bs_lv_delete_from_favorites".tr),
                       onTap: () => controller.deleteFromFavorites(wish.id),
                     )
-                // ListTile(
-                //   leading: const Icon(Icons.send),
-                //   title: const Text("Share"),
-                //   onTap: controller.shareWish,
-                // ),
                 else ...[
                   ListTile(
                     leading: const Icon(Icons.delete),
@@ -97,7 +92,6 @@ class HomeMainView extends GetView<HomeMainController> {
       onWillPop: Get.find<HomeController>().onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          // title: Text("fm_hmv_appbar_title".tr),
           actions: [
             IconButton(
               onPressed: _showSearch,
@@ -161,9 +155,6 @@ class HomeMainView extends GetView<HomeMainController> {
   }
 
   Widget _gridBuild() {
-    // final mediaQuery = Get.mediaQuery;
-    // final size = mediaQuery.size;
-    // final gridItemHeight = 500.0;
     // todo, optional: implement grid to desktop
 
     return MasonryGridView.builder(

@@ -86,7 +86,6 @@ class AccountEditController extends GetxController {
         _ac.updateUserAccountInfoByFields(login: user.login!);
         Get.focusScope?.unfocus();
       } else {
-        // Get.snackbar("Warning", "This login is already taken.");
         Get.snackbar(
             "warning_title".tr, "account_aec_e_this_login_is_already_taken".tr);
       }
@@ -121,8 +120,6 @@ class AccountEditController extends GetxController {
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      print(e);
-      // Get.snackbar("Error", "Unknown error.");
       Get.snackbar("error_title".tr, "error_unknown".tr);
     } finally {
       isPasswordUpdateLoad.value = false;
@@ -158,7 +155,6 @@ class AccountEditController extends GetxController {
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      // Get.snackbar("Error", "Unknown error.");
       Get.snackbar("error_title".tr, "error_unknown".tr);
     } finally {
       isProfileImageUpdateLoad.value = false;

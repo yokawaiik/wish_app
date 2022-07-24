@@ -61,7 +61,7 @@ class WishLargeCard extends StatelessWidget {
                       ),
                 decoration: BoxDecoration(
                   color: colorScheme.primary,
-                  borderRadius: BorderRadius.all(
+                  borderRadius: const BorderRadius.all(
                     Radius.circular(global_constants.defaultRadius),
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../global/api_services/user_api_service.dart';
@@ -13,7 +14,6 @@ class AccountApiService {
       final theUser = await UserApiService.getUser(id, currentUserId);
 
       if (theUser == null) {
-        // throw SupabaseException("Error", "Such an user didn't find.");
         throw SupabaseException(
             "error_title".tr, "account_aas_es_such_an_user_did_not_find".tr);
       }
@@ -30,7 +30,9 @@ class AccountApiService {
 
       return theUser;
     } catch (e) {
-      print("AccountApiService - getUser() - e : $e");
+      if (kDebugMode) {
+        print("AccountApiService - getUser() - e : $e");
+      }
       rethrow;
     }
   }
@@ -48,8 +50,6 @@ class AccountApiService {
         "offset": offset,
       };
 
-      print(params);
-
       final gotTheWishes = await _supabase
           .rpc(
             "select_user_wish_list",
@@ -58,7 +58,6 @@ class AccountApiService {
           .execute();
 
       if (gotTheWishes.hasError) {
-        // throw SupabaseException("Error", gotTheWishes.error!.message);
         throw SupabaseException("error_title".tr, gotTheWishes.error!.message);
       }
 
@@ -67,16 +66,17 @@ class AccountApiService {
               Wish.fromJson(wish as Map<String, dynamic>, currentUserId))
           .toList();
 
-      // print(
-      //     'AccountApiService - getTheUserWishes() - theWishes : ${theWishes}');
-
       return theWishes;
     } on SupabaseException catch (e) {
-      print(
-          "AccountApiService - getTheUserWishes() - SupabaseException - e : $e");
+      if (kDebugMode) {
+        print(
+            "AccountApiService - getTheUserWishes() - SupabaseException - e : $e");
+      }
       rethrow;
     } catch (e) {
-      print("AccountApiService - getTheUserWishes() - e : $e");
+      if (kDebugMode) {
+        print("AccountApiService - getTheUserWishes() - e : $e");
+      }
 
       rethrow;
     }
@@ -87,11 +87,15 @@ class AccountApiService {
       final gotUserInfo = await UserApiService.getUserInfo(id);
       return gotUserInfo;
     } on SupabaseException catch (e) {
-      print("AccountApiService - getUserInfo() - SupabaseException - e : $e");
+      if (kDebugMode) {
+        print("AccountApiService - getUserInfo() - SupabaseException - e : $e");
+      }
 
       rethrow;
     } catch (e) {
-      print("AccountApiService - getUserInfo() - e : $e");
+      if (kDebugMode) {
+        print("AccountApiService - getUserInfo() - e : $e");
+      }
       rethrow;
     }
   }
@@ -114,19 +118,22 @@ class AccountApiService {
           .execute();
 
       if (gotSubscriptionInfo.hasError) {
-        // throw SupabaseException("error_title".tr, "Error when get subscription info.");
         throw SupabaseException("error_title".tr,
             "account_aas_es_error_when_get_subscription_info".tr);
       }
 
       return gotSubscriptionInfo.data as Map<String, dynamic>?;
     } on SupabaseException catch (e) {
-      print(
-          "AccountApiService - getSubscriptionInfo() - SupabaseException - e : $e");
+      if (kDebugMode) {
+        print(
+            "AccountApiService - getSubscriptionInfo() - SupabaseException - e : $e");
+      }
 
       rethrow;
     } catch (e) {
-      print("AccountApiService - getSubscriptionInfo() - e : $e");
+      if (kDebugMode) {
+        print("AccountApiService - getSubscriptionInfo() - e : $e");
+      }
       rethrow;
     }
   }
@@ -149,7 +156,6 @@ class AccountApiService {
           .execute();
 
       if (gotSubscriptionInfo.hasError) {
-        // throw SupabaseException("Error", gotSubscriptionInfo.error.toString());
         throw SupabaseException(
           "error_title".tr,
           gotSubscriptionInfo.error.toString(),
@@ -158,12 +164,16 @@ class AccountApiService {
 
       return gotSubscriptionInfo.data;
     } on SupabaseException catch (e) {
-      print(
-          "AccountApiService - getSubscriptionInfo() - SupabaseException - e : $e");
+      if (kDebugMode) {
+        print(
+            "AccountApiService - getSubscriptionInfo() - SupabaseException - e : $e");
+      }
 
       rethrow;
     } catch (e) {
-      print("AccountApiService - getSubscriptionInfo() - e : $e");
+      if (kDebugMode) {
+        print("AccountApiService - getSubscriptionInfo() - e : $e");
+      }
       rethrow;
     }
   }

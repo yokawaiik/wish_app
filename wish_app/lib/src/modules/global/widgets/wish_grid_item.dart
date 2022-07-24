@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:get/get.dart';
 
 import '../constants/global_constants.dart' as global_constants;
@@ -11,8 +10,6 @@ class WishGridItem extends StatelessWidget {
   final Wish wish;
 
   final Function()? onPressedMore;
-  // final Function() onPressedAddToFavorites;
-  // final Function() onPressedShare;
 
   final Function()? clickOnWish;
   final Function()? onLongPress;

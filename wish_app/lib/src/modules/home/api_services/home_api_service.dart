@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../global/models/supabase_exception.dart';
@@ -29,7 +30,6 @@ class HomeService {
           .execute();
 
       if (selectedQuery.hasError) {
-        // throw SupabaseException("Supabase Error", selectedQuery.error!.message);
         throw SupabaseException(
             "error_db_unknown_title".tr, selectedQuery.error!.message);
       }
@@ -41,11 +41,15 @@ class HomeService {
 
       return lastWishList;
     } on SupabaseException catch (e) {
-      print("HomeService - loadWishList - SupabaseException - ${e.toString()}");
+      if (kDebugMode) {
+        print(
+            "HomeService - loadWishList - SupabaseException - ${e.toString()}");
+      }
       rethrow;
     } catch (e) {
-      print("HomeService - loadWishList - SupabaseException - $e");
-      // throw UnknownException("Unknown error");
+      if (kDebugMode) {
+        print("HomeService - loadWishList - SupabaseException - $e");
+      }
       rethrow;
     }
   }
@@ -68,19 +72,23 @@ class HomeService {
           .execute();
 
       if (countWish.hasError) {
-        // throw SupabaseException("Supabase Error", countWish.error!.message);
         throw SupabaseException(
             "error_db_unknown_title".tr, countWish.error!.message);
       }
 
-      print(countWish.data);
+      if (kDebugMode) {
+        print(countWish.data);
+      }
       return countWish.data;
     } on SupabaseException catch (e) {
-      print("HomeService - loadCountOfWishInSubscriptions - ${e.toString()}");
+      if (kDebugMode) {
+        print("HomeService - loadCountOfWishInSubscriptions - ${e.toString()}");
+      }
       rethrow;
     } catch (e) {
-      print("HomeService - loadCountOfWishInSubscriptions - $e");
-      // throw UnknownException("Unknown error");
+      if (kDebugMode) {
+        print("HomeService - loadCountOfWishInSubscriptions - $e");
+      }
       rethrow;
     }
   }

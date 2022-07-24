@@ -10,6 +10,5 @@ class SupabaseException implements Exception {
       [this.kindOfException = KindOfException.unknown]);
 
   @override
-  String toString() =>
-      "$title: $msg, with kind of exception ${kindOfException}";
+  String toString() => "$title: $msg, with kind of exception $kindOfException";
 }

@@ -4,7 +4,6 @@ import '../constants/global_constants.dart' as global_constants;
 import '../models/wish.dart';
 
 class WishCard extends StatelessWidget {
-  // final double defaultPadding;
   final Wish wish;
   final double radius;
   final void Function()? onTap;
@@ -14,7 +13,6 @@ class WishCard extends StatelessWidget {
   const WishCard(
     this.wish, {
     Key? key,
-    // this.defaultPadding = global_constants.defaultPadding,
     this.radius = global_constants.defaultRadius,
     this.onTap,
     this.onLongPress,

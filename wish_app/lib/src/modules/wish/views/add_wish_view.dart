@@ -21,7 +21,6 @@ class AddWishView extends GetView<AddWishController> {
         children: [
           Scaffold(
             appBar: AppBar(
-              // title: Text(controller.isEdit.value ? "Edit wish" : "New wish"),
               title: Text(controller.isEdit.value
                   ? "wish_add_appbar_title_is_edit_true".tr
                   : "wish_add_appbar_title_is_edit_false".tr),
@@ -31,7 +30,6 @@ class AddWishView extends GetView<AddWishController> {
                 key: controller.formKey,
                 child: Column(
                   children: [
-                    // In another file: add_wish_image.dart
                     Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.secondaryContainer,
@@ -39,7 +37,6 @@ class AddWishView extends GetView<AddWishController> {
                       width: double.infinity,
                       height: Get.height / 3,
                       child: InkWell(
-                        // onTap: controller.pickImage,
                         onTap: controller.pickImage,
                         child: controller.wishForm.value.hasImage
                             ? (controller.wishForm.value.image != null
@@ -53,7 +50,7 @@ class AddWishView extends GetView<AddWishController> {
                                   ))
                             : Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: const [
                                   Icon(
                                     Icons.touch_app,
                                     size: 100,
@@ -70,8 +67,7 @@ class AddWishView extends GetView<AddWishController> {
                               ),
                       ),
                     ),
-
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Padding(
@@ -83,29 +79,26 @@ class AddWishView extends GetView<AddWishController> {
                             validator: (value) =>
                                 validators.onlyNumbersAndLettersCheck(
                               value,
-                              // "Title",
                               "wish_add_default_text_field_title_label".tr,
                               minLength: 5,
                               isRequired: true,
                             ),
-                            prefixIcon: Icon(Icons.title),
+                            prefixIcon: const Icon(Icons.title),
                             onChanged: (v) {
                               controller.wishForm.value.title = v;
                             },
                             maxLength: 100,
-                            // labelText: "Title",
                             labelText:
                                 "wish_add_default_text_field_title_label".tr,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           DefaultTextField(
-                              prefixIcon: Icon(Icons.description),
+                              prefixIcon: const Icon(Icons.description),
                               validator: (value) =>
                                   validators.onlyNumbersAndLettersCheck(
                                     value,
-                                    // "Description",
                                     "wish_add_default_text_field_description_label"
                                         .tr,
                                   ),
@@ -116,11 +109,10 @@ class AddWishView extends GetView<AddWishController> {
                               minLines: 1,
                               maxLines: 15,
                               maxLength: 600,
-                              // labelText: "Description",
                               labelText:
                                   'wish_add_default_text_field_description_label'
                                       .tr),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           DefaultTextField(
@@ -128,18 +120,17 @@ class AddWishView extends GetView<AddWishController> {
                               value,
                             ),
                             controller: controller.linkController,
-                            prefixIcon: Icon(Icons.link),
+                            prefixIcon: const Icon(Icons.link),
                             onChanged: (v) {
                               controller.wishForm.value.link = v;
                             },
                             minLines: 1,
                             maxLines: 15,
                             maxLength: 1000,
-                            // labelText: "Link",
                             labelText:
                                 "wish_add_default_text_field_link_label".tr,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Row(
@@ -163,8 +154,6 @@ class AddWishView extends GetView<AddWishController> {
                                           )
                                         : Text(
                                             controller.isEdit.value
-                                                // // ? "Save"
-                                                // : "Create",
                                                 ? "wish_add_elevated_button_text_is_edit_true"
                                                     .tr
                                                 : "wish_add_elevated_button_text_is_edit_false"
@@ -190,7 +179,7 @@ class AddWishView extends GetView<AddWishController> {
             ),
           ),
           if (controller.isWishLoading.value) ...[
-            Container(
+            SizedBox(
               width: double.infinity,
               height: double.infinity,
               child: BackdropFilter(

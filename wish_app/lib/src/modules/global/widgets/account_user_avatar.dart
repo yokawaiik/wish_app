@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../extensions/wish_color.dart';
-
 class AccountUserAvatar extends StatelessWidget {
   final Color defaultColor;
-  // final String? userHexColor;
   final Color? userColor;
   final String? imageUrl;
   final double? radius;

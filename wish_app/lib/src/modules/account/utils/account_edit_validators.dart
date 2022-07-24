@@ -27,7 +27,6 @@ String? checkPassword(
   if (baseCheck != null) return baseCheck;
 
   if (isRetypePassword && (value != originalField)) {
-    // return 'These fields is not equal.';
     return 'account_utils_account_edit_validators_check_password_fields_is_not_equal'
         .tr;
   }

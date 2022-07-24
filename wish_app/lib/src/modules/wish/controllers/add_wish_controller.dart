@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +19,6 @@ import '../../global/services/user_service.dart';
 import '../../home/controllers/home_main_controller.dart';
 import '../../home/views/home_view.dart';
 
-// class AddWishController extends GetxController {
 class AddWishController extends GetxController {
   var wishForm = WishForm().obs;
 
@@ -57,17 +57,13 @@ class AddWishController extends GetxController {
             Get.arguments["createdBy"]["isCurrentUser"] as bool;
 
         if (!isCurrentUser) {
-          // Get.offAndToNamed(HomeView.routeName);
           Get.offNamedUntil(NavigatorView.routeName, (route) => false);
-          // Get.snackbar("Error", "You are not a creator");
           Get.snackbar("error_title".tr, "wa_e_not_a_creator".tr);
         }
 
         if (id == null) {
-          // Get.offAndToNamed(NavigatorView.routeName);
           Get.offNamedUntil(NavigatorView.routeName, (route) => false);
-          // Get.snackbar("Error",
-          //     "You want to edit wish but wish with this id doesn't exist or was deleted.");
+
           Get.snackbar(
               "error_title".tr, "wa_e_wish_does_not_exist_or_was_delete".tr);
           return;
@@ -77,7 +73,6 @@ class AddWishController extends GetxController {
       }
     } else {
       isWishLoading.value = false;
-      // change(null, status: RxStatus.success());
     }
   }
 
@@ -89,15 +84,13 @@ class AddWishController extends GetxController {
         userService.currentUser!.id,
       );
 
-      if (gotTheWish == null)
+      if (gotTheWish == null) {
         throw SupabaseException(
-          // "Error",
-          // "Not found the wish",
           "error_title".tr,
-          // "Not found the wish",
           "wa_es_wish_not_found".tr,
           KindOfException.notFound,
         );
+      }
 
       wishForm.value = WishForm(
         id: gotTheWish.id,
@@ -108,8 +101,6 @@ class AddWishController extends GetxController {
         createdBy: gotTheWish.createdBy.id,
       );
 
-      // print(wishForm.toJson());
-
       // ? info: to set initial values
       titleController.text = wishForm.value.title ?? "";
       descriptionController.text = wishForm.value.description ?? "";
@@ -117,9 +108,10 @@ class AddWishController extends GetxController {
 
       update();
     } on SupabaseException catch (e) {
-      print("AddWishController - getWIshForEdit - SupabaseException - $e");
+      if (kDebugMode) {
+        print("AddWishController - getWIshForEdit - SupabaseException - $e");
+      }
 
-      // var title = "Error";
       var title = "error_title".tr;
       var message = "error_in_api".tr;
 
@@ -131,8 +123,9 @@ class AddWishController extends GetxController {
       Get.snackbar(title, message);
       Get.offNamedUntil(NavigatorView.routeName, (route) => false);
     } catch (e) {
-      print("AddWishController - getWIshForEdit - Exception - ${e}");
-      // Get.snackbar("Exception", "Error get the wish.");
+      if (kDebugMode) {
+        print("AddWishController - getWIshForEdit - Exception - ${e}");
+      }
       Get.snackbar(
         "error_title".tr,
         "wa_e_getting_wish".tr,
@@ -147,7 +140,6 @@ class AddWishController extends GetxController {
     try {
       isLoading.value = true;
       if (!validateFields()) return;
-      // wishForm.value.createdBy = userService.user?.id;
       wishForm.value.createdBy = userService.currentUser?.id;
 
       final addedWish = await AddWishApiService.addWish(wishForm.value);
@@ -170,11 +162,14 @@ class AddWishController extends GetxController {
 
       Get.back();
     } on SupabaseException catch (e) {
-      print("AddWishController - addWish - SupabaseException - $e");
+      if (kDebugMode) {
+        print("AddWishController - addWish - SupabaseException - $e");
+      }
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      print("AddWishController - addWish - Exception - ${e}");
-      // Get.snackbar("Exception", "Error create wish");
+      if (kDebugMode) {
+        print("AddWishController - addWish - Exception - ${e}");
+      }
       Get.snackbar(
         "error_title".tr,
         "wa_e_creating_wish".tr,
@@ -212,11 +207,14 @@ class AddWishController extends GetxController {
         Get.back();
       }
     } on SupabaseException catch (e) {
-      print("AddWishController - saveWish - SupabaseException - $e");
+      if (kDebugMode) {
+        print("AddWishController - saveWish - SupabaseException - $e");
+      }
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      print("AddWishController - saveWish - Exception - ${e}");
-      // Get.snackbar("Exception", "Error updating wish.");
+      if (kDebugMode) {
+        print("AddWishController - saveWish - Exception - ${e}");
+      }
       Get.snackbar(
         "error_title".tr,
         "wa_e_updating_wish".tr,

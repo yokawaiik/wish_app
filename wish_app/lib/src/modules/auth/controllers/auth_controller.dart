@@ -72,7 +72,6 @@ class AuthController extends GetxController {
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
-      print(e);
       Get.snackbar("error_title".tr, "error_unknown".tr);
     } finally {
       isLoading.value = false;

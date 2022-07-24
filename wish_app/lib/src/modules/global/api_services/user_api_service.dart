@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -18,16 +19,16 @@ class UserApiService {
       final theUser = UserAccount.fromJson(theGotUser.data, currentUserId);
 
       if (theGotUser.hasError) {
-        // throw SupabaseException("Error", theGotUser.error!.message);
         throw SupabaseException(
             "error_db_unknown_title".tr, 'gm_uas_es_error_getting_user'.tr);
       }
 
       return theUser;
     } on SupabaseException catch (e) {
-      print("UserApiService - getUser() - SupabaseException - e: $e");
+      if (kDebugMode) {
+        print("UserApiService - getUser() - SupabaseException - e: $e");
+      }
 
-      // throw SupabaseException("Error", "Something went wrong.");
       rethrow;
     } catch (e) {
       print("UserApiService - getUser() - e : $e");
@@ -45,7 +46,6 @@ class UserApiService {
       ).execute();
 
       if (gotUserInfo.hasError) {
-        // throw SupabaseException("Error", gotUserInfo.error!.message);
         throw SupabaseException("error_db_unknown_title".tr,
             "gm_uas_es_error_getting_user_info".tr);
       }
@@ -54,11 +54,15 @@ class UserApiService {
 
       return userInfo;
     } on SupabaseException catch (e) {
-      print("UserApiService - getUserInfo() - SupabaseException - e : $e");
+      if (kDebugMode) {
+        print("UserApiService - getUserInfo() - SupabaseException - e : $e");
+      }
 
       rethrow;
     } catch (e) {
-      print("UserApiService - getUserInfo() - e : $e");
+      if (kDebugMode) {
+        print("UserApiService - getUserInfo() - e : $e");
+      }
 
       rethrow;
     }
@@ -68,7 +72,9 @@ class UserApiService {
     try {
       await _supabase.auth.signOut();
     } catch (e) {
-      print("UserApiService - signOut() - e : $e");
+      if (kDebugMode) {
+        print("UserApiService - signOut() - e : $e");
+      }
       rethrow;
     }
   }
