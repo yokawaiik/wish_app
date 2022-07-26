@@ -115,7 +115,7 @@ Created this application with Material Design 3.0, Getx, Supabase and Isar datab
 ### Supabase
 
 1. Sign up to Supabase;
-2. Set up Supabase with [Supabase README.md](./supabase/README.md.md);
+2. Set up Supabase with [Supabase README.md](./supabase/README.md);
 3. Get and paste data to environments from Supabase project: SUPABASE_ANNON_KEY, SUPABASE_URL. You can find environments dot files (.env.production, .env.development) in root flutter project.
 
 ## Author contacts
