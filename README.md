@@ -1,6 +1,6 @@
 # Wish App (MVP pet project)
 
-Created this application with Material Design 3.0, Getx, Supabase and Isar database to learning, showing my skills in Flutter programming and PostgreSQL. This application can convinient to save wish and share its to your friends, add wishes to favorites to note what will you buy to your friend on it Birthday
+Created this application with Material Design 3.0, Getx, Supabase and Isar database to learning, showing my skills in Flutter programming and PostgreSQL. This application can convinient to save wish and share its to your friends, add wishes to favorites to note what will you buy to your friend on it Birthday.
 
 ## Content table
 
