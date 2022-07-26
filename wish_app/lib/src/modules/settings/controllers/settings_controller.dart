@@ -35,6 +35,7 @@ class SettingsController extends GetxController {
     if (value == null) return;
     final selectedLanguage = languageDropdownList[value];
     _setLanguage(selectedLanguage);
+    selectedValueLanguageDropdown.value = value;
   }
 
   void _setLanguage(LanguageItem languageItem) {
@@ -46,6 +47,7 @@ class SettingsController extends GetxController {
     if (value == null) return;
     final selectedTheme = themeDropdownList[value];
     _setTheme(selectedTheme);
+    selectedValueThemeDropdown.value = value;
   }
 
   void _setTheme(ThemeItem selectedTheme) {

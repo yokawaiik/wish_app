@@ -18,7 +18,6 @@ import '../constants/router_constants.dart' as router_constants;
 class HomeMainController extends GetxController {
   final _us = Get.find<UserService>();
   final _hc = Get.find<HomeController>();
-  final _fc = Get.find<FavoritesController>();
 
   late final ScrollController scrollController;
 
@@ -147,8 +146,8 @@ class HomeMainController extends GetxController {
 
       foundWish.isFavorite = !foundWish.isFavorite;
       homeWishList.refresh();
-
-      _fc.addFavoriteHandler(foundWish);
+      final fc = Get.find<FavoritesController>();
+      fc.addFavoriteHandler(foundWish);
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {
@@ -207,7 +206,9 @@ class HomeMainController extends GetxController {
 
       foundWish.isFavorite = !foundWish.isFavorite;
       homeWishList.refresh();
-      _fc.deleteFavoriteHandler(id);
+
+      final fc = Get.find<FavoritesController>();
+      fc.deleteFavoriteHandler(id);
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {

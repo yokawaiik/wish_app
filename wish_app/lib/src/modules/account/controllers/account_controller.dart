@@ -299,8 +299,26 @@ class AccountController extends GetxController {
 
       foundWish.isFavorite = !foundWish.isFavorite;
       wishList.refresh();
+
       final fc = Get.find<FavoritesController>();
       fc.addFavoriteHandler(foundWish);
+    } on SupabaseException catch (e) {
+      Get.snackbar(e.title, e.msg);
+    } catch (e) {
+      Get.snackbar("error_title".tr, "error_m_something_went_wrong".tr);
+    }
+  }
+
+  void removeFromFavorites(int id) async {
+    try {
+      final foundWish = wishList.firstWhere((wish) => wish.id == id);
+      await FavoritesApiService.toggleFavorite(id, _us.currentUser!.id);
+
+      foundWish.isFavorite = !foundWish.isFavorite;
+      wishList.refresh();
+
+      final fc = Get.find<FavoritesController>();
+      fc.deleteFavoriteHandler(id);
     } on SupabaseException catch (e) {
       Get.snackbar(e.title, e.msg);
     } catch (e) {

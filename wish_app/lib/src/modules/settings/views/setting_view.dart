@@ -11,51 +11,55 @@ class SettingView extends GetView<SettingsController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("settings_appbar_title".tr),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(global_constants.defaultPadding),
-        shrinkWrap: true,
-        children: [
-          DropdownButton<int>(
-            value: controller.selectedValueLanguageDropdown.value,
-            isExpanded: true,
-            items: controller.languageDropdownList
-                .map(
-                  (item) => DropdownMenuItem(
-                    value: item.value,
-                    child: ListTile(
-                      title: Text(
-                        item.title.tr,
+    return Obx(
+      () => Scaffold(
+        appBar: AppBar(
+          title: Text("settings_appbar_title".tr),
+        ),
+        body: ListView(
+          padding: const EdgeInsets.all(global_constants.defaultPadding),
+          shrinkWrap: true,
+          children: [
+            DropdownButton<int>(
+              value: controller.selectedValueLanguageDropdown.value,
+              underline: const SizedBox(),
+              isExpanded: true,
+              items: controller.languageDropdownList
+                  .map(
+                    (item) => DropdownMenuItem(
+                      value: item.value,
+                      child: ListTile(
+                        title: Text(
+                          item.title.tr,
+                        ),
                       ),
                     ),
-                  ),
-                )
-                .toList(),
-            onChanged: controller.onChangedLanguageDropdown,
-          ),
-          const SizedBox(
-            height: global_constants.defaultPadding,
-          ),
-          DropdownButton<int>(
-            value: controller.selectedValueThemeDropdown.value,
-            isExpanded: true,
-            items: controller.themeDropdownList
-                .map(
-                  (item) => DropdownMenuItem(
-                    value: item.value,
-                    child: ListTile(
-                      leading: item.icon,
-                      title: Text(item.title.tr),
+                  )
+                  .toList(),
+              onChanged: controller.onChangedLanguageDropdown,
+            ),
+            const SizedBox(
+              height: global_constants.defaultPadding,
+            ),
+            DropdownButton<int>(
+              value: controller.selectedValueThemeDropdown.value,
+              underline: const SizedBox(),
+              isExpanded: true,
+              items: controller.themeDropdownList
+                  .map(
+                    (item) => DropdownMenuItem(
+                      value: item.value,
+                      child: ListTile(
+                        leading: item.icon,
+                        title: Text(item.title.tr),
+                      ),
                     ),
-                  ),
-                )
-                .toList(),
-            onChanged: controller.onChangedThemeDropdown,
-          ),
-        ],
+                  )
+                  .toList(),
+              onChanged: controller.onChangedThemeDropdown,
+            ),
+          ],
+        ),
       ),
     );
   }

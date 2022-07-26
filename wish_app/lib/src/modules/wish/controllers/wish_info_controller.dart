@@ -83,14 +83,10 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
         default:
           final theFoundWish = await AddWishApiService.getWish(
             _args.wishId,
-            _us.currentUser!.id,
+            _us.currentUser?.id,
           );
           currentWish.value = theFoundWish;
           break;
-      }
-
-      if (kDebugMode) {
-        print('сurrentWish.value : ${currentWish.value}');
       }
 
       if (currentWish.value == null) {
@@ -104,6 +100,9 @@ class WishInfoController extends GetxController with StateMixin<Wish> {
 
       change(currentWish.value, status: RxStatus.success());
     } on SupabaseException catch (e) {
+      if (kDebugMode) {
+        print("WishInfoController - getTheWish - SupabaseException - e: $e");
+      }
       Get.back();
       Get.snackbar(e.title, e.msg);
     } on UnknownException catch (e) {

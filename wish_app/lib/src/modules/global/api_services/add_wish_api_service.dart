@@ -197,7 +197,7 @@ class AddWishApiService {
     }
   }
 
-  static Future<Wish?> getWish(int id, String currentUserId) async {
+  static Future<Wish?> getWish(int id, String? currentUserId) async {
     try {
       final gotTheWish = await _supabase
           .from("wishes_view")

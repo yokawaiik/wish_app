@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../navigator/utils/show_exit_app.dart';
 
@@ -40,7 +41,7 @@ class RequireConnectionWidget extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              const Text('cm_w_text_check_your_connection')
+              Text('cm_w_text_check_your_connection'.tr)
             ],
           ),
         ),

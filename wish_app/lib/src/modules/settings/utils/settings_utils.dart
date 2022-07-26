@@ -27,7 +27,8 @@ void saveTheme(ThemeItem themeItem) async {
 }
 
 // ? info: get current theme from storage
-ThemeItem getCurrentTheme() {
+ThemeItem 
+getCurrentTheme() {
   final _settingsBox = GetStorage(settings_constants.settingsBox);
 
   final selectedTheme =

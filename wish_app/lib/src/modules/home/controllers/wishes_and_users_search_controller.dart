@@ -109,16 +109,29 @@ class WishesAndUsersSearchController extends GetxController {
         getSearchWishList(),
       ]);
     } catch (e) {
+      if (kDebugMode) {
+        print('search() - e : $e');
+      }
       Get.snackbar("error_title".tr, "error_m_something_went_wrong".tr);
     }
   }
 
+  var isSuggestionsLoad = false;
+
   Future<void> setSuggestions() async {
     try {
-      _clearSuggestions();
+      // ? info: it's necessary to add data from database to lists only
+      // ? once because showSuggestions method calls it too fast (without async await) if user type query too fast
+      if (isSuggestionsLoad) return;
 
-      final gotSuggestions =
-          await Future.wait([_ssh.getWishList(), _ssh.getUserList()]);
+      isSuggestionsLoad = true;
+
+      clearSuggestions();
+
+      final gotSuggestions = await Future.wait([
+        _ssh.getWishList(),
+        _ssh.getUserList(),
+      ]);
 
       suggestionsSearchWishList.addAll(gotSuggestions[0] as List<LightWish>);
       suggestionsSearchUserList.addAll(gotSuggestions[1] as List<LightUser>);
@@ -126,10 +139,12 @@ class WishesAndUsersSearchController extends GetxController {
       if (kDebugMode) {
         print('setSuggestions() - e : $e');
       }
+    } finally {
+      isSuggestionsLoad = false;
     }
   }
 
-  void _clearSuggestions() {
+  void clearSuggestions() {
     suggestionsSearchWishList.clear();
     suggestionsSearchUserList.clear();
   }

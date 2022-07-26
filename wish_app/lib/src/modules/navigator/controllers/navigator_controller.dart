@@ -16,7 +16,7 @@ class NavigatorController extends GetxController {
   final userService = Get.find<UserService>();
 
   RxBool get isUserAuthenticated => userService.isUserAuthenticated;
-  late AccountArguments accountArguments;
+  // late AccountArguments accountArguments;
 
   var selectedIndex = RxInt(1);
   late final PageController pageViewController;
@@ -29,7 +29,7 @@ class NavigatorController extends GetxController {
     views = [
       _createFavoriteView(),
       const KeepAliveWrapper(child: HomeView()),
-      KeepAliveWrapper(child: _createAccountView()),
+      _createAccountView(),
     ];
 
     pageViewController = PageController(initialPage: selectedIndex.value);
@@ -39,9 +39,11 @@ class NavigatorController extends GetxController {
 
   Widget _createAccountView() {
     if (isUserAuthenticated.value) {
-      accountArguments = AccountArguments(userService.currentUser!.id);
-      return AccountView(
-        tag: accountArguments.tag,
+      final tag = userService.currentUser!.id;
+      return KeepAliveWrapper(
+        child: AccountView(
+          tag: tag,
+        ),
       );
     } else {
       return const SizedBox();
@@ -58,21 +60,13 @@ class NavigatorController extends GetxController {
 
   Future<void> signOut() async {
     try {
-      final tag = userService.currentUser!.id;
-
-      final acIsRegistered = Get.isRegistered<AccountController>(tag: tag);
-
-      if (!isUserAuthenticated.value && acIsRegistered) {
-        await Get.delete<AccountController>(tag: tag);
-      }
-
       await userService.signOut();
 
       if ([0, 2].contains(selectedIndex.value)) {
         onItemTapped(selectedIndex.value);
       }
 
-      updateNavigator(tag: tag);
+      updateNavigator();
     } catch (e) {
       Get.snackbar("error_title".tr, "error_m_something_went_wrong".tr);
     }
@@ -109,11 +103,12 @@ class NavigatorController extends GetxController {
     return (await showExitPopup());
   }
 
-  void updateNavigator({String? tag}) {
-    if (!userService.isUserAuthenticated.value) {
+  void updateNavigator() {
+    final tag = userService.currentUser!.id;
+    if (userService.isUserAuthenticated.value) {
       Get.put(
         AccountController(),
-        tag: accountArguments.tag,
+        tag: tag,
         permanent: true,
       );
 

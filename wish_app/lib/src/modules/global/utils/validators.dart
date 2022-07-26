@@ -34,8 +34,12 @@ String? baseFieldCheck(
       return maxLengthMessage;
     }
   } else {
-    if (value != null && value.length > maxLength) {
-      return maxLengthMessage;
+    if (value != null) {
+      if (value.length > maxLength) {
+        return maxLengthMessage;
+      } else if (value.isNotEmpty && value.length < minLength) {
+        return minLengthMessage;
+      }
     }
   }
 

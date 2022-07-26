@@ -29,6 +29,22 @@ class WishesAndUsersSearchDelegate extends SearchDelegate {
     super.showResults(context);
   }
 
+  // var isSuggestionsLoad = false;
+
+// todo: delete
+  @override
+  void showSuggestions(BuildContext context) {
+    // isSuggestionsLoad = true;
+    // if (isSuggestionsLoad) {
+    //   _waus.clearSuggestions();
+    //   if (isSuggestionsLoad) super.showSuggestions(context);
+    //   isSuggestionsLoad = false;
+    // }
+
+    // _waus.clearSuggestions();
+    super.showSuggestions(context);
+  }
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return <Widget>[

@@ -133,7 +133,8 @@ class WishInfoView extends GetView<WishInfoController> {
                       ),
                     )
                   else ...[
-                    if (currentWish!.link != null)
+                    if (currentWish!.link != null &&
+                        currentWish.link!.isNotEmpty)
                       ListTile(
                         leading: const Icon(Icons.link),
                         title: Text(currentWish.link!),
@@ -156,7 +157,7 @@ class WishInfoView extends GetView<WishInfoController> {
                       ),
                   ],
                 ],
-              )
+              ),
             ],
           );
         },

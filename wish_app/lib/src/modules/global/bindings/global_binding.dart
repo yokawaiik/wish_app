@@ -21,11 +21,10 @@ class GlobalBinding extends Bindings {
         () async => await ConnectionManagerService().init(),
         permanent: true,
       ),
-      settings_utils.initStorage(),
       Supabase.initialize(
         url: dotenv.env['SUPABASE_URL'],
         anonKey: dotenv.env['SUPABASE_ANNON_KEY'],
-        debug: true,
+        // debug: true,
       ),
     ]);
 

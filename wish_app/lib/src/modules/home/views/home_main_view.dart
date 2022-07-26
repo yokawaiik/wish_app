@@ -186,7 +186,7 @@ class HomeMainView extends GetView<HomeMainController> {
     if (searchResult is AccountArguments) {
       final hc = Get.find<HomeController>();
 
-      Get.toNamed(
+      await Get.toNamed(
         router_constants.homeAccountRouteName,
         id: hc.nestedKey,
         arguments: searchResult,

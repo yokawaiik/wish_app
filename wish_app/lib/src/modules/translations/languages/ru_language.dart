@@ -71,7 +71,7 @@ class RuLanguage {
         "account_view_elevated_button_text_has_subscribe_false": "Подписаться",
         "account_view_popup_menu_item_title_delete_wish": "Удалить желание",
         "am_av_pmi_add_to_favorites": "Добавить в любимые",
-
+        "am_av_pmi_remove_from_favorites": "Удалить из любимых",
         "am_av_lt_settings": "Настройки",
         // ? info: errors in account controller
         "account_ac_es_it_is_not_an_user": "Это не пользователь.",
@@ -156,7 +156,7 @@ class RuLanguage {
         // ?
         // ? info: home module
         // ? info: home main view
-        "fm_hmv_appbar_title": "Дом",
+        "fm_hmv_appbar_title": "Главная",
         "fm_hmv_bs_lv_add_to_favorites": "Добавить в избранное",
         "fm_hmv_bs_lv_delete_from_favorites": "Удалить из избранного",
 
@@ -182,7 +182,7 @@ class RuLanguage {
         "nm_nv_pmb_pmi_sign_out": "Выйти",
         "nm_nv_pmb_pmi_sign_in": "Войти",
         "nm_nv_nb_nd_favorites": "Избранное",
-        "nm_nv_nb_nd_home": "Дом",
+        "nm_nv_nb_nd_home": "Главная",
         "nm_nv_nb_nd_account": "Учетная запись",
         // // ? info: navigator controller
         // ? info: navigator utils

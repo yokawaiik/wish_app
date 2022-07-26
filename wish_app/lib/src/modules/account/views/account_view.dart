@@ -328,7 +328,7 @@ class AccountView extends GetView<AccountController> {
                   wish,
                   onTap: () => onTap(wish.id),
                   onTapDown: _storePosition,
-                  onLongPress: () => _showPopupMenu(ctx, wish.id),
+                  onLongPress: () => _showPopupMenu(ctx, wish),
                 );
               } else {
                 return const WishCardSkeleton();
@@ -346,7 +346,8 @@ class AccountView extends GetView<AccountController> {
 
   void _showPopupMenu(
     BuildContext context,
-    int id,
+    // int id,
+    Wish wish,
   ) {
     final overlay =
         Overlay.of(context)!.context.findRenderObject() as RenderBox;
@@ -361,20 +362,28 @@ class AccountView extends GetView<AccountController> {
       items: [
         if (controller.isCurrentUser.value)
           PopupMenuItem(
-            onTap: () => controller.removeWish(id),
+            onTap: () => controller.removeWish(wish.id),
             child: ListTile(
               leading: const Icon(Icons.work),
               title: Text('account_view_popup_menu_item_title_delete_wish'.tr),
             ),
           )
         else
-          PopupMenuItem(
-            onTap: () => controller.addToFavorites(id),
-            child: ListTile(
-              leading: const Icon(Icons.work),
-              title: Text('am_av_pmi_add_to_favorites'.tr),
-            ),
-          )
+          !wish.isFavorite
+              ? PopupMenuItem(
+                  onTap: () => controller.removeFromFavorites(wish.id),
+                  child: ListTile(
+                    leading: const Icon(Icons.delete),
+                    title: Text('am_av_pmi_remove_from_favorites'.tr),
+                  ),
+                )
+              : PopupMenuItem(
+                  onTap: () => controller.addToFavorites(wish.id),
+                  child: ListTile(
+                    leading: const Icon(Icons.work),
+                    title: Text('am_av_pmi_add_to_favorites'.tr),
+                  ),
+                )
       ],
       context: context,
     );

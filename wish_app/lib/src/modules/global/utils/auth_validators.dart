@@ -59,7 +59,7 @@ String? checkLogin(
   String? value, {
   bool isRequired = true,
   String? emptyLengthMessage,
-  int minLength = 5,
+  int minLength = 4,
   String? minLengthMessage,
   int maxLength = 100,
   String? maxLengthMessage,

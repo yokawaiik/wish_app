@@ -76,10 +76,9 @@ class AddWishView extends GetView<AddWishController> {
                         children: [
                           DefaultTextField(
                             controller: controller.titleController,
-                            validator: (value) =>
-                                validators.onlyNumbersAndLettersCheck(
+                            validator: (value) => validators.baseFieldCheck(
+                              "wish_add_default_text_field_titl e_label".tr,
                               value,
-                              "wish_add_default_text_field_title_label".tr,
                               minLength: 5,
                               isRequired: true,
                             ),
