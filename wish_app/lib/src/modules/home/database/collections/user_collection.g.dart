@@ -7,96 +7,106 @@ part of 'user_collection.dart';
 // **************************************************************************
 
 // coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
 
 extension GetUserCollectionCollection on Isar {
-  IsarCollection<UserCollection> get userCollections => collection();
+  IsarCollection<UserCollection> get userCollections => this.collection();
 }
 
 const UserCollectionSchema = CollectionSchema(
   name: r'UserCollection',
-  schema:
-      r'{"name":"UserCollection","idName":"key","properties":[{"name":"id","type":"String"},{"name":"imageUrl","type":"String"},{"name":"login","type":"String"},{"name":"userColor","type":"String"}],"indexes":[{"name":"id","unique":true,"replace":false,"properties":[{"name":"id","type":"Value","caseSensitive":true}]}],"links":[]}',
-  idName: r'key',
-  propertyIds: {r'id': 0, r'imageUrl': 1, r'login': 2, r'userColor': 3},
-  listProperties: {},
-  indexIds: {r'id': 0},
-  indexValueTypes: {
-    r'id': [
-      IndexValueType.string,
-    ]
+  id: 1551134645489327298,
+  properties: {
+    r'id': PropertySchema(
+      id: 0,
+      name: r'id',
+      type: IsarType.string,
+    ),
+    r'imageUrl': PropertySchema(
+      id: 1,
+      name: r'imageUrl',
+      type: IsarType.string,
+    ),
+    r'login': PropertySchema(
+      id: 2,
+      name: r'login',
+      type: IsarType.string,
+    ),
+    r'userColor': PropertySchema(
+      id: 3,
+      name: r'userColor',
+      type: IsarType.string,
+    )
   },
-  linkIds: {},
-  backlinkLinkNames: {},
+  estimateSize: _userCollectionEstimateSize,
+  serialize: _userCollectionSerialize,
+  deserialize: _userCollectionDeserialize,
+  deserializeProp: _userCollectionDeserializeProp,
+  idName: r'key',
+  indexes: {
+    r'id': IndexSchema(
+      id: -3268401673993471357,
+      name: r'id',
+      unique: true,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'id',
+          type: IndexType.value,
+          caseSensitive: true,
+        )
+      ],
+    )
+  },
+  links: {},
+  embeddedSchemas: {},
   getId: _userCollectionGetId,
   getLinks: _userCollectionGetLinks,
-  attachLinks: _userCollectionAttachLinks,
-  serializeNative: _userCollectionSerializeNative,
-  deserializeNative: _userCollectionDeserializeNative,
-  deserializePropNative: _userCollectionDeserializePropNative,
-  serializeWeb: _userCollectionSerializeWeb,
-  deserializeWeb: _userCollectionDeserializeWeb,
-  deserializePropWeb: _userCollectionDeserializePropWeb,
-  version: 4,
+  attach: _userCollectionAttach,
+  version: '3.0.5',
 );
 
-int? _userCollectionGetId(UserCollection object) {
-  if (object.key == Isar.autoIncrement) {
-    return null;
-  } else {
-    return object.key;
+int _userCollectionEstimateSize(
+  UserCollection object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  bytesCount += 3 + object.id.length * 3;
+  {
+    final value = object.imageUrl;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
   }
+  bytesCount += 3 + object.login.length * 3;
+  {
+    final value = object.userColor;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  return bytesCount;
 }
 
-List<IsarLinkBase<dynamic>> _userCollectionGetLinks(UserCollection object) {
-  return [];
+void _userCollectionSerialize(
+  UserCollection object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeString(offsets[0], object.id);
+  writer.writeString(offsets[1], object.imageUrl);
+  writer.writeString(offsets[2], object.login);
+  writer.writeString(offsets[3], object.userColor);
 }
 
-void _userCollectionSerializeNative(
-    IsarCollection<UserCollection> collection,
-    IsarCObject cObj,
-    UserCollection object,
-    int staticSize,
-    List<int> offsets,
-    AdapterAlloc alloc) {
-  final id$Bytes = IsarBinaryWriter.utf8Encoder.convert(object.id);
-  IsarUint8List? imageUrl$Bytes;
-  final imageUrl$Value = object.imageUrl;
-  if (imageUrl$Value != null) {
-    imageUrl$Bytes = IsarBinaryWriter.utf8Encoder.convert(imageUrl$Value);
-  }
-  final login$Bytes = IsarBinaryWriter.utf8Encoder.convert(object.login);
-  IsarUint8List? userColor$Bytes;
-  final userColor$Value = object.userColor;
-  if (userColor$Value != null) {
-    userColor$Bytes = IsarBinaryWriter.utf8Encoder.convert(userColor$Value);
-  }
-  final size = (staticSize +
-      3 +
-      (id$Bytes.length) +
-      3 +
-      (imageUrl$Bytes?.length ?? 0) +
-      3 +
-      (login$Bytes.length) +
-      3 +
-      (userColor$Bytes?.length ?? 0)) as int;
-  cObj.buffer = alloc(size);
-  cObj.buffer_length = size;
-
-  final buffer = IsarNative.bufAsBytes(cObj.buffer, size);
-  final writer = IsarBinaryWriter(buffer, staticSize);
-  writer.writeHeader();
-  writer.writeByteList(offsets[0], id$Bytes);
-  writer.writeByteList(offsets[1], imageUrl$Bytes);
-  writer.writeByteList(offsets[2], login$Bytes);
-  writer.writeByteList(offsets[3], userColor$Bytes);
-}
-
-UserCollection _userCollectionDeserializeNative(
-    IsarCollection<UserCollection> collection,
-    int id,
-    IsarBinaryReader reader,
-    List<int> offsets) {
+UserCollection _userCollectionDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
   final object = UserCollection(
     id: reader.readString(offsets[0]),
     imageUrl: reader.readStringOrNull(offsets[1]),
@@ -106,11 +116,13 @@ UserCollection _userCollectionDeserializeNative(
   return object;
 }
 
-P _userCollectionDeserializePropNative<P>(
-    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
-  switch (propertyIndex) {
-    case -1:
-      return id as P;
+P _userCollectionDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
@@ -120,51 +132,20 @@ P _userCollectionDeserializePropNative<P>(
     case 3:
       return (reader.readStringOrNull(offset)) as P;
     default:
-      throw IsarError('Illegal propertyIndex');
+      throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-Object _userCollectionSerializeWeb(
-    IsarCollection<UserCollection> collection, UserCollection object) {
-  final jsObj = IsarNative.newJsObject();
-  IsarNative.jsObjectSet(jsObj, r'id', object.id);
-  IsarNative.jsObjectSet(jsObj, r'imageUrl', object.imageUrl);
-  IsarNative.jsObjectSet(jsObj, r'key', object.key);
-  IsarNative.jsObjectSet(jsObj, r'login', object.login);
-  IsarNative.jsObjectSet(jsObj, r'userColor', object.userColor);
-  return jsObj;
+Id _userCollectionGetId(UserCollection object) {
+  return object.key;
 }
 
-UserCollection _userCollectionDeserializeWeb(
-    IsarCollection<UserCollection> collection, Object jsObj) {
-  final object = UserCollection(
-    id: IsarNative.jsObjectGet(jsObj, r'id') ?? '',
-    imageUrl: IsarNative.jsObjectGet(jsObj, r'imageUrl'),
-    login: IsarNative.jsObjectGet(jsObj, r'login') ?? '',
-    userColor: IsarNative.jsObjectGet(jsObj, r'userColor'),
-  );
-  return object;
+List<IsarLinkBase<dynamic>> _userCollectionGetLinks(UserCollection object) {
+  return [];
 }
 
-P _userCollectionDeserializePropWeb<P>(Object jsObj, String propertyName) {
-  switch (propertyName) {
-    case r'id':
-      return (IsarNative.jsObjectGet(jsObj, r'id') ?? '') as P;
-    case r'imageUrl':
-      return (IsarNative.jsObjectGet(jsObj, r'imageUrl')) as P;
-    case r'key':
-      return (IsarNative.jsObjectGet(jsObj, r'key')) as P;
-    case r'login':
-      return (IsarNative.jsObjectGet(jsObj, r'login') ?? '') as P;
-    case r'userColor':
-      return (IsarNative.jsObjectGet(jsObj, r'userColor')) as P;
-    default:
-      throw IsarError('Illegal propertyName');
-  }
-}
-
-void _userCollectionAttachLinks(
-    IsarCollection<dynamic> col, int id, UserCollection object) {}
+void _userCollectionAttach(
+    IsarCollection<dynamic> col, Id id, UserCollection object) {}
 
 extension UserCollectionByIndex on IsarCollection<UserCollection> {
   Future<UserCollection?> getById(String id) {
@@ -203,19 +184,19 @@ extension UserCollectionByIndex on IsarCollection<UserCollection> {
     return deleteAllByIndexSync(r'id', values);
   }
 
-  Future<int> putById(UserCollection object) {
+  Future<Id> putById(UserCollection object) {
     return putByIndex(r'id', object);
   }
 
-  int putByIdSync(UserCollection object, {bool saveLinks = true}) {
+  Id putByIdSync(UserCollection object, {bool saveLinks = true}) {
     return putByIndexSync(r'id', object, saveLinks: saveLinks);
   }
 
-  Future<List<int>> putAllById(List<UserCollection> objects) {
+  Future<List<Id>> putAllById(List<UserCollection> objects) {
     return putAllByIndex(r'id', objects);
   }
 
-  List<int> putAllByIdSync(List<UserCollection> objects,
+  List<Id> putAllByIdSync(List<UserCollection> objects,
       {bool saveLinks = true}) {
     return putAllByIndexSync(r'id', objects, saveLinks: saveLinks);
   }
@@ -241,7 +222,7 @@ extension UserCollectionQueryWhereSort
 extension UserCollectionQueryWhere
     on QueryBuilder<UserCollection, UserCollection, QWhereClause> {
   QueryBuilder<UserCollection, UserCollection, QAfterWhereClause> keyEqualTo(
-      int key) {
+      Id key) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: key,
@@ -251,7 +232,7 @@ extension UserCollectionQueryWhere
   }
 
   QueryBuilder<UserCollection, UserCollection, QAfterWhereClause> keyNotEqualTo(
-      int key) {
+      Id key) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -274,7 +255,7 @@ extension UserCollectionQueryWhere
   }
 
   QueryBuilder<UserCollection, UserCollection, QAfterWhereClause>
-      keyGreaterThan(int key, {bool include = false}) {
+      keyGreaterThan(Id key, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: key, includeLower: include),
@@ -283,7 +264,7 @@ extension UserCollectionQueryWhere
   }
 
   QueryBuilder<UserCollection, UserCollection, QAfterWhereClause> keyLessThan(
-      int key,
+      Id key,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
@@ -293,8 +274,8 @@ extension UserCollectionQueryWhere
   }
 
   QueryBuilder<UserCollection, UserCollection, QAfterWhereClause> keyBetween(
-    int lowerKey,
-    int upperKey, {
+    Id lowerKey,
+    Id upperKey, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -408,6 +389,42 @@ extension UserCollectionQueryWhere
       ));
     });
   }
+
+  QueryBuilder<UserCollection, UserCollection, QAfterWhereClause> idIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'id',
+        value: [''],
+      ));
+    });
+  }
+
+  QueryBuilder<UserCollection, UserCollection, QAfterWhereClause>
+      idIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.lessThan(
+              indexName: r'id',
+              upper: [''],
+            ))
+            .addWhereClause(IndexWhereClause.greaterThan(
+              indexName: r'id',
+              lower: [''],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.greaterThan(
+              indexName: r'id',
+              lower: [''],
+            ))
+            .addWhereClause(IndexWhereClause.lessThan(
+              indexName: r'id',
+              upper: [''],
+            ));
+      }
+    });
+  }
 }
 
 extension UserCollectionQueryFilter
@@ -428,8 +445,8 @@ extension UserCollectionQueryFilter
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
       idGreaterThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -444,8 +461,8 @@ extension UserCollectionQueryFilter
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
       idLessThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -460,9 +477,9 @@ extension UserCollectionQueryFilter
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition> idBetween(
     String lower,
     String upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -528,9 +545,38 @@ extension UserCollectionQueryFilter
   }
 
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
+      idIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'id',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
+      idIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'id',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
       imageUrlIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'imageUrl',
+      ));
+    });
+  }
+
+  QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
+      imageUrlIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'imageUrl',
       ));
     });
@@ -553,8 +599,8 @@ extension UserCollectionQueryFilter
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
       imageUrlGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -569,8 +615,8 @@ extension UserCollectionQueryFilter
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
       imageUrlLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -586,9 +632,9 @@ extension UserCollectionQueryFilter
       imageUrlBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -653,7 +699,27 @@ extension UserCollectionQueryFilter
   }
 
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
-      keyEqualTo(int value) {
+      imageUrlIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'imageUrl',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
+      imageUrlIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'imageUrl',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
+      keyEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'key',
@@ -664,7 +730,7 @@ extension UserCollectionQueryFilter
 
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
       keyGreaterThan(
-    int value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -678,7 +744,7 @@ extension UserCollectionQueryFilter
 
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
       keyLessThan(
-    int value, {
+    Id value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -692,8 +758,8 @@ extension UserCollectionQueryFilter
 
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
       keyBetween(
-    int lower,
-    int upper, {
+    Id lower,
+    Id upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -725,8 +791,8 @@ extension UserCollectionQueryFilter
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
       loginGreaterThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -741,8 +807,8 @@ extension UserCollectionQueryFilter
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
       loginLessThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -758,9 +824,9 @@ extension UserCollectionQueryFilter
       loginBetween(
     String lower,
     String upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -825,9 +891,38 @@ extension UserCollectionQueryFilter
   }
 
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
+      loginIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'login',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
+      loginIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'login',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
       userColorIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'userColor',
+      ));
+    });
+  }
+
+  QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
+      userColorIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'userColor',
       ));
     });
@@ -850,8 +945,8 @@ extension UserCollectionQueryFilter
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
       userColorGreaterThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
@@ -866,8 +961,8 @@ extension UserCollectionQueryFilter
   QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
       userColorLessThan(
     String? value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
@@ -883,9 +978,9 @@ extension UserCollectionQueryFilter
       userColorBetween(
     String? lower,
     String? upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -948,12 +1043,35 @@ extension UserCollectionQueryFilter
       ));
     });
   }
+
+  QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
+      userColorIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'userColor',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<UserCollection, UserCollection, QAfterFilterCondition>
+      userColorIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'userColor',
+        value: '',
+      ));
+    });
+  }
 }
+
+extension UserCollectionQueryObject
+    on QueryBuilder<UserCollection, UserCollection, QFilterCondition> {}
 
 extension UserCollectionQueryLinks
     on QueryBuilder<UserCollection, UserCollection, QFilterCondition> {}
 
-extension UserCollectionQueryWhereSortBy
+extension UserCollectionQuerySortBy
     on QueryBuilder<UserCollection, UserCollection, QSortBy> {
   QueryBuilder<UserCollection, UserCollection, QAfterSortBy> sortById() {
     return QueryBuilder.apply(this, (query) {
@@ -1006,7 +1124,7 @@ extension UserCollectionQueryWhereSortBy
   }
 }
 
-extension UserCollectionQueryWhereSortThenBy
+extension UserCollectionQuerySortThenBy
     on QueryBuilder<UserCollection, UserCollection, QSortThenBy> {
   QueryBuilder<UserCollection, UserCollection, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {

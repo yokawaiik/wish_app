@@ -349,8 +349,7 @@ class AccountView extends GetView<AccountController> {
     // int id,
     Wish wish,
   ) {
-    final overlay =
-        Overlay.of(context)!.context.findRenderObject() as RenderBox;
+    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
 
     showMenu(
       position: RelativeRect.fromLTRB(
